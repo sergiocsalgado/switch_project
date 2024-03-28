@@ -1,0 +1,36 @@
+@startuml
+'Inactive = (boolean) false
+legend top
+SD US009 Add a Customer
+end legend
+autonumber 1.1
+skinparam sequenceMessageAlign center
+autoactivate on
+
+actor Administrator
+participant ": CustomerUI" as A
+participant ": CustomerController" as B
+participant ": Company" as C
+participant ": CustomerContainer" as D
+
+
+Activate Administrator #lightgrey
+Administrator -> A #lightgrey: Add a Customer
+A -> B #lightgrey: addCustomer(name)
+B -> C #lightgrey: addCustomer(name)
+C -> D #lightgrey: addCustomer(name)
+D --> "customer: Customer" ** : create (name)
+
+D -> D #grey: saveCustomer(customer)
+D--> C #lightgrey: true
+deactivate
+
+
+C --> B: true
+B --> A: true
+A --> Administrator: Customer Added
+
+
+
+
+@enduml

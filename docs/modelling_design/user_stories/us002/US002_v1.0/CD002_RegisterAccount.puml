@@ -1,0 +1,58 @@
+@startuml
+legend top
+US002 - Register Account
+end legend
+
+'..|> implementation
+'-- associado
+'..> depende
+
+RegisterAccountUI..>RegisterAccountController
+AccountContainer "1" *-- "*" Account : accounts
+RegisterAccountController..> Company : company
+Company ..> AccountContainer : accountContainer
+Company ..> ProfileContainer : profileContainer
+
+
+class RegisterAccountUI {}
+
+class RegisterAccountController{
++RegisterAccountController()
++registerAccount(String email, String name, String phoneNumber,
+boolean status): boolean
+}
+
+class Company{
++Company(AccountContainer accountContainer, ProfileContainer profileContainer)
++registerAccount(String email, String name, String phoneNumber,
+ boolean status): boolean
+-saveAccount(Account account): boolean
+}
+
+class AccountContainer{
+-accounts:List<Account>
++AccountContainer()
++saveAccount(Account account): boolean
+-addAccount(Account account): boolean
+}
+
+class ProfileContainer {
+-profiles : List <Profile>
++ProfileContainer()
++createProfile(String description): boolean
+-saveProfile(Profile profile): boolean
++getDefaultProfile(): Profile
+}
+
+class Account {
+-email: String
+-name: String
+-phoneNumber: String
+-status: boolean
+-profile: Profile
++Account(String email, String name, String phoneNumber,
+boolean status, Profile profile)
+}
+
+
+@enduml

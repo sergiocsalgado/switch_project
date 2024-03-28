@@ -1,0 +1,45 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+SD US003 - Set Account Profile
+end legend
+
+autoactivate on
+
+actor Administrator
+activate Administrator #lightgrey
+participant ":SetAccountProfileUI"
+participant ":SetAccountProfileController"
+participant "pc:ProfileContainer"
+participant "profile :Profile"
+participant "ac:AccountContainer"
+participant "account :Account"
+
+autonumber 1.1
+Administrator -> ":SetAccountProfileUI" #b: Set Profile "description" to \n Account with email "email"
+":SetAccountProfileUI" -> ":SetAccountProfileController" #b: SetAccountProfile(email, description)
+
+":SetAccountProfileController" -> "pc:ProfileContainer" #b: profile = getProfile(description))
+loop for each profile in profiles
+"pc:ProfileContainer" -> "profile :Profile" #b: account verifyDescription(description)
+"profile :Profile" --> "pc:ProfileContainer": true
+end
+deactivate
+
+":SetAccountProfileController" -> "ac:AccountContainer" #b: account = getAccount(email)
+loop for each account in accounts
+"ac:AccountContainer" -> "account :Account" #b: account verifyEmail(email)
+"account :Account" --> "ac:AccountContainer": true
+end
+deactivate
+
+":SetAccountProfileController" -> "account :Account" #b: setProfile(profile)
+"account :Account"  --> ":SetAccountProfileController" #b: true
+
+":SetAccountProfileController" --> ":SetAccountProfileUI":  true
+
+":SetAccountProfileUI" --> Administrator: "Profile Set Successfully"
+
+@enduml

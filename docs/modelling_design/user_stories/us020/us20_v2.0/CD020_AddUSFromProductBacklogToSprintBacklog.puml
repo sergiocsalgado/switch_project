@@ -1,0 +1,78 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+CD US020 AddUSFromProductBacklogToSprintBacklog
+end legend
+
+AddUSFromProductBacklogToSprintBacklogUI ..> AddUSFromProductBacklogToSprintBacklogController
+AddUSFromProductBacklogToSprintBacklogController ..> ProjectContainer : projectContainer
+AddUSFromProductBacklogToSprintBacklogController ..> Project
+AddUSFromProductBacklogToSprintBacklogController ..> ProductBacklog
+AddUSFromProductBacklogToSprintBacklogController ..> SprintContainer
+AddUSFromProductBacklogToSprintBacklogController ..> UserStory
+Project -> ProductBacklog
+Project --> SprintContainer
+SprintContainer ..> UserStory
+ProductBacklog "1"*--"*" UserStory : contains
+SprintContainer "1"*--"*" Sprint : contains
+Sprint "1"*-"*" UserStory : contains
+ProjectContainer "1"*--"*" Project :contains
+
+class AddUSFromProductBacklogToSprintBacklogController {
+-getProject(String projectCode) : Project
+-getProductBacklog(String projectCode) : ProductBacklog
+-getUserStoryFromProductBacklog(String projectCode, String usNumber) : UserStory
+-getSprintContainer(String projectCode) : SprintContainer
++addUsFromProductBacklogToSprintBacklog(String projectCode, String userStoryNumber) : boolean
+}
+
+class ProjectContainer {
+-factoryProject : FactoryProject
++getProject(String projectCode) : Project
+
+}
+
+class Project {
+-projectCode : String
+-projectName : String
+-description : String
+-customer : Customer
+-businessSector : BusinessSector
+-typology : Typology
+-status : ProjectStatus
+-period : Period
+-resourceInProjectContainer : ResourceInProjectContainer
++getProductBacklog() : ProductBacklog
++getSprintContainer() : SprintContainer
+}
+
+class ProductBacklog {
+-factoryUserStory : FactoryUserStory
++getUserStory(String userStoryNumber) : UserStory
+
+}
+
+class SprintContainer {
+-factorySprint : FactorySprint
+-getCurrentSprint() : Sprint
++addUserStoryToSprintBacklog(UserStory userStory) : boolean
+
+}
+
+class Sprint {
+-sprintID : String
+-period : Period
++addUserStoryToSprintBacklog(UserStory userStory) : boolean
+}
+
+class UserStory{
+-userStoryNumber : String
+-actor : String
+-userStoryText : String
+-status : Status
+-effort : Effort
+}
+
+@enduml

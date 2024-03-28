@@ -1,0 +1,70 @@
+@startuml
+
+legend top
+US001 - As Administrator, I want to create user profiles
+end legend
+
+skinparam sequence {
+    LifeLineBackgroundColor #lightgrey
+    }
+skinparam sequenceMessageAlign left
+skinparam maxmessagesize 250
+autonumber
+
+boundary " " as Administrator #white
+
+Administrator o-> Route : POST (/profiles) (json)
+activate Route
+
+
+Route -> ProfileController : createProfile(profileDTO)
+activate ProfileController
+
+ref over ProfileController: unwrapping profileDTO
+ProfileController -> CreateProfileService : createProfile(profileID, description)
+activate CreateProfileService
+
+CreateProfileService --> "profileID:ProfileID" **:create
+CreateProfileService --> "description:Description" ** :create
+
+CreateProfileService -> FactoryProfile: createProfile(profileID, description)
+activate FactoryProfile
+
+FactoryProfile --> Profile**: create
+FactoryProfile --> CreateProfileService: profile
+deactivate
+
+
+CreateProfileService -> ProfileRepository: containsIDAndDescription(profile)
+activate ProfileRepository
+ProfileRepository --> CreateProfileService: false
+deactivate
+
+CreateProfileService -> ProfileRepository: save(profile)
+activate ProfileRepository
+deactivate
+
+CreateProfileService --> ProfileController: profile
+deactivate
+
+ProfileController --> ProfileMapper: toDTO(profile)
+activate ProfileMapper
+
+participant "List <ProfileDTO>" as DTO
+ProfileMapper --> DTO **: create
+ProfileMapper -> DTO : add(profile)
+activate DTO
+DTO --> ProfileMapper : profileDTO
+deactivate
+ProfileMapper --> ProfileController : profileDTO
+deactivate
+
+ProfileController --> "responseEntity: ResponseEntity" **: ResponseEntity<>(profileCreated, HttpStatus.CREATED)
+ProfileController --> Route : responseEntity
+deactivate
+
+
+Route --> Administrator: response(json)
+deactivate
+
+@enduml

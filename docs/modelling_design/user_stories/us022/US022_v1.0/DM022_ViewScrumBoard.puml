@@ -1,0 +1,51 @@
+@startuml
+/'Domain Model'/
+
+/'title'/
+
+legend top
+Domain Model
+end legend
+
+/'Class'/
+
+Object "Project" as Project {
+-projectCode
+-projectName
+-projectDescription
+-sprintDuration
+-numberSprints
+-budget
+}
+
+Object "Sprint" as Sprint {
+-sprintID
+}
+
+Object "Status" as Status {
+-description
+}
+
+Object "UserStory" as UserStory {
+-userStoryNumber
+-actor
+-userStoryText
+-listOfAcceptanceCriteria
+}
+
+/'Directions'/
+
+Sprint "1" -- "*" UserStory : contains a >
+Project "1" --- "*" Sprint : constituted by >
+Project "1" -- "*" UserStory : constituted by >
+UserStory "*" -- "1" Status : currently in a  >
+/'notas'/
+
+note right of Status
+    Planned
+    Running
+    Finished
+    Blocked
+end note
+
+@enduml

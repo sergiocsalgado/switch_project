@@ -1,0 +1,93 @@
+@startuml
+
+legend top
+SD US011 Associate a User as Team Member of a Project
+end legend
+
+
+skinparam sequenceMessageAlign center
+
+actor Manager
+participant ":AssociateTeamMemberUI"
+participant ":AssociateTeamMemberController"
+participant ":AccountContainer"
+participant ":AccountsMapper"
+participant " projectContainer\n:ProjectContainer"
+participant " project\n :Project"
+participant "resourceInProject\n:ResourceInProject"
+participant "teamMember\n:TeamMemberContainer"
+
+
+autoactivate on
+autonumber 1.1
+'List Accounts
+Manager -> ":AssociateTeamMemberUI" #lightgrey: Asks For List Of Accounts
+":AssociateTeamMemberUI" -> ":AssociateTeamMemberController" #lightgrey: getAccountContainer()
+":AssociateTeamMemberController" -> ":AccountContainer" #lightgrey: getAccounts()
+":AccountContainer"-->"listAccount :List<Accounts>"** #lightgrey: createListAccounts()
+":AccountContainer" --> ":AssociateTeamMemberController" #lightgrey: listAccounts
+":AssociateTeamMemberController" -> ":AccountsMapper" #lightgrey: getAccountsDTO()
+":AccountsMapper" --> "listAccountsDTO\n :List<AccountsDTO>"** #lightgrey: createListAccountsDTO()
+
+loop for each account in listAccounts
+":AccountsMapper"->"listAccounts\n :List<Accounts>" #lightgrey: account=get(i)
+deactivate
+":AccountsMapper" -> ":AccountsMapper" #lightgrey: accountDTO=toDTO(email,name)
+":AccountsMapper" -->"accountDTO\n :AccountDTO"** #lightgrey: createAccountDTO()
+deactivate
+":AccountsMapper" ->"listAccountsDTO\n :List<AccountsDTO>"  #lightgrey: addAccountDTO(accountDTO)
+deactivate
+end
+":AccountsMapper" --> ":AssociateTeamMemberController" #lightgrey: listAccountsDTO
+":AssociateTeamMemberController" --> ":AssociateTeamMemberUI"  #lightgrey: listAccountsDTO
+":AssociateTeamMemberUI" --> Manager  #lightgrey: Shows List of Accounts
+deactivate Manager
+
+
+
+autonumber 2.1
+'List Projects
+Manager -> ":AssociateTeamMemberUI" #lightgrey: Asks For List of Projects
+ref over ":AssociateTeamMemberUI" :US015 - As Manager, "resourceInProject\n:ResourceInProject" want to get a list of all projects
+":AssociateTeamMemberUI" --> Manager #lightgrey: Shows List of Projects
+
+
+
+autoactivate on
+autonumber 3.1
+'Define Team Member
+Manager -> ":AssociateTeamMemberUI" #lightgrey: Associate Account Email To \n Project Code as Team Member
+":AssociateTeamMemberUI" -> ":AssociateTeamMemberController" #lightgrey: associateTeamMember(email,\n projectCode, allocation, costPerHour)
+":AssociateTeamMemberController" -> " projectContainer\n:ProjectContainer" #lightgrey: getAccountByEmail(email)
+E--> ":AssociateTeamMemberController" #lightgrey: account
+
+":AssociateTeamMemberController" -> " projectContainer\n:ProjectContainer" #lightgrey: getProjectByProjectCode(projectCode)
+" projectContainer\n:ProjectContainer"--> ":AssociateTeamMemberController" #lightgrey: project
+
+":AssociateTeamMemberController" -> " project\n :Project"  #lightgrey: associateTeamMember (account, allocation, costPerHour)
+" project\n :Project" -> "resourceInProject\n:ResourceInProject" #lightgrey: getResourceInProject()
+"resourceInProject\n:ResourceInProject" -> "teamMember\n:TeamMemberContainer" #lightgrey: associateTeamMember(account, \n allocation, costPerHour)
+"teamMember\n:TeamMemberContainer"-> "teamMember\n :Team Member"** #lightgrey: associateTeamMember(account, allocation , costPerHour)
+
+":AssociateTeamMemberController" ->" projectContainer\n:ProjectContainer" #lightgrey:  doesNotExceedPercentageAllocation(email, allocation)
+loop for each project search for account
+" projectContainer\n:ProjectContainer" -> " project\n :Project" #lightgrey:  doesNotExceedPercentageAllocation\n(email, allocation)
+" project\n :Project" -> "resourceInProject\n:ResourceInProject" #lightgrey: getResourceInProject()
+"resourceInProject\n:ResourceInProject" -> "teamMember\n:TeamMemberContainer" #lightgrey:getAllocationInProject(email)
+deactivate
+deactivate
+" project\n :Project" --> " projectContainer\n:ProjectContainer" #lightgrey:true
+end
+
+
+" projectContainer\n:ProjectContainer" --> ":AssociateTeamMemberController" #lightgrey:true
+"teamMember\n:TeamMemberContainer"-> "teamMember\n:TeamMemberContainer" #lightgrey: add(teamMember)
+"teamMember\n:TeamMemberContainer" --> "listTeamMembers\n :List<TeamMembers>"** #lightgrey: createListTeamMembers()
+deactivate
+"teamMember\n:TeamMemberContainer" --> "resourceInProject\n:ResourceInProject" #lightgrey: true
+"resourceInProject\n:ResourceInProject"-->" project\n :Project" #lightgrey: true
+" project\n :Project" --> ":AssociateTeamMemberController" #lightgrey: true
+":AssociateTeamMemberController" --> ":AssociateTeamMemberUI" #lightgrey:  true
+":AssociateTeamMemberUI" --> Manager : Team Member Associated
+
+@enduml

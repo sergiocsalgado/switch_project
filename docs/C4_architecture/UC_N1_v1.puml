@@ -1,0 +1,74 @@
+@startuml
+
+!if %variable_exists("RELATIVE_INCLUDE")
+  !include %get_variable_value("RELATIVE_INCLUDE")/C4_Container.puml
+!else
+  !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!endif
+
+legend top
+C4+1 Model - UC:N1
+end legend
+
+left to right direction
+
+Person(administrator, "Administrator")
+Person(manager, "Manager")
+Person(projectManager, "Project Manager")
+Person(teamMember, "Team Member")
+Person(scrumMaster, "Scrum Master")
+Person(productOwner, "Product Owner")
+
+System_Boundary(c1, "Project Management") {
+
+administrator --> (US001_Create User Profiles)
+administrator --> (US002_Register User)
+administrator --> (US003_Change User Profile)
+administrator --> (US004_Get User Account List)
+administrator --> (US005_Inactivate User Account)
+administrator --> (US006_Activate User Account)
+administrator --> (US007_Create Project Typology)
+administrator --> (US008_Add BusinessSector)
+administrator --> (US009_Add Customer)
+
+manager --> (US010_Register/Create Project)
+manager --> (US011_Associate User as TeamMember)
+manager --> (US012_Define PO of Project)
+manager --> (US013_Define SM of Project)
+manager --> (US014_Get Human Resources List in Project)
+manager --> (US015_Get Project list)
+manager --> (US024_Get Project list in the web UI)
+manager --> (US023_Register/Create Project in the web UI)
+manager --> (US028_Associate User as TeamMember in the web UI)
+manager --> (US029_Define PO of Project in the web UI)
+manager --> (US030_Define SM of Project in the web UI)
+
+teamMember --> (US016_Get Project list I'm Allocated to)
+teamMember --> (US018_Consult Product Backlog)
+teamMember --> (US020_Add User Story to Sprint Backlog)
+teamMember --> (US021_Estimate Effort of User Story)
+teamMember --> (US022_View ScrumBoard)
+teamMember --> (US026_Consult Product Backlog in the web UI)
+teamMember --> (US033_Update User Story Status in Sprint Backlog in the web UI)
+teamMember --> (US036_Consult the Sprint Backlog of a chosen sprint in the web UI)
+
+productOwner --> (US017_Create User Story and add it to product backlog)
+productOwner --> (US018_Consult Product Backlog)
+productOwner --> (US025_Create User Story and add it to product backlog in the web UI)
+productOwner --> (US026_Consult Product Backlog in the web UI)
+productOwner --> (US036_Consult the Sprint Backlog of a chosen sprint in the web UI)
+
+scrumMaster --> (US018_Consult Product Backlog)
+scrumMaster --> (US026_Consult Product Backlog in the web UI)
+scrumMaster --> (US036_Consult the Sprint Backlog of a chosen sprint in the web UI)
+
+projectManager --> (US019_Create Sprint)
+projectManager --> (US027_Create Sprint in the web UI)
+projectManager --> (US032_Add a user story to the open/current sprint backlog in the web UI)
+projectManager --> (US031_Start new Sprint in web UI)
+projectManager --> (US034_Close Sprint in the web UI)
+projectManager --> (US035_Product Backlog to be updated when a sprint is closed in the web UI)
+
+}
+
+@enduml

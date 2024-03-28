@@ -1,0 +1,29 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+SSD - System Sequence Diagram
+US012 As Manager, I want to define the PO of a project
+end legend
+
+autonumber
+
+actor Manager #lightgrey
+activate Manager #lightgrey
+participant System #lightgrey
+
+autonumber 1.1
+autoactivate on
+Manager -> System #lightgrey : Asks for lists of Accounts
+System --> Manager : Shows list of Accounts
+
+autonumber 2.1
+Manager -> System #lightgrey : Asks for list of Projects
+System --> Manager : Shows list of Projects
+
+autonumber 3.1
+Manager -> System #lightgrey : Define Product Owner in Project
+System --> Manager : Product Owner defined in Project
+
+@enduml

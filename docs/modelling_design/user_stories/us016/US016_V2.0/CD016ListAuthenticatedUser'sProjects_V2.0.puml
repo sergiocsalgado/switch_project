@@ -1,0 +1,210 @@
+@startuml
+
+legend top
+US016 As Authenticated User, I want to get a list of all projects I'm currently allocated to
+end legend
+
+
+
+package Controller {
+    class "ListUserProjectsController" as controller {
+        +listAllUserProjects(String email, String date)
+    }
+}
+
+package Service {
+    package interfaces {
+        interface "ListUserProjectsService" as  serviceI {
+            +listAllUserProjects(String email, String date)
+
+        }
+    }
+    class "ListUserProjectsServiceImpl" as service {
+        +listAllUserProjects(String email, String date)
+        -getUserProjects(Email emailVO, LocalDate localDate)
+        -getCustomers()
+        -getTypologies()
+        -getBusinessSectors()
+
+
+    }
+}
+
+package ddd {
+    interface "Repository<ProjectCode, Project>" as interfacePrjRepo {
+        +findAll : List<Project>
+    }
+    interface "Repository<TypologyID, Typology>" as interfaceTypoRepo {
+        +findAll() : List<Typology>
+    }
+    interface "Repository<BusinessSectorID, BusinessSector>" as interfaceBusinessSecRepo {
+        +findAll() : List<BusinessSector>
+    }
+    interface "Repository<CustomerID, Customer>" as interfaceCustomerRepo {
+        +findAll() : List<Customer>
+    }
+}
+
+package Mapper {
+    class "ProjectDTOMapper" as projectMapper {
+        + toDTOWithoutIDs(project, customerName,
+        businessSectorDescription, typologyDescription): ProjectDTO
+    }
+    class "ProjectDTO" as projectDTO {
+     - projectCode : String
+     - name : String
+     - description : String
+     - customer : String
+     - businessSector : String
+     - typology : String
+     - startDate : String
+     - endDate : String
+     - status : String
+     - sprintDuration : int
+     - numberOfPlannedSprints : int
+     - budget : String
+     }
+}
+
+package Model {
+
+    package value_objects {
+        class "ProjectCode" as projectCode <<(V, LightBlue) Value Object>> {
+            +getProjectCode(): String
+        }
+        class "Name" as name <<(V, LightBlue) Value Object>> {
+            +getValue() : String
+        }
+        class "Description" as description <<(V, LightBlue) Value Object>> {
+            +getDescription() : String
+        }
+        class "CustomerID" as customerID <<(V, LightBlue) Value Object>> {
+            +getIdOfCustomer() : String
+        }
+        class "BusinessSectorID" as businessSectorID <<(V, LightBlue) Value Object>> {
+            +getId() : String
+        }
+        class "TypologyID" as typologyID <<(V, LightBlue) Value Object>> {
+            +getIdOfTypology(): String
+        }
+        class "ProjectStatus" as projectStatus <<(V, LightBlue) Value Object>> {
+            +getProjectStatus(): String
+        }
+        class "PositiveNumber" as sprintDuration <<(V, LightBlue) Value Object>> {
+            +getNumber() : int
+        }
+        class "PositiveNumber" as numberOfPlannedSprints <<(V, LightBlue) Value Object>> {
+            +getNumber() : int
+        }
+        class "Cost" as budget <<(V, LightBlue) Value Object>> {
+            +getValue() : double
+            +getCurrency() : String
+        }
+        class "Period" as period <<(V, LightBlue) Value Object>> {
+            +getStartDate() : LocalDate
+            +getEndDate() : LocalDate
+        }
+        class "Email" as email <<(V, LightBlue) Value Object>>{
+            +Email(String emailAddress)
+        }
+
+    }
+
+    package Project {
+        class "Project" as project <<(A,SandyBrown) Aggregate Root>> {
+            +getProjectCode() :ProjectCode
+            +getProjectName() : Name
+            +getProjectDescription() : Description
+            +getCustomerID() : CustomerID
+            +getBusinessSectorID() BusinessSectorID
+            +getTypologyID() : TypologyID
+            +getPeriod() : Period
+            +getProjectStatus() : ProjectStatus
+            +getSprintDuration() : PositiveNumber
+            +getNumberOfPlannedSprints() : PositiveNumber
+            +getBudget() : Cost
+        }
+    }
+
+    package Typology {
+        class "Typology" as typology <<(A,SandyBrown) Aggregate Root>> {
+            +getTypologyID() : TypologyID
+            +getDescription() : Description
+        }
+    }
+
+    package Customer {
+        class "Customer" as customer <<(A,SandyBrown) Aggregate Root>> {
+            +getCustomerID() : CustomerID
+            +getName() : Name
+        }
+    }
+    package BusinessSector{
+        class "BusinessSector" as businessSector <<(A,SandyBrown) Aggregate Root>> {
+            +getBusinessSectorID() : BusinessSectorID
+            +getBusinessSectorDescription() : Description
+        }
+    }
+}
+
+ListProjectsUI ..> controller
+ListProjectsUI ..> projectDTO
+
+controller ..> serviceI
+controller ...> projectDTO
+serviceI <|.. service
+serviceI ..> projectDTO
+
+service ..> interfacePrjRepo
+service ..> interfaceTypoRepo
+service ..> interfaceBusinessSecRepo
+service ..> interfaceCustomerRepo
+service ..> projectMapper
+service ..> projectDTO
+service ..> project
+service ..> projectCode
+service ..> customer
+service ..> customerID
+service ..> businessSector
+service ..> businessSectorID
+service ..> typology
+service ..> typologyID
+service ..> name
+service ..> description
+service ..> email
+
+
+interfacePrjRepo ..> project
+interfacePrjRepo ..> projectCode
+interfaceTypoRepo ..> typology
+interfaceTypoRepo ..> typologyID
+interfaceBusinessSecRepo ..> businessSector
+interfaceBusinessSecRepo ..> businessSectorID
+interfaceCustomerRepo ..> customer
+interfaceCustomerRepo ..> customerID
+
+project "1" --> "1" projectCode
+project "1" --> "1" name
+project "1" --> "1" description
+project "1" --> "1" customerID
+project "1" --> "1" businessSectorID
+project "1" --> "1" typologyID
+project "1" --> "1" projectStatus
+project "1" --> "1" sprintDuration
+project "1" --> "1" numberOfPlannedSprints
+project "1" --> "1" budget
+project "1" --> "1" period
+
+typology "1" --> "1" "typologyID"
+typology "1" --> "1" "description"
+
+customer "1" --> "1" "customerID"
+customer "1" --> "1" "name"
+
+businessSector "1" --> "1" "businessSectorID"
+businessSector "1" --> "1" "description"
+
+projectMapper ..> projectDTO
+projectMapper ..> project
+
+@enduml

@@ -1,0 +1,615 @@
+@font-face {
+    font-family: 'LLPIXEL3';
+    src: url("./assets/fonts/LLPIXEL3.ttf");
+}
+
+@font-face {
+    font-family: 'PixelOne';
+    src: url("./assets/fonts/PixelOne.ttf");
+}
+
+@media (max-width: 768px) {
+    .team-member {
+        flex-basis: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 576px) {
+    .team-member {
+        flex-basis: 100%;
+    }
+}
+
+.about-page {
+    text-align: center;
+}
+
+.App {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    background-color: white;
+}
+
+.App {
+    background-image: url('./assets/images/WallPaperHome.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* CSS for window alert */
+.alert-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    width: 300px;
+    max-width: 90%;
+}
+
+.alert-modal h2 {
+    margin-top: 0;
+    font-size: 18px;
+}
+
+.alert-modal p {
+    margin-bottom: 10px;
+}
+
+.alert-modal button {
+    background-color: #144385;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.alert-modal button:hover {
+    background-color: #0056b3;
+}
+
+
+.button-sprint {
+    background-color: #144385;
+    color: white;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 3px;
+    height: 40px;
+}
+
+.button-sprint:hover {
+    background-color: #3E5794;
+}
+
+
+.button-pb {
+    background-color: #144385;
+    color: white;
+    padding: 5px 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 3px;
+    height: 40px;
+}
+
+.button-pb:hover {
+    background-color: #3E5794;
+}
+
+.button-sb {
+    background-color: #144385;
+    color: white;
+    padding: 5px 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 3px;
+    height: 40px;
+}
+
+.button-sb:hover {
+    background-color: #3E5794;
+}
+
+.button-resources {
+    background-color: #144385;
+    color: white;
+    padding: 5px 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 3px;
+    height: 40px;
+}
+
+.button-resources:hover {
+    background-color: #3E5794;
+}
+
+.button-more {
+    background-color: #144385;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px;
+    height: 40px;
+}
+
+.button-more:hover {
+    background-color: #3E5794;
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.back-button-SB {
+    background-color: dimgray;
+    color: white;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.back-button-SB:hover {
+    background-color: #144385;
+}
+
+
+.back-button-USInSprint {
+    background-color: dimgray;
+    color: white;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.back-button-USInSprint {
+    background-color: #144385;
+
+}
+
+
+.back-button {
+    background-color: dimgray;
+    color: white;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.back-button:hover {
+    background-color: #144385;
+
+}
+
+.close-button {
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.close-button:hover {
+    color: #144385;
+}
+
+.first_image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.footer-global {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    background-color: transparent;
+    color: black;
+    padding: 0;
+    border-top: transparent;
+    border-bottom: transparent;
+    box-sizing: border-box;
+    position: relative;
+    min-height: 13vh;
+}
+
+
+.footer-table {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    background-color: transparent;
+    color: #0077be;
+    padding: 1vh;
+    box-sizing: border-box;
+    margin-top: 10px;
+}
+
+
+/*.home-Container {
+    width: 100vw;
+    height: 100vh;
+    text-align: left;
+    background-image: url('./assets/images/Home_Video.mp4');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}*/
+
+.header-global {
+    text-align: center;
+    top: 0;
+    width: 100%;
+    background-color: transparent;
+    color: black;
+    padding: 1vh;
+    box-sizing: border-box;
+}
+
+.header-white {
+    text-align: center;
+    top: 0;
+    width: 100%;
+    background-color: white;
+    color: black;
+    padding: 1vh;
+    box-sizing: border-box;
+}
+
+
+.home-Container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-size: cover;
+}
+
+.home-Container-Home {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-size: cover;
+}
+
+
+.home-video {
+    display: none;
+}
+
+.home-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: black;
+    font-size: 2.5em;
+    font-style: normal;
+    padding: 5vh 8vh;
+}
+
+.home-button {
+    border: none;
+    text-align: center;
+    color: #144385;
+    font-size: 2.5em;
+    font-style: normal;
+    font-family: "LLPIXEL3", sans-serif;
+    background-image: url("./assets/images/GifCircle.gif");
+    background-position: center;
+    padding: 1.5vh;
+    text-decoration: none;
+    display: inline-block;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%; /* 50% for a circle */
+    cursor: pointer;
+    margin-top: 250px;
+    position: absolute;
+    top: 0%; /* adjust up and down */
+    left: 50%; /* adjust right left */
+    transform: translate(-50%, -50%); /* adjust center */
+}
+
+.left-align-button {
+    text-align: left;
+    margin-right: 1300px;
+}
+
+
+.nav-container.fixed {
+    text-align: left;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+}
+
+.nav-bar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    gap: 7vh;
+    height: 50px;
+    z-index: 999;
+    margin-top: 15px;
+
+
+}
+
+.nav-bar::before,
+.nav-bar::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 25%; /* line length */
+    height: 1px;
+    background-color: black;
+}
+
+.nav-bar::before {
+    top: -1px; /* upper line  */
+}
+
+.nav-bar::after {
+    bottom: -1px; /* under line */
+}
+
+
+.nav-bar li {
+    position: relative;
+}
+
+.nav-bar li:hover::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: black;
+}
+
+.nav-line {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background-color: black;
+    width: 0;
+}
+
+.nav-button {
+    border: none;
+    color: #000033;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.nav-button-selected {
+    background-color: #ccc;
+    color: #fff;
+}
+
+
+/*pop up sprint page: Buttons Start and Close Sprint*/
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.popup-content p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.popup-content button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+}
+
+.popup-content button:hover {
+    background-color: #555;
+}
+
+
+.proj-container {
+    position: relative;
+    min-height: 100vh;
+    margin-top: 50px;
+
+}
+
+
+table {
+    border-collapse: collapse;
+    margin-left: 20px;
+    margin-right: 20px;
+    border: none;
+}
+
+table td,
+table th {
+    border: none;
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: gray;
+    color: white;
+}
+
+
+table tr:nth-child(odd) {
+    background-color: #F8F8F9;
+}
+
+table tr:nth-child(even) {
+    background-color: #e9e9ea;
+}
+
+table tr:hover {
+    background-color: #ddd;
+}
+
+table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #144385;
+    color: white;
+}
+
+.team {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.team-member {
+    flex-basis: calc(20% - 20px);
+    margin: 10px;
+    position: relative;
+}
+
+.team-member-image {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.team-member-name {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.team-member-role {
+    margin-top: 5px;
+    font-size: 16px;
+    color: #777;
+    text-align: center;
+}
+
+.table-container {
+    style: center;
+}
+
+
+/*Pop-up for Close Sprints*/
+.error,
+.success {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: #fff;
+    color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.error {
+    background-color: #d32f2f;
+}
+
+.success {
+    background-color: #4CAF50;
+}
+

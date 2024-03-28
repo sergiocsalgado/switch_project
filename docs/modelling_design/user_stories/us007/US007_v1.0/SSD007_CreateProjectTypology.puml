@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+legend top
+SSD US007 - Create a new project typology
+end legend
+
+autoactivate on
+Actor Administrator
+activate Administrator #lightgrey
+
+autonumber
+Administrator -> System #lightgrey: Create project typology
+Administrator <-- System: Project typology created
+
+@enduml

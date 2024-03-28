@@ -1,0 +1,39 @@
+@startuml
+'https://plantuml.com/class-diagram
+legend top
+ CD US008 Add Business Sector
+ end legend
+
+AddBusinessSectorUI..>BusinessSectorController
+BusinessSectorController..>Company: company
+Company..>BusinessSectorContainer: addBusinessSectorContainer
+BusinessSectorContainer"1"*--"*"BusinessSector
+
+class AddBusinessSectorUI {
+}
+
+class BusinessSectorController {
++BusinessSectorController(Company company)
++addBusinessSector(String description):boolean
+}
+class Company{
++Company()
++addBusinessSector(String description):boolean
+}
+
+class BusinessSectorContainer {
+-profiles : List <BusinessSector>
++BusinessSectorContainer()
++addBusinessSector(String description):boolean
+-saveBusinessSector(BusinessSector bs):boolean
++getBusinessSector((String description):BusinessSector bs
+}
+
+class BusinessSector {
+-description : String
++BusinessSector(String description)
++ verifyBusinessSector(String description)
+}
+
+
+@enduml

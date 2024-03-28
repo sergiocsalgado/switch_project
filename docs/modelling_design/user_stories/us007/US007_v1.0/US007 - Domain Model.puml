@@ -1,0 +1,18 @@
+@startuml
+
+legend top
+US007 - Domain Model
+end legend
+
+/'Class'/
+Object "Typology" as Typology {
+-description
+}
+
+/'Notas'/
+note right of Typology
+    Fixed Cost
+    Time and materials
+end note
+
+@enduml

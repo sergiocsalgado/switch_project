@@ -1,0 +1,147 @@
+@startuml
+/'Domain Model'/
+
+/'title'/
+
+legend top
+Domain Model
+end legend
+
+/'Class'/
+
+Object "Profile" as Profile {
+-description
+}
+
+Object "Account" as Account {
+-email
+-name
+-photo_optional
+-phoneNumber
+-status
+-password
+}
+
+Object "Project" as Project {
+-code
+-name
+-description
+-startDate
+-endDate
+-numberSprints
+-sprintDuration
+-businessSector
+-customer
+-budget
+-typology
+}
+
+Object "ProjectStatus" as ProjectStatus {
+-description
+}
+
+Object "Report" as Report {
+-description
+}
+
+Object "ProductBacklog" as ProductBacklog {
+}
+
+Object "ProjectManager" as ProjectManager{
+-startDate
+ -endDate
+ -percentageAllocation
+ -costPerHour
+}
+
+Object "ProductOwner" as ProductOwner{
+-startDate
+-endDate
+-percentageAllocation
+-costPerHour
+}
+
+Object "ScrumMaster" as ScrumMaster{
+-startDate
+-endDate
+-percentageAllocation
+-costPerHour
+}
+
+Object "TeamMember" as TeamMember{
+-startDate
+-endDate
+-percentageAllocation
+-costPerHour
+}
+
+Object "Sprint" as Sprint {
+-startDate
+-endDate
+-status
+-effort
+}
+
+Object "SprintBacklog" as SprintBacklog {
+}
+
+Object "Task" as Task {
+-typeOfTask
+-name
+-description
+-startDate
+-endDate
+-percentageExecution
+-status
+-responsible
+-userStory_optional
+-hoursSpend
+-effortEstimated
+}
+
+Object "UserStory" as UserStory {
+-userStoryNumber
+-actor
+-userStoryText
+-listOfAcceptanceCriteria
+-status
+-priority
+}
+
+/'Directions'/
+
+Sprint "1" -- "*" UserStory : includes a >
+Project "1" -- "*" Sprint : constituted by >
+TeamMember "*" -- "1" Project : allocated to >
+ScrumMaster "0..1" -- "1" Project : allocated to >
+ProductOwner "0..1" -- "1" Project : allocated to >
+ProjectManager "0..1" -- "1" Project : allocated to >
+Report "*" -- "1" Project : generates a  <
+ProjectStatus "1" -- "1" Project : characterized by a  <
+Project "1" -- "1" "ProductBacklog" : includes a >
+UserStory "*" - "1" ProductBacklog : decomposed in <
+UserStory "1" -- "*" Task : originates a  >
+Sprint "1" -- "*" Task : originates a  >
+Sprint "1" -- "*" SprintBacklog : includes a  >
+SprintBacklog "1" -- "*" UserStory : contains a  >
+Account "1" -- "1" ProjectManager : represents a >
+Account "1" -- "1" ProductOwner : represents a >
+Account "1" -- "1" ScrumMaster : represents a >
+Account "1" -- "1" TeamMember : represents a >
+Account "*" - "1" Profile :owns a >
+
+/'notas'/
+
+note right of Profile
+    Administrator
+    Manager
+    User
+end note
+
+note left of Report
+    Allocations
+    KPI
+end note
+
+
+@enduml

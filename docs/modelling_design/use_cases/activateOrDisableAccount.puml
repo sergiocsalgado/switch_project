@@ -1,0 +1,17 @@
+@startuml
+
+
+actor "Administrator"
+
+left to right direction
+rectangle "System"{
+
+    "Administrator" --> (List Users accounts)
+
+    "Administrator" --> (Activate account)
+
+    "Administrator" --> (Deactivate account)
+
+}
+
+@enduml

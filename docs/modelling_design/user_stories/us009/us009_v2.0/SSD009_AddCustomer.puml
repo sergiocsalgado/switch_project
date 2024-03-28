@@ -1,0 +1,15 @@
+@startuml
+skinparam sequenceMessageAlign center
+
+legend top
+SSD US007 - Add Business Sector
+end legend
+
+autoactivate on
+Actor Administrator
+activate Administrator #lightgrey
+
+autonumber
+Administrator -> System #lightgrey: Add Business Sector
+System --> Administrator: true
+@enduml

@@ -1,0 +1,15 @@
+{
+    "costumersList":[
+        {"id": "1", "CustomerName": "Crystal Chemicals Corp.", "nif": "123456789"},
+        {"id": "2", "CustomerName": "Terra Power Corp.", "nif": "987654321"},
+        {"id": "3", "CustomerName": "Medico Health Group LLC", "nif": "246810121"},
+        {"id": "4", "CustomerName": "Elite Brands Inc.", "nif": "864209753"},
+        {"id": "5", "CustomerName": "Precision Manufacturing LLC", "nif": "135790864"},
+        {"id": "6", "CustomerName": "FreshCo Foods Inc.", "nif": "369258147"},
+        {"id": "7", "CustomerName": "Golden Bank Corp. ", "nif": "741852963"},
+        {"id": "8", "CustomerName": "Solar Energy Solutions LLC", "nif": "159263748"},
+        {"id": "9", "CustomerName": "CyberSec Innovations Inc.", "nif": "951753852"},
+        {"id": "10", "CustomerName": "SmartTel Communications Corp.", "nif": "258147369"},
+        {"id": "11", "CustomerName": "Prime Properties Group LLC", "nif": "753951456"}
+    ]
+}

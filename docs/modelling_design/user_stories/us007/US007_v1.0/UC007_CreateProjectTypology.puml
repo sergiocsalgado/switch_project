@@ -1,0 +1,17 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+legend top
+UC US007 - Create a new project typology
+end legend
+
+left to right direction
+actor Administrator
+
+rectangle System {
+usecase "CreateProjectTypology" as UC7
+}
+
+ Administrator --> UC7
+
+@enduml

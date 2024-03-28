@@ -1,0 +1,50 @@
+@startuml
+legend top
+SD US007 - Create BusinessSector
+end legend
+
+autoactivate on
+
+boundary " " as Administrator #white
+participant ": Route" as Route
+participant ": BusinessSectorDTO" as BusinessSectorDTO
+participant BusinessSectorController as BusinessSectorController
+participant AddBusinessSectorService as AddBusinessSectorService
+participant AddBusinessSectorServiceImpl as AddBusinessSectorServiceImpl
+participant BusinessSectorID as BusinessSectorID
+participant Description as Description
+participant FactoryBusinessSector as FactoryBusinessSector
+participant FactoryBusinessSectorImpl as FactoryBusinessSectorImpl
+participant BusinessSector as BusinessSector
+participant InMemoryBusinessSectorRepository as InMemoryBusinessSectorRepository
+participant BusinessSectorDTOMapper as BusinessSectorDTOMapper
+
+
+autonumber 1.1
+Administrator o-> Route #b: POST (/business-sectors))
+Route -> BusinessSectorDTO #b: createBusinessSector(BusinessSectorDTO businessSectorDTO)
+BusinessSectorDTO -> BusinessSectorController #b: createBusinessSector(BusinessSectorDTO businessSectorDTO)
+deactivate BusinessSectorDTO
+BusinessSectorController -> AddBusinessSectorService #b: addBusinessSector(String bSectorID, String bSectorDescription)
+AddBusinessSectorService -> AddBusinessSectorServiceImpl #b : addBusinessSector(String bSectorID, String bSectorDescription)
+AddBusinessSectorServiceImpl -> BusinessSectorID ** #b : create VO BusinessSectorID
+AddBusinessSectorServiceImpl -> Description ** #b : create VO Description
+
+AddBusinessSectorServiceImpl -> FactoryBusinessSector #b: addBusinessSector(BusinessSectorID businessSectorID, Description businessSectorDescription)
+FactoryBusinessSector -> FactoryBusinessSectorImpl #b: addBusinessSector(BusinessSectorID businessSectorID, Description businessSectorDescription)
+FactoryBusinessSectorImpl ->BusinessSector ** #b: BusinessSector (BusinessSectorID businessSectorID, Description businessSectorDescription)
+FactoryBusinessSectorImpl --> FactoryBusinessSector #b: BusinessSector
+FactoryBusinessSector --> AddBusinessSectorServiceImpl #b: BusinessSector
+
+AddBusinessSectorServiceImpl -> InMemoryBusinessSectorRepository #b : containsIDOrDescription(BusinessSector businessSector)
+InMemoryBusinessSectorRepository --> AddBusinessSectorServiceImpl #b : true = containsIDOrDescription(BusinessSector businessSector)
+AddBusinessSectorServiceImpl -> InMemoryBusinessSectorRepository #b : save(BusinessSector businessSector)
+InMemoryBusinessSectorRepository --> AddBusinessSectorServiceImpl #b: BusinessSector
+AddBusinessSectorServiceImpl --> AddBusinessSectorService #b: BusinessSector
+AddBusinessSectorService --> BusinessSectorController #b: BusinessSector
+BusinessSectorController -> BusinessSectorDTOMapper ** #b: toDTO( BusinessSector businessSector)
+BusinessSectorController --> Route #b: (addBSector)
+
+Route -->o Administrator #b: response(json)
+deactivate Route
+@enduml

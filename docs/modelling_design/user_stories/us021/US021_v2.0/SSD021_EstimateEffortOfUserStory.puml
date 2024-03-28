@@ -1,0 +1,17 @@
+@startuml
+
+legend top
+SSD US021 As Team Member, I Want to Estimate the Effort
+of a User Story in a Sprint, during the Sprint Planning Ceremony
+end legend
+
+skinparam sequenceMessageAlign center
+actor TeamMember
+participant ":System"
+
+
+TeamMember -> ":System": Add the Effort of a User Story in a Sprint
+TeamMember <-- ":System": Effort added
+
+
+@enduml

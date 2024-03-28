@@ -1,0 +1,62 @@
+@startuml
+
+'..|> implementation
+'-- associado
+'..> depende
+
+skinparam sequenceMessageAlign center
+
+legend top
+CD US004 List all User Accounts and their Status
+end legend
+
+AccountsAndStatusUI..>AccountsAndStatusController
+AccountsAndStatusController..>" "Company: company
+AccountsAndStatusController..>" "AccountStatusMapper: accountStatusMapper
+Company " "..>" "AccountContainer : accountContainer
+AccountContainer"1 "*--"1..*"Account : contains
+AccountStatusDTO<..AccountStatusMapper : accountStatusDTO\naccountContainer
+
+class AccountsAndStatusUI {
+}
+
+class AccountsAndStatusController {
++AccountsAndStatusController(Company company)
++getAccountsAndStatus(): List<Account>
++getAccountAndStatus(): List<AccountStatusDTO>
+}
+
+class Company{
++Company(AccountContainer accountContainer,\nProfileContainer profileContainer)
++getAccountAndStatus(): List<Account>
+}
+
+class AccountStatusMapper{
++listAccountAndStatusDTO(List<Account> accounts):\nList<AccountStatusDTO)
+}
+
+class AccountContainer {
++AccountContainer()
++getAccountAndStatus() : List<Account>
+}
+
+class Account {
+-name: String
+-email: String
+-phoneNumber: String
+-status: boolean
++Account(String email, String name, String phoneNumber,
+ boolean status, Profile profile)
++getName(): String
++getEmail(): String
++phoneNumber(): String
++getStatus(): boolean
+}
+
+class AccountStatusDTO {
+-final EMAIL: String
+-final STATUS: boolean
++AccountStatusDTO(String email, boolean status)
+}
+
+@enduml

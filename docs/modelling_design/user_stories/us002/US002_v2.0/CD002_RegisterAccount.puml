@@ -1,0 +1,149 @@
+@startuml
+skinparam linetype ortho
+legend top
+CD US002 Register Account
+end legend
+
+package Controller {
+    class "AccountController" as controller {
+        +createAccount(AccountDTO accountDTO)
+    }
+}
+
+package Service {
+    package interfaces {
+        interface "RegisterAccountService" as  serviceI {
+            +createAccount(String email, String name,
+             String phoneNumber,String status)
+        }
+    }
+    class "RegisterAccountServiceImpl" as service {
+                +createAccount(String email, String name,
+                 String phoneNumber,String status)
+    }
+}
+
+package ddd {
+    interface "Repository<Email, Account>" as interfaceAccRepo {
+        +findAll
+    }
+    interface "Repository<ProfileID, Profile>" as interfaceProfRepo {
+        +findAll()
+    }
+}
+
+package Mapper {
+    class "AccountMapper" as accountMapper {
+        + toDTO(project)
+    }
+
+    class "AccountDTO" as accountDTO {
+     - email : String
+     - name : String
+     - phoneNumber : String
+     - status : String
+     }
+}
+
+package Model {
+
+    package value_objects {
+        class "Email" as email <<(V, LightBlue) Value Object>> {
+            -emailAddress : String
+            +getEmail()
+        }
+        class "Name" as name <<(V, LightBlue) Value Object>> {
+            -value : String
+            +getValue()
+        }
+        class "PhoneNumber" as phoneNumber <<(V, LightBlue) Value Object>> {
+            -number : String
+            +getPhoneNumber()
+        }
+        class "AccountStatus" as accountStatus <<(V, LightBlue) Value Object>> {
+            -status : String
+            +getStatus()
+        }
+        class "ProfileID" as profileID <<(V, LightBlue) Value Object>> {
+            -idProfile : String
+            +getProfileID()
+        }
+        class "Description" as description <<(V, LightBlue) Value Object>> {
+            -text : String
+            +getDescription()
+        }
+    }
+
+    package Profile {
+        class "Profile" as profile <<(A,SandyBrown) Aggregate Root>> {
+            +getProfileID()
+            +getDescription()
+        }
+    }
+
+    package HumanResource {
+        class "Account" as account <<(A,SandyBrown) Aggregate Root>> {
+            +getEmail()
+            +getName()
+            +getPhoneNumber()
+            +getStatus()
+        }
+        interface "FactoryAccount" as factoryAccountI {
+            +createAccount(Email email, Name name,
+            PhoneNumber phoneNumber, AccountStatus status, ProfileID profile)
+        }
+        class "FactoryAccountImpl" as factoryAccount{
+            +createAccount(Email email, Name name,
+             PhoneNumber phoneNumber, AccountStatus status, ProfileID profile)
+        }
+    }
+}
+
+
+controller ..> serviceI
+controller ..> accountMapper
+controller ...> accountDTO
+
+serviceI <|-- service
+serviceI ..> account
+
+service ..> interfaceAccRepo
+service ..> interfaceProfRepo
+service ..> account
+service ..> factoryAccountI
+service ..> profileID
+service ..> profile
+service ..> email
+service ..> name
+service ..> phoneNumber
+service ..> accountStatus
+service ..> description
+
+interfaceAccRepo ..> account
+interfaceAccRepo ..> email
+
+interfaceProfRepo ..> profile
+interfaceProfRepo ..> profileID
+
+profile "1" --> "1" profileID
+profile "1" --> "1" description
+
+account "1" --> "1" email
+account "1" --> "1" name
+account "1" --> "1" phoneNumber
+account "1" --> "1" accountStatus
+
+factoryAccount ..> email
+factoryAccount ..> name
+factoryAccount ..> phoneNumber
+factoryAccount ..> accountStatus
+factoryAccount ..> profileID
+
+accountMapper ..> accountDTO
+accountMapper ..> email
+accountMapper ..> name
+accountMapper ..> phoneNumber
+accountMapper ..> accountStatus
+accountMapper ..> account
+
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+
+
+actor "Administrator" as Actor
+participant "System" as System
+
+autonumber
+
+
+Actor -> System : Asks for list of users
+System --> Actor: Returns list of users
+
+Actor -> System : Asks for list of users status
+System --> Actor: Returns list of users status
+
+
+
+@enduml

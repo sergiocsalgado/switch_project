@@ -1,0 +1,41 @@
+[
+  {
+    "id": "1",
+    "code": "PRJ1",
+    "name": "Switch",
+    "description": "IT",
+    "startDate": "04/10/2022",
+    "customer": "PTH",
+    "businessSector": "Learning",
+    "status": "Construction",
+    "typology": "Fixed Cost",
+    "budget": "3000€",
+    "sprintDuration": "2"
+  },
+  {
+    "id": "2",
+    "code": "PRJ2",
+    "name": "Computer Engineering",
+    "description": "IT",
+    "startDate": "15/09/2022",
+    "customer": "ISEP",
+    "businessSector": "Learning",
+    "status": "Elaboration",
+    "typology": "Fixed Cost",
+    "budget": "1000€",
+    "sprintDuration": "3"
+  },
+  {
+    "id": "3",
+    "code": "PRJ3",
+    "name": "Civil Engineering",
+    "description": "Engineering",
+    "startDate": "30/10/2023",
+    "customer": "STH",
+    "businessSector": "Construction",
+    "status": "Planned",
+    "typology": "Fixed time and materials",
+    "budget": "1500€",
+    "sprintDuration": "1"
+  }
+]

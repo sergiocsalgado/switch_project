@@ -1,0 +1,166 @@
+@startuml
+
+legend top
+CD: US022 - As Team Member, I want to view the Scrum Board of current sprint
+end legend
+
+skinparam linetype ortho
+
+package Controller {
+    class "UserStoryController" as controller {
+        +viewScrumBoard() : List<UserStoryDTO>
+    }
+}
+
+package Service {
+    package interfaces {
+        interface "ViewScrumBoardService" as  serviceI {
+            +getScrumBoard(ProjectCode) : List<UserStory>
+        }
+    }
+    class "ViewScrumBoardServiceImpl" as service {
+        -projectExists(ProjectCode) : boolean
+        -getCurrentSprint(ProjectCode) : Optional<Sprint>
+        -getUserStoriesStatusForScrumBoard() : Set<UserStoryStatus>
+        +getScrumBoard(ProjectCode)  : List<UserStory>
+    }
+}
+
+package ddd {
+    interface "Repository<ProjectCode, Project>" as interfacePrjRepo {
+        +containsOfIdentity(projectCode) : boolean
+    }
+    interface "Repository<SprintID, Sprint>" as interfaceSprintRepo {
+        +findAll() : List<Project>
+    }
+    interface "Repository<UserStoryID, UserStory>" as interfaceStoryRepo {
+        +findAll() : List<UserStory>
+    }
+}
+
+package Model {
+
+    package value_objects{
+        class "ProjectCode" as projectCode <<(V, LightBlue) Value Object>> {
+            +getProjectCode() : String
+        }
+        class "UserStoryID" as storyID <<(V, LightBlue) Value Object>> {
+            +getUserStoryID() : String
+        }
+        class "SprintID" as sprintID <<(V, LightBlue) Value Object>> {
+            +getSprintID() : String
+        }
+        class "Description" as storyText <<(V, LightBlue) Value Object>> {
+            +getDescription() : String
+        }
+        class "UserStoryStatus" as storyStatus <<(V, LightBlue) Value Object>> {
+            +getDescription() : String
+        }
+        class "UserStoryNumber" as storyNumber <<(V, LightBlue) Value Object>> {
+            +getNumber() : String
+        }
+        class "Name" as actorName <<(V, LightBlue) Value Object>> {
+            +getValue() : String
+        }
+        class "Priority" as priority <<(V, LightBlue) Value Object>> {
+            +getIndex() : int
+        }
+        class "Period" as period <<(V, LightBlue) Value Object>> {
+            +getStartDate() : LocalDate
+            +getEndDate() : LocalDate
+        }
+    }
+
+    package Project {
+        class "Project" as project <<(A,SandyBrown) Aggregate Root>> {
+            +getProjectCode() : ProjectCode
+        }
+    }
+    package Sprint {
+        class "Sprint" as sprint <<(A,SandyBrown) Aggregate Root>> {
+            +getProjectCode() : ProjectCode
+            +getPeriod() : Period
+            +getScrumBoardList() : List<UserStoryID>
+        }
+    }
+    package UserStory {
+        class "UserStory" as story <<(A,SandyBrown) Aggregate Root>> {
+            +getUserStoryID() : UserStoryID
+            +getProjectCode() : ProjectCode
+            +getUserStoryNumber() : UserStoryNumber
+            +getActor() : Name
+            +getUserStoryText() : Description
+            +getStatus() : UserStoryStatus
+            +getPriority() : Priority
+        }
+    }
+}
+
+package Mapper {
+    class "UserStoryMapper" as mapper {
+        + getUserStoriesDTO(List<UserStory> userStories) : List<UserStoryDTO>
+    }
+    class "UserStoryDTO" as storyDTO {
+        + projectCode : String
+        + userStoryID : String
+        + userStoryText: String
+        + status: String
+        + userStoryNumber: String
+        + actor : String
+        + priority : int
+    }
+}
+
+ViewScrumBoardUI ..> controller
+ViewScrumBoardUI ..> storyDTO
+
+controller ...> storyDTO
+controller ...> story
+controller ...> mapper
+controller ..> serviceI
+
+mapper .right.> storyDTO
+mapper ..> story
+
+mapper ..> storyID
+mapper ..> projectCode
+mapper ..> storyNumber
+mapper ..> actorName
+mapper ..> storyText
+mapper ..> storyStatus
+mapper ..> priority
+
+serviceI <|.. service
+serviceI ..> story
+serviceI ..> projectCode
+
+service ..> interfacePrjRepo
+service ..> interfaceSprintRepo
+service ..> interfaceStoryRepo
+service ..> storyDTO
+service ..> story
+service ..> storyStatus
+service ..> projectCode
+
+interfacePrjRepo ..> projectCode
+interfacePrjRepo ..> project
+interfaceSprintRepo ..> sprint
+interfaceSprintRepo ..> sprintID
+interfaceStoryRepo ..> story
+interfaceStoryRepo ..> storyID
+
+project "1" -down-> "1" projectCode
+
+sprint "1" -down-> "1" sprintID
+sprint "1" -down-> "1" period
+
+story "1" -down-> "1" storyID
+story "1" -down-> "1" projectCode
+story "1" -down-> "1" storyNumber
+story "1" -down-> "1" actorName
+story "1" -down-> "1" storyText
+story "1" -down-> "1" storyStatus
+story "1" -down-> "1" priority
+
+
+@enduml

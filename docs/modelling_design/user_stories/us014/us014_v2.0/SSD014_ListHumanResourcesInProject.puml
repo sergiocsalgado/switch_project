@@ -1,0 +1,15 @@
+@startuml
+
+
+actor Manager
+
+autonumber 1.1
+
+activate Manager #lightgrey
+
+Manager -> System: Requests a List of Human Resources in Project
+activate System #lightgrey
+
+System --> Manager: Displays list of all human resources associated to that project
+deactivate
+@enduml

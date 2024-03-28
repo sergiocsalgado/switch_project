@@ -1,0 +1,13 @@
+@startuml
+
+
+actor "User"
+
+left to right direction
+rectangle "System"{
+
+    "User" --> (Update task)
+
+}
+
+@enduml

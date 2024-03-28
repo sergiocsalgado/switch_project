@@ -1,0 +1,11 @@
+# Primary Actor:
+Administrator
+
+# Main Success Scenario:
+1. Administrator is well authenticated with Administrator profile
+2. Administrator requests registration of new account
+3. System lists fields necessary to register a new account
+4. Administrator inputs fields
+5. Administrator confirms new user registration request
+6. System accepts registration response
+7. System associates account to a User profile

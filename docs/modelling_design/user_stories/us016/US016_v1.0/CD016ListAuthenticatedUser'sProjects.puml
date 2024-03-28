@@ -1,0 +1,64 @@
+CD 
+
+@startuml
+legend top
+CD US016 As Authenticated User, I want to get a list of all projects I'm currently allocated to
+end legend
+
+ListUserProjectsUI..>ListUserProjectsController
+ListUserProjectsController ..> AccountContainer
+AccountContainer "1"*--"*" Account : contains
+ListUserProjectsController ..> ProjectContainer
+ListUserProjectsController ..> ProjectMapper
+ProjectMapper ..> ProjectDTO
+ProjectContainer "1"*--"*" ResourcesInProjectContainer : contains
+ResourcesInProjectContainer "1"-->"*" Account : composed by
+
+
+
+class ListUserProjectsUI {
+
+}
+
+class ListUserProjectsController {
+-listAllUserProjects(email): List<Project>
++listAllUserProjectsDTO(email): List<ProjectDTO>
+
+}
+
+
+
+
+class AccountContainer {
++getAccount(email): Account
+
+}
+
+class Account{
++copy(): Account
+}
+
+class ProjectContainer{
++listAllUserProjects(account, localdate): List<Project>
+
+
+class ResourcesInProjectContainer{
++isInProject(account): boolean
+
+}
+
+class ProjectMapper {
++getProjectsDTO(progects: List<Project>)
+}
+
+class ProjectDTO {
++CODE: String;
++NAME: String;
++CUSTOMER: String;
++BUSINESS_SECTOR: String;
++STATUS: String
++ProjectDTO(String CODE, String NAME, String CUSTOMER,
+           String BUSINESS_SECTOR, String STATUS)
+}
+
+@enduml

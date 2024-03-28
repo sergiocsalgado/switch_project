@@ -1,0 +1,46 @@
+@startuml
+
+legend top
+SSD US021 As Team Member, I Want to Estimate the Effort
+of a User Story in a Sprint, during the Sprint Planning Ceremony
+end legend
+
+skinparam sequenceMessageAlign center
+
+actor "TeamMember"
+participant ":EstimateEffortUI"
+participant ":EstimateEffortController"
+participant ":ProjectContainer"
+participant "prj:Project"
+participant "sc:SprintContainer"
+participant "sp:Sprint"
+
+autonumber 1.1
+autoactivate on
+
+activate "TeamMember"  #lightgrey
+"TeamMember" -> ":EstimateEffortUI" #lightgrey: Add the Effort of a User \n Story in a Sprint (projectCode, usCode)
+":EstimateEffortUI" -> ":EstimateEffortController" #lightgrey: Add the Effort of a User \n Story in a Sprint (projectCode, usCode)
+":EstimateEffortController" -> ":ProjectContainer" #lightgrey: prj=getProject(projectCode)
+deactivate
+
+":EstimateEffortController" -> "prj:Project" #lightgrey: sc=getSprintContainer(projectCode)
+deactivate
+":EstimateEffortController" -> "sc:SprintContainer" #lightgrey: sp=getSprint(projectCode, sprintID)
+deactivate
+":EstimateEffortController" -> "sp:Sprint" #lightgrey: setEffortToUserStory(effort, projectCode, sprintID, userStoryNumber)
+
+loop for each us in UserStory
+"sp:Sprint" -> "sp:Sprint" #lightgrey: us= getUserStory(userStoryNumber)
+end loop
+
+"sp:Sprint" -> "us:UserStory" #lightgrey: setEffort(effort)
+
+"us:UserStory" --> "sp:Sprint" #lightgrey: true
+deactivate
+
+"sp:Sprint" --> ":EstimateEffortController" #lightgrey: true
+":EstimateEffortController" --> ":EstimateEffortUI" #lightgrey: true
+":EstimateEffortUI" --> "TeamMember" #lightgrey: Effort added
+
+@enduml

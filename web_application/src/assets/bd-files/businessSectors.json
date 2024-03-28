@@ -1,0 +1,16 @@
+
+{
+  "businessSectorList":[
+    {"id": "1", "bsName": "Health care"},
+    {"id": "2", "bsName": "Materials"},
+    {"id": "3", "bsName": "Energy"},
+    {"id": "4", "bsName": "Consumer discretionary"},
+    {"id": "5", "bsName": "Consumer staples"},
+    {"id": "6", "bsName": "Industrials"},
+    {"id": "7", "bsName": "Utilities"},
+    {"id": "8", "bsName": "Financials"},
+    {"id": "9", "bsName": "Information technology"},
+    {"id": "10", "bsName": "Communication services"},
+    {"id": "11", "bsName": "Real estate"}
+  ]
+}

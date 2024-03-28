@@ -1,0 +1,19 @@
+@startuml
+
+legend top
+SSD US003 - Set Account Profile
+end legend
+
+autoactivate on
+Actor Administrator
+activate Administrator #lightgrey
+
+autonumber
+Administrator -> System #lightgrey: Set user account Profile Request
+System --> Administrator: User account and profile input Request
+Administrator -> System #lightgrey: User account e-mail and profile input Response
+System --> Administrator: Set profile confirmation Request
+Administrator -> System #lightgrey: Set profile confirmation
+System --> Administrator: Set profile acceptance Response
+
+@enduml

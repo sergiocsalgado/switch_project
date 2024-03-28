@@ -1,0 +1,43 @@
+
+@startuml
+
+legend top
+SSD US021 As Team Member, I Want to Estimate the Effort
+of a User Story in a Sprint, during the Sprint Planning Ceremony
+end legend
+
+skinparam sequenceMessageAlign center
+
+boundary " " #white
+participant ":Route" as Route
+participant ":EstimateEffortController"
+participant ":EstimateEffortRequestDTO"
+participant ":EstimateEffortService"
+
+autonumber 1
+autoactivate on
+
+" " o-> Route : PATCH (/product-backlog/{userStoryID} (json)
+
+activate Route  #lightgrey
+Route -> ":EstimateEffortController" #lightgrey: setEffortToUserStory(EstimateEffortRequestDTO)
+":EstimateEffortController" -> ":EstimateEffortRequestDTO" #lightgrey: us=getUserStoryID
+":EstimateEffortController" -> ":EstimateEffortRequestDTO" #lightgrey: sp=getStoryPoints
+deactivate
+
+loop for each us in UserStory
+":EstimateEffortRequestDTO" -> ":EstimateEffortRequestDTO" #lightgrey: us= getUserStory(userStoryNumber)
+end loop
+":EstimateEffortRequestDTO" --> ":EstimateEffortController" #lightgrey: true
+deactivate
+
+
+":EstimateEffortController" -> ":EstimateEffortService" #lightgrey: setEffort(effort)
+":EstimateEffortService" -> "us:UserStory" #lightgrey: setEffort
+"us:UserStory" --> ":EstimateEffortService" #lightgrey: true
+":EstimateEffortService" --> ":EstimateEffortController" #lightgrey: true
+":EstimateEffortController" --> Route #lightgrey: responseEntity<>(HttpStatus.OK)
+Route -->o " " : response(json)
+deactivate Route
+
+@enduml

@@ -1,0 +1,164 @@
+.form {
+    padding: 20px 20px;
+    margin: 20px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    resize: horizontal;
+    text-align: start;
+}
+
+h1 {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: left;
+    margin: 20px;
+}
+
+placeholder {
+    color: gray;
+    font-style: normal;
+    text-align: start;
+}
+
+
+/* Define o estilo do botão para adicionar human resources */
+.button-Add {
+    background-color: #144385;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 20px 20px;
+}
+
+.button-Add:hover {
+    background-color: #3E5794;
+
+}
+
+.button-Add-Project {
+    background-color: #144385;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 20px 40px;
+}
+
+.button-Add-Project:hover {
+    background-color: #3E5794;
+
+}
+
+/* Define o estilo do botão para submeter form human resources */
+.button-Submit {
+    background-color: #144385;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 20px 20px;
+    margin-bottom: 20px;
+}
+
+.button-Submit:hover {
+    background-color: #3E5794;
+
+}
+
+.boxTitle {
+    display: flex;
+    width: 260px;
+    display: block;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin: 20px;
+}
+
+.dropdownlBox {
+    width: 270px;
+    height: 40px;
+    margin-top: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+}
+.minidropdownlBox {
+    width: 80px;
+    height: 30px;
+    margin-top: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+    background: none;
+}
+
+.select-dropdown {
+    width: 270px;
+    height: 40px;
+    margin-top: -10px;
+    margin-left: 20px;
+    /*border: 1px solid black;*/
+    lineHeight: 5;
+    border-radius: 4px;
+    text-line-through-color: black;
+}
+
+.dateBox {
+    width: 260px;
+    height: 35px;
+    margin-top: 10px;
+}
+
+.inputnumberBox {
+    width: 260px;
+    height: 30px;
+    margin-top: 10px;
+}
+
+.inputBox {
+    width: 260px;
+    height: 30px;
+    margin-top: 10px;
+}
+
+.textBox {
+    width: 260px;
+    height: 30px;
+    margin-top: 10px;
+}
+
+.error {
+    position: relative;
+    display: inline-block;
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 8px;
+    text-align: center;
+    border-radius: 10px;
+    margin-left: 200px;
+    width: 250px;
+}
+
+.error::before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 10%;
+    transform: translateX(-50%);
+    border-width: 10px;
+    border-style: solid;
+    border-color: #f2f2f2 transparent transparent transparent;
+}
+
+.formStory {
+    padding: 20px 20px;
+    margin: 20px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    resize: horizontal;
+    text-align: start;
+}

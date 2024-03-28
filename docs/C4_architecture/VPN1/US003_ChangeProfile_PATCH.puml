@@ -1,0 +1,31 @@
+@startuml
+
+legend top
+Vista Processos Nível 1 - US003 - As Administrator, I want to change the profile of an user account
+end legend
+
+skinparam sequence {
+LifeLineBackgroundColor #lightgrey
+}
+
+actor Administrator
+
+activate Administrator
+
+Administrator -> "<<System (C4)>> \n g5 : G5" : 1: Change profile of an account
+
+activate "<<System (C4)>> \n g5 : G5"
+
+"<<System (C4)>> \n g5 : G5" --> Administrator : 1.1: UI
+
+deactivate "<<System (C4)>> \n g5 : G5"
+
+Administrator -> "<<System (C4)>> \n g5 : G5" : 2: emailAddress, profileID
+
+activate "<<System (C4)>> \n g5 : G5"
+
+"<<System (C4)>> \n g5 : G5" --> Administrator : 2.1: OK/~OK
+
+deactivate "<<System (C4)>> \n g5 : G5"
+
+@enduml

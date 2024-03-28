@@ -1,0 +1,66 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+SD US020-AddUSFromProductBacklogToSprintBacklog
+end legend
+
+autoactivate on
+autonumber 1.1
+
+actor TeamMember
+activate TeamMember #lightgrey
+participant ":AddUSFromProductBacklog\nToSprintBacklogUI"
+participant ":AddUSFromProductBacklog\nToSprintBacklogController"
+participant "projectContainer\n:ProjectContainer"
+participant "project\n:Project"
+participant "productBacklog\n:ProductBacklog"
+participant "sprintContainer\n:SprintContainer"
+participant "sprint\n:Sprint"
+
+autonumber 1.1
+TeamMember -> ":AddUSFromProductBacklog\nToSprintBacklogUI" #b: "Add user story("userStoryNumber") to the\nproject's("projectCode") sprint backlog"
+":AddUSFromProductBacklog\nToSprintBacklogUI" -> ":AddUSFromProductBacklog\nToSprintBacklogController" #b: AddUSFromProductBacklogToSprintBacklog(projectCode, userStoryNumber)
+
+'get project object'
+":AddUSFromProductBacklog\nToSprintBacklogController" -> "projectContainer\n:ProjectContainer" #b: project = getProject(projectCode)
+autonumber 1.3.1
+deactivate
+
+'get product backlog(planned user stories repository) from project'
+autonumber 1.4
+":AddUSFromProductBacklog\nToSprintBacklogController" -> "project\n:Project" #B: productBacklog = getProductBacklog()
+deactivate
+
+'get sprint container from project'
+autonumber 1.5
+":AddUSFromProductBacklog\nToSprintBacklogController" -> "project\n:Project" #b: sprintContainer = getSprintContainer()
+deactivate
+
+'get user story object'
+autonumber 1.6
+":AddUSFromProductBacklog\nToSprintBacklogController" -> "productBacklog\n:ProductBacklog" #b: userStory = getUserStory(userStoryNumber)
+autonumber 1.6.1
+deactivate
+
+'add user story in sprint backlog'
+autonumber 1.7
+":AddUSFromProductBacklog\nToSprintBacklogController" -> "sprintContainer\n:SprintContainer" #b: addUserStoryToSprintBacklog(userStory)
+"sprintContainer\n:SprintContainer" -> "sprintContainer\n:SprintContainer" #b:sprint = getCurrentSprint()
+
+deactivate
+autonumber 1.8
+"sprintContainer\n:SprintContainer" -> "sprint\n:Sprint" #b: addUserStoryToSprintBacklog(userStory)
+autonumber 1.8.1
+"sprint\n:Sprint" -> "sprint\n:Sprint" #B: verifyUserStory(userStory)
+"sprint\n:Sprint" -> "sprint\n:Sprint" #B: addUserStory(userStory)
+deactivate
+deactivate
+
+"sprint\n:Sprint"  --> "sprintContainer\n:SprintContainer"#b: true
+"sprintContainer\n:SprintContainer" --> ":AddUSFromProductBacklog\nToSprintBacklogController" #b: true
+":AddUSFromProductBacklog\nToSprintBacklogController" --> ":AddUSFromProductBacklog\nToSprintBacklogUI" #b: true
+":AddUSFromProductBacklog\nToSprintBacklogUI" --> TeamMember #b: "User story added to sprint backlog"
+
+@enduml

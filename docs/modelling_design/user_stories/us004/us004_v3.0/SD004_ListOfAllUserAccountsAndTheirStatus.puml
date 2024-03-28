@@ -1,0 +1,65 @@
+@startuml
+
+autonumber 1.1
+
+skinparam sequenceArrowThickness 1
+skinparam maxmessagesize 250
+
+legend top
+SD US004 List all User Accounts and their Status
+end legend
+
+boundary " " #white
+participant ": Route" as Route
+participant ": AccountController" as Controller
+participant ": AccountsAndStatusService" as Service
+participant ":AccountRepository" as Repo
+participant "account : Account" as Account
+participant "AccountMapper" as Mapper
+
+" " o-> Route : GET (/accounts) (json)
+activate Route
+
+Route -> Controller #b: getAccountsAndStatus()
+
+activate Controller
+
+Controller -> Service :  getAccountsAndStatus()
+
+activate Service
+
+Service -> Repo : findAll()
+activate Repo
+Service <- Repo : List<Account>
+deactivate Repo
+
+
+Service -> Account : getEmail()
+activate Account
+Service <-- Account : Email
+Service -> Account : getStatus()
+Service <-- Account : Status
+deactivate Account
+
+
+Service -> Mapper : mapToDTO(accounts)
+activate Mapper
+Service <- Mapper : List<AccountDTO>
+deactivate Mapper
+
+
+deactivate Mapper
+
+
+Service -> Controller : accountDTOs
+deactivate Service
+
+Controller --> "responseEntity: ResponseEntity" : ResponseEntity<>(accountDTOs,HttpStatus.OK)
+
+Controller --> Route : responseEntity<List<AccountDTO>>
+deactivate Controller
+
+Route -->o " " : response(json)
+deactivate Route
+
+@enduml

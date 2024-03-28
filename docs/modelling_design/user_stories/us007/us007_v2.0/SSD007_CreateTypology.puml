@@ -1,0 +1,15 @@
+@startuml
+skinparam sequenceMessageAlign center
+
+legend top
+SSD US007 - Create Typology
+end legend
+
+autoactivate on
+Actor Administrator
+activate Administrator #lightgrey
+
+autonumber
+Administrator -> System #lightgrey: Create Typology
+System --> Administrator: Typology
+@enduml

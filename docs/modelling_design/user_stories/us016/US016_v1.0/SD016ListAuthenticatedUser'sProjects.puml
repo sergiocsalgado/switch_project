@@ -1,0 +1,61 @@
+
+@startuml
+
+legend top
+SD US016 - As Authenticated User, I want to get a list of all projects I'm currently allocated to
+end legend
+
+
+actor AuthenticatedUser as A
+participant ": ListUserProjectsUI" as B
+participant ": ListUserProjectsController" as C
+participant ": ProjectContainer" as H
+participant ": ResourcesInProjectContainer" as J
+participant ": AccountCountainer" as F
+participant ": mapper\n:ListUserProjectsMapper" as U
+
+autonumber 1.1
+
+activate  A #lightgrey
+A -> B #lightgrey: List User's Projects
+activate B #lightgrey
+B -> C #lightgrey: listAllUserProjects(email, localdate)
+activate C #lightgrey
+
+
+
+
+
+C -> F #lightgrey: getAccount(email)
+activate F #lightgrey
+F -> C #lightgrey: account
+deactivate F
+C -> H :listAllUserProjects(account, localdate):
+activate H #lightgrey
+H --> "listAllUserProjects\n:List<Project>" ** #lightgrey: create
+
+
+loop for each project in projects
+H -> J #lightgrey: isInProject(account, localdate)
+activate J #lightgrey
+J --> H #lightgrey: true
+deactivate J
+H --> "listAllUserProjects\n:List<Project>" #lightgrey: add(project)
+activate "listAllUserProjects\n:List<Project>" #lightgrey
+deactivate "listAllUserProjects\n:List<Project>"
+end
+
+H --> C #lightgrey: userProjects
+deactivate H
+
+C --> U #lightgrey: mappToProjectDTO(userProjects)
+activate U #lightgrey
+ref over U : US015_MappToProjectDTO
+U --> C #lightgrey: projectsDTO
+deactivate U
+
+C --> B #lightgrey: projectsDTO
+deactivate C
+B --> A #lightgrey: "display User's Projects List"
+deactivate B
+@enduml

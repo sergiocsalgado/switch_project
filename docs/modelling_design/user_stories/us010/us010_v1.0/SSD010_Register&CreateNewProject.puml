@@ -1,0 +1,37 @@
+@startuml
+
+legend top
+SSD US010 Register/create a new project
+end legend
+
+actor Manager
+
+activate Manager #lightgrey
+
+autonumber 1.1
+Manager -> System: Asks for Customer name
+activate System#lightgrey
+Manager <-- System: Shows list of customers names
+deactivate
+
+
+autonumber 2.1
+Manager -> System: Asks for Business Sector description
+activate System#lightgrey
+Manager <-- System: Shows list of business sectors descriptions
+deactivate
+
+autonumber 3.1
+Manager -> System: Asks for Typology description
+activate System#lightgrey
+Manager <-- System: Shows list of typologies descriptions
+deactivate
+
+
+autonumber 4.1
+Manager -> System: Register project with projectCode,\n projectName, projectDescription,\n customer, businessSector and typology
+activate System#lightgrey
+Manager <-- System: Project registered
+deactivate
+
+@enduml

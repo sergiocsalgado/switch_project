@@ -1,0 +1,36 @@
+@startuml
+'Inactive = (boolean) false
+legend top
+SD US005 Inactivate Account
+end legend
+autonumber 1.1
+skinparam sequenceMessageAlign center
+autoactivate on
+
+actor Administrator
+participant ": InactivateAccountUI" as A
+participant ": InactivateAccountController" as B
+participant ": Company" as C
+participant ": AccountContainer" as D
+participant "account:Account" as E
+
+Activate Administrator #lightgrey
+Administrator -> A #lightgrey: inactivate an Account
+A -> B #lightgrey: inactivateAccount(email)
+B -> C #lightgrey: inactivateAccount(email)
+C -> D #lightgrey: ac = accounts()
+deactivate
+loop for each account in ac
+C -> E #lightgrey: verifyEmail(email)
+E--> C #lightgrey: true
+C -> E #lightgrey: setStatus(false)
+E --> C: true
+end
+C --> B: true
+B --> A: true
+A --> Administrator: Account Inactive
+
+
+
+
+@enduml

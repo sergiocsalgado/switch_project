@@ -1,0 +1,8 @@
+# Primary Actor:
+Administrator
+
+# Main success scenario:
+1. Administrator is well authenticated with Administrator profile
+2. Administrator requests the creation of a new project typology to the System and insert the description
+3. System verify the description, and create a new project typology
+4. System displays the message "Project typology successfully created"

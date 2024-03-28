@@ -1,0 +1,46 @@
+Introduction
+
+Purpose
+The purpose of this document is to define requirements of the project management system. This supplementary specifications defines the requirements that are not easily defined in the use cases of the use case Model. The Supplementary Specifications and the use-case model together capture a complete set of requirements on the system.
+
+Scope
+This Supplementary Specification applies to the project management solution for this company which will be developed by the IT company.
+The IT department will develop this client-server system to interface with the internal software development process (SDP) management.
+
+The system will manage and associate user accounts, resources and general configuration. The system will also allow project creation and management, as well as reports generation.
+
+This specification defines the non-functional requirements of the system; such as reliability, usability, performance, and supportability as well as functional requirements that are common across a number of use cases.
+
+1. Functionality
+
+1.1 Printing
+Facilities related with printing data manipulated by the system, such as user lists, account information, project information, etc.
+
+1.2 System Management
+Manage user accounts and associate the profiles available to solution administrators, manage resources and general configuration related to a project.
+
+1.3 Reporting
+Generate reports aligned with user profile’s needs, such as Allocation report and KPI report.
+
+1.4 Security
+1.4.1 Saved Passwords
+Passwords should not be openly saved to the database allowing them to be read or decrypted by a user with access to the database.
+
+1.5 Localization
+1.5.1 Language and Location
+All text, as well as date formats and decimal formats, must be configured so that you can have more than one language in the application and changed in runtime.
+
+
+2. Usability
+
+2.1 Responsive Layout
+The development of the user interface should be responsive, that is, adapt the design of the forms to the type of device that is used by the user. For different devices, with different screen sizes, such as a computer and a mobile phone, the layout should adapt and display the information in a different layout to maximize the usability and user experience of the application.
+
+
+3. Reliability
+
+3.1 Session Timeout
+If there is a period of inactivity of more than 30 minutes, the session should be automatically closed.
+
+3.2 Logging
+All user operations, as well as system messages, either warning or error, must be saved in log files on the server, identified with at least the following levels: debug, info, warn, error.

@@ -1,0 +1,65 @@
+@startuml
+
+legend top
+SD - US019 - As Project Manager, I want to create a sprint
+end legend
+
+skinparam sequence {
+LifeLineBackgroundColor #lightgrey
+}
+autonumber 1.1
+autoactivate on
+
+boundary " " as pm #white
+participant ": Route" as route
+participant "sprintDTO:\nSprintDTO" as DTO
+participant ":SprintController" as controller
+participant SprintService
+
+pm o-> route: POST {/projects\n/{projectCode}/sprints} {json}
+route --> DTO **: create
+route -> controller: createSprint(String projectCode,\n sprintDTO)
+
+ref over controller: unwrapping DTO
+
+controller -> SprintService: createAndSaveSprint(sprintID,\n sprintNumber, startDate,\n endDate, projectCode)
+
+SprintService --> "projectCodeOfSprint:\nProjectCode" **: create
+SprintService --> "period:\nPeriod" **: create
+SprintService --> "sprintID:\nSprintID" **: create
+SprintService --> "sprintNumber:\nSprintNumber" **: create
+SprintService --> "sprintBacklogID:\nSprintBacklogID" **: create
+SprintService --> "sprintStatusEmpty:\nSprintStatus" **: create
+
+participant ":ProjectRepository" as prjRepo
+SprintService -> prjRepo: project = ofIdentity(projectCodeOfSprint)
+deactivate
+
+participant ":FactorySprintBacklog" as backlog << (I,#ccb3ff) >>
+participant "sprintBacklog:\nSprintBacklog" as back
+SprintService -> backlog: create(sprintBacklogID)
+backlog --> back **: create
+deactivate
+
+participant ":FactorySprint" as factory << (I,#ccb3ff) >>
+participant "sprint:Sprint" as sprint
+SprintService -> factory: createSprint(projectCodeOfSprint, sprintID, sprintNumber, period, sprintBacklog, sprintStatusEmpty)
+factory --> sprint **: create
+deactivate
+
+participant ":SprintRepository" as repository
+participant ":SprintMapper" as mapper
+SprintService -> repository: save(sprint)
+deactivate
+
+SprintService --> controller: sprint
+
+controller -> mapper: toDTO(sprintToCreate)
+mapper --> "sprintDTO:SprintDTO" **: create
+deactivate
+
+controller --> "responseEntity:\nResponseEntity" **: create(toDTO, HttpStatus CREATED)
+controller --> route: responseEntity
+route --> pm: response(json)
+
+@enduml

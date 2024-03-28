@@ -1,0 +1,242 @@
+@startuml
+
+legend top
+CD US010  As Manager, I want to register/create a new project
+end legend
+
+
+Package Controller {
+class "ProjectController" as controller {
++registerProject(projDTO)
+}
+}
+
+
+Package Service {
+Package Interface {
+interface "RegisterProjectService" as interfaceService {
++registerProject(projectDTO)
+}
+}
+class "RegisterProjectServiceImpl" as serviceImpl {
++registerProject(projectDTO)
+-getCustomerID (customer)
+-getBusinessSectorID (businessSector)
+-getTypologyID(typology)
+}
+}
+
+Package ddd {
+interface "Repository<ProjectCode, Project>" as interfacePrjRepo {
++containsOfIdentity(projectCode)
++save(project)
+}
+
+interface "Repository<TypologyID, Typology>" as interfaceTypoRepo {
++findAll()
+}
+
+interface "Repository<BusinessSectorID, BusinessSector>" as interfaceBusinessSecRepo {
++findAll()
+}
+
+interface "Repository<CustomerID, Customer>" as interfaceCustomerRepo {
++findAll()
+}
+}
+
+Package Model {
+Package Project {
+interface "FactoryProject" as factoryProj {
++createProject(projectCode, projectName, projectDescription,customerID,
+ businessSectorID, typologyID,projectStatus,sprintDuration, numberOfPlannedSprints, budget, period);
+}
+class "Project" as ProjectClass <<(A,SandyBrown) Aggregate Root>> {
++getProjectCode()
++getProjectName()
++getProjectDescription()
++getCustomerID()
++getBusinessSectorID()
++getTypologyID()
++getPeriod()
++getProjectStatus()
++getSprintDuration()
++getNumberOfPlannedSprints()
++getBudget()
+}
+}
+
+package Typology {
+class "Typology" as typology <<(A,SandyBrown) Aggregate Root>> {
++getTypologyID()
++getDescription()
+}
+}
+
+package Customer {
+class "Customer" as customer <<(A,SandyBrown) Aggregate Root>> {
++getCustomerID()
++getName()
+}
+}
+package BusinessSector{
+class "BusinessSector" as businessSector <<(A,SandyBrown) Aggregate Root>> {
++getBusinessSectorID()
++getBusinessSectorDescription()
+}
+}
+
+Package value_objects {
+class "ProjectCode" as projCode <<(V, LightBlue) Value ValueObject>>{
+-code : String
++getProjectCode()
+}
+class "Name" as name <<(V, LightBlue) Value ValueObject>>{
+-value : String
++getValue()
+}
+class "Description" as description <<(V, LightBlue) Value ValueObject>>{
+-text : String
++getDescription()
+}
+class "CustomerID" as customerID <<(V, LightBlue) Value ValueObject>>{
+-idOfCustomer : String
++getIdOfCustomer()
+}
+class "BusinessSectorID" as businessSectorID <<(V, LightBlue) Value ValueObject>>{
+-id : String
++getId()
+}
+class "TypologyID" as typologyID <<(V, LightBlue) Value ValueObject>>{
+-idOfTypology : String
++getIdOfTypology()
+}
+class "ProjectStatus" as projStatus <<(V, LightBlue) Value ValueObject>>{
+-statusDescription : String
++getProjectStatus()
+}
+class "PositiveNumber" as positiveNumber <<(V, LightBlue) Value ValueObject>>{
+-number : int
++getNumber()
+}
+class "Cost" as cost <<(V, LightBlue) Value ValueObject>>{
+-value : double
+-currency: String
++getValue()
++getCurrency()
+}
+class "Period" as period <<(V, LightBlue) Value ValueObject>>{
+-startDate : LocalDate
+-endDate: LocalDate
++getStartDate()
++getEndDate()
+}
+}
+}
+
+
+Package Mapper {
+class "ProjectDTO" as ProjectDTO {
+- projectCode : String
+- name : String
+- description : String
+- customer : String
+- businessSector : String
+- typology : String
+- startDate : String
+- endDate : String
+- status : String
+- sprintDuration : int
+- numberOfPlannedSprints : int
+- budget : String
++getProjectCode()
++setProjectCode(String projectCode)
++getName()
++setName(String name)
++getDescription()
++setDescription(String description)
++getCustomer()
++setCustomer(String customer)
++getBusinessSector()
++setBusinessSector(String businessSector)
++getTypology()
++setTypology(String typology)
++getStartDate()
++setStartDate(String startDate)
++getEndDate()
++setEndDate(String endDate)
++getStatus()
++setStatus(String status)
++getSprintDuration()
++setSprintDuration(int sprintDuration)
++getNumberOfPlannedSprints()
++setNumberOfPlannedSprints(int numberOfPlannedSprints)
++getBudget()
++setBudget(String budget)
+}
+class "ProjectDTOMapper" as ProjectDTOMapper {
++ toDTO(project)
+}
+}
+
+
+controller  ..>  interfaceService
+controller ..> ProjectDTOMapper
+controller ..> ProjectDTO
+serviceImpl ..> interfacePrjRepo
+serviceImpl ..> interfaceTypoRepo
+serviceImpl ..> interfaceBusinessSecRepo
+serviceImpl ..> interfaceCustomerRepo
+serviceImpl ..> factoryProj
+serviceImpl ..|> interfaceService
+serviceImpl ..> ProjectDTO
+
+ProjectDTOMapper ..> ProjectDTO
+ProjectDTOMapper ..> ProjectClass
+factoryProj ..> ProjectClass
+
+factoryProj ..> projCode
+factoryProj ..> name
+factoryProj ..> description
+factoryProj ..> customerID
+factoryProj ..> businessSectorID
+factoryProj ..> typologyID
+factoryProj ..> projStatus
+factoryProj ..> positiveNumber
+factoryProj ..> cost
+factoryProj ..> period
+
+ProjectClass "1" --> "1" projCode
+ProjectClass "1" --> "1" name
+ProjectClass "1" --> "1" description
+ProjectClass "1" --> "1" customerID
+ProjectClass "1" --> "1" businessSectorID
+ProjectClass "1" --> "1" typologyID
+ProjectClass "1" --> "1" projStatus
+ProjectClass "1" --> "1" positiveNumber
+ProjectClass "1" --> "1" cost
+ProjectClass "1" --> "1" period
+
+
+typology "1" --> "1" "typologyID"
+typology "1" --> "1" "description"
+
+customer "1" --> "1" "customerID"
+customer "1" --> "1" "name"
+
+businessSector "1" --> "1" "businessSectorID"
+businessSector "1" --> "1" "description"
+
+
+interfacePrjRepo ..> ProjectClass
+interfacePrjRepo ..> projCode
+interfaceTypoRepo ..> typology
+interfaceTypoRepo ..> typologyID
+interfaceBusinessSecRepo ..> businessSector
+interfaceBusinessSecRepo ..> businessSectorID
+interfaceCustomerRepo ..> customer
+interfaceCustomerRepo ..> customerID
+
+
+
+@enduml

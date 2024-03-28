@@ -1,0 +1,9 @@
+SSD 012 - As Manager, I want to define the PO of a project
+
+1º The diagram starts with the Manager interacting with the System by selecting a project;
+2º The System then responds by displaying the project details to the Manager;
+3º The Manager then sets the role typology, then the System displays the roles (Product Owner, Scrum Master, Team Member);
+4º The Manager then defines the Product Owner, and the System confirms that the Product Owner has been defined successfully;
+
+Overall, this diagram provides a clear and concise illustration of the main steps and interactions involved in defining
+the Product Owner for a project using the system.

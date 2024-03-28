@@ -1,0 +1,11 @@
+# Primary Actor:
+Manager
+
+# Main Success Scenario:
+1.	Manager is well authenticated with Manager profile
+2.  Manager requests a list of all accounts
+3.	System responds with the list of all accounts
+4.	Manager requests a list of all projects
+5.  System responds with the list of all projects
+6.  Manager requests to define a Scrum Master in a Project
+7.  System responds with Scrum Master defined

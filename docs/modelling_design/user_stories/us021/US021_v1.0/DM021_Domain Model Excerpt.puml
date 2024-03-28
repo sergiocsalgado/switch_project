@@ -1,0 +1,41 @@
+@startuml
+/'Domain Model Excerpt'/
+
+/'title'/
+
+legend top
+Domain Model Excerpt
+end legend
+
+/'Directions'/
+Project "1" --- "*" Sprint : constituted by >
+Project "1" -- "*" UserStory : constituted by >
+Sprint "1" -- "*" UserStory : contains a >
+UserStory "*" -- "1" Effort : estimated an  >
+
+/'Class'/
+Object "Project" as Project {
+-projectCode
+-projectName
+-projectDescription
+-sprintDuration
+-numberSprints
+-budget
+}
+
+Object "Sprint" as Sprint {
+-sprintID
+}
+
+Object "UserStory" as UserStory {
+-userStoryNumber
+-actor
+-userStoryText
+-listOfAcceptanceCriteria
+}
+
+Object "Effort" as Effort {
+-storyPoints
+}
+
+@enduml

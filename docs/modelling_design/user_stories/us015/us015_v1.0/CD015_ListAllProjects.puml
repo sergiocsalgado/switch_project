@@ -1,0 +1,76 @@
+@startuml
+legend top
+CD US015 List all Projects
+end legend
+
+ListAllProjectsUI..> ListAllProjectsController
+ListAllProjectsUI..> ProjectDTO
+ListAllProjectsController ..> ProjectContainer: projectContainer
+ListAllProjectsController ..> Project
+ListAllProjectsController ..> ProjectDTO
+ListAllProjectsController ..> ProjectMapper
+ProjectMapper ..> ProjectDTO
+ProjectMapper ..> Project
+ProjectContainer "1"*--"*"Project :contains
+Project "*"-->"1" Customer : belongs to
+Project "*"-->"1" BusinessSector : integrates in
+Project "*"-->"1" ProjectStatus : classified in
+
+class ListAllProjectsUI {
+}
+
+class ListAllProjectsController {
+-getAllProjects(): List<Project>
++getProjects(): List<ProjectDTO>
+}
+
+class ProjectMapper {
++getProjectsDTO(List<Project> projects): List<ProjectDTO>
+}
+
+class ProjectDTO {
++code: String
++name: String
++customer: String
++businessSector: String
++status: String
++getCode(): String
++getName(): String
++getCustomer(): String
++getBusinessSector(): String
++getStatus(): String
+}
+
+class ProjectContainer {
++getProjects(): List<Project>
+}
+
+class Project {
+-projectCode: String
+-projectName: String
+-description: String
+-custumer: Custumer
+-businessSector: BusinessSector
+-typology: Typology
+-status: ProjectStatus
+-resourceInProjectContainer: ResourceInProjectContainer
+-scrumBoard: ScrumBoard
++ getProjectCode(): String
++ getProjectName(): String
++ getCustomer(): Customer
++ getBusinessSector(): BusinessSector
++ getProjectStatus(): ProjectStatus
+}
+
+class Customer {
++ getName(): String
+}
+
+class BusinessSector {
++ getDescription(): String
+}
+
+class ProjectStatus {
++ getDescription(): String
+}
+@enduml

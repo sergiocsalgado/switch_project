@@ -1,0 +1,34 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+actor "User" as fc
+rectangle system {
+usecase "Account registration" as UC1
+}
+fc --> UC1
+@enduml
+
+@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+actor "Administrator" as fc
+rectangle system {
+usecase "Profile Management and Configuration" as UC1
+}
+fc --> UC1
+@enduml
+
+@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+actor "Manager" as fc
+rectangle system {
+usecase "Access all projects" as UC1
+usecase "Manage resources" as UC2
+}
+fc --> UC1
+fc --> UC2
+@enduml

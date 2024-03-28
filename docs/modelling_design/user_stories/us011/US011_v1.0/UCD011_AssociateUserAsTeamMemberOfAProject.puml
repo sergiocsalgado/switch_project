@@ -1,0 +1,16 @@
+@startuml
+
+legend top
+UC US011 Associate a User as Team Member of a Project
+end legend
+
+left to right direction
+
+actor "Manager"
+rectangle "System"{
+
+"Manager" --> (Associate a User as Team Member of a Project)
+
+}
+
+@enduml

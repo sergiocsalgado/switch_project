@@ -1,0 +1,63 @@
+@startuml
+
+skinparam sequenceMessageAlign left
+skinparam sequenceArrowThickness 2
+skinparam maxmessagesize 250
+
+legend top
+SD US003 - Set Account Profile
+end legend
+
+autoactivate on
+
+boundary " " as Administrator #white
+participant ": Route" as Route
+participant ": AccountController" as AccountController
+participant ": SetAccountProfileService" as SetAccountProfileService
+participant ": Email" as Email
+participant ": ProfileID" as ProfileID
+participant ": ProfileRepository" as ProfileRepository
+participant ": AccountRepository" as AccountRepository
+participant ": Account" as Account
+participant "responseEntity : ResponseEntity" as Response
+participant "accountDTO : AccountDTO" as AccountDTO
+
+autonumber 1.1
+Administrator o-> Route #b: PATCH (/accounts/{emailAddress}/{profileID}) (json))
+Route -> AccountController #b: setAccountProfile (String emailAddress, String profileID)
+AccountController -> SetAccountProfileService #b: changeProfile (String emailAddress, String profileID)
+SetAccountProfileService --> Email ** #b : create VO Email
+SetAccountProfileService --> ProfileID ** #b : create VO ProfileID
+
+SetAccountProfileService -> SetAccountProfileService #b : existsProfile(profileId)
+SetAccountProfileService -> ProfileRepository #b : true = containsOfIdentity(ProfileID profileID)
+deactivate ProfileRepository
+deactivate SetAccountProfileService
+
+SetAccountProfileService -> AccountRepository #b : Optional(Account) = ofIdentity(Email email)
+deactivate AccountRepository
+
+SetAccountProfileService -> SetAccountProfileService #b : true = Optional.isPresent()
+deactivate SetAccountProfileService
+
+SetAccountProfileService -> SetAccountProfileService #b : Account account = Optional.get()
+deactivate SetAccountProfileService
+
+SetAccountProfileService -> Account #b : account = setProfile(profileId)
+deactivate Account
+
+SetAccountProfileService -> AccountRepository #b : save(account)
+deactivate AccountRepository
+
+SetAccountProfileService --> AccountController : Account
+
+AccountController --> AccountDTO ** #b : create AccountDTO
+
+AccountController --> Response ** : create(accountDTO, HttpStatus.OK)
+
+AccountController --> Route : responseEntity(accountDTO, HttpStatus.OK)
+deactivate AccountController
+
+Route -->o Administrator : response(json)
+deactivate Route
+@enduml

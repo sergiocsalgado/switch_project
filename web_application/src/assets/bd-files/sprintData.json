@@ -1,0 +1,32 @@
+[
+  {
+    "sprintid":"Sprint1",
+    "sprintnumber":"1",
+    "startdatesprint":"20/01/2023",
+    "enddatesprint":"10/02/2023"
+  },
+  {
+    "sprintid":"Sprint2",
+    "sprintnumber":"2",
+    "startdatesprint":"10/02/2023",
+    "enddatesprint":"03/03/2023"
+  },
+  {
+    "sprintid":"Sprint3",
+    "sprintnumber":"3",
+    "startdatesprint":"03/03/2023",
+    "enddatesprint":"24/03/2023"
+  },
+  {
+    "sprintid":"Sprint4",
+    "sprintnumber":"4",
+    "startdatesprint":"24/03/2023",
+    "enddatesprint":"14/04/2023"
+  },
+  {
+    "sprintid":"Sprint5",
+    "sprintnumber":"5",
+    "startdatesprint":"14/04/2023",
+    "enddatesprint":"05/05/2023"
+  }
+]

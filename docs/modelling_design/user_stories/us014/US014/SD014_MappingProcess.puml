@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+legend top
+SD US014 Mapping Process
+end legend
+autoactivate on
+
+participant ListResourcesMapper    as G
+participant "resourceInProjectContainer\n: ResourceInProjectContainer" as H
+participant "resourceInProject\n: ResourceInProject" as I
+participant "account\n: Account" as II
+participant "role\n: Role" as J
+
+autonumber 1.1
+activate G #lightgrey
+G ->H #lightgrey: getResources()
+H -->G #lightgrey: List<ResourceInProject>
+
+loop for each resourceInProject in resources
+G ->H #lightgrey: getResources()
+H ->H #lightgrey: isInProject()
+deactivate
+H ->I #lightgrey: account = getAccount()
+I ->II #lightgrey: accountEmail = getEmail()
+I ->II #lightgrey: accountName = getName()
+
+deactivate
+deactivate
+deactivate
+
+H ->I #lightgrey: role = getRole()
+I ->J #lightgrey: roleDescription = getDescription()
+deactivate
+deactivate
+deactivate
+
+H -->G #lightgrey: getResources()
+
+
+
+G --> "DTO:resourcesInProjectDTO" ** : createDTO(email, name, roleDescription)
+
+G -> "List<ResourcesInProjectDTO>" #lightgrey: save to list
+end
+
+@enduml

@@ -1,0 +1,134 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+CD - Class Diagram
+US012 As Manager, I want to define the PO of a project
+end legend
+
+DefineProductOwnerUI ..> DefineProductOwnerController
+
+DefineProductOwnerController ..> AccountContainer :accountContainer
+DefineProductOwnerController ..> AccountMapper :accountMapper
+DefineProductOwnerController --> Period :period
+DefineProductOwnerController ..> RoleContainer :roleContainer
+DefineProductOwnerController ..> ProjectContainer :projectContainer
+
+AccountContainer ..> RoleContainer :roleContainer
+AccountContainer "1"*--"*" Account :accounts
+
+AccountMapper "1"*--"*" AccountDTO :accountsDTO
+
+ProjectContainer "1"*--"*" Project :projects
+ProjectContainer ..> ResourceInProjectContainer :resourceInProjectContainer
+
+ResourceInProjectContainer "1"*--"*" ResourceInProject :resources
+
+RoleContainer -> Role
+
+
+class DefineProductOwnerUI{
+}
+
+class DefineProductOwnerController{
+-email : String
+-projectCode : String
+-allocation : double
+-costPerHour : double
+-daysFromNow : Int
++getAccountDTO() : List<AccountDTO>
++defineProductOwner() : boolean
+-getStartDate() : Period
+}
+
+class AccountContainer{
+-email : String
++getAccounts() : List<accounts>
++getAccount() : Account
+}
+
+class Account{
+-email : String
++verifyEmail() : boolean
+}
+
+class AccountMapper{
++listAccountsDTO(List<Account> accounts): List<AccountsDTO>
+}
+
+class ProjectContainer{
+-projectCode : String
+-account : Account
+-role : Role
+-allocation : double
+-costPerHour : double
+-period : Period
+-localDate : LocalDate
+-defineRole() : boolean
+-doesNotExceedPercentageAllocation() : boolean
+-getProject : String
+}
+
+class Project{
+-projectCode: String
+-projectName: String
+-projectDescription: String
+-customer: Customer
+-businessSector: BusinessSector
+-typology: Typology
+-resourceInProjectContainer : ResourceInProjectContainer
+-period : Period
+-projectStatus : ProjectStatus
+-productBacklog : ProductBacklog
+-sprintContainer : SprintContainer
++getResourceInProjectContainer(): ResourceInProjectContainer
++getProject().equals() : boolean
+}
+
+class ResourceInProjectContainer{
+-account : Account
+-localDate : LocalDate
+-role : Role
+-period : Period
+-costPerHour : double
+-allocation : double
++isInProject(): boolean
++defineRole(): boolean
+-add() : ResourceInProject
+}
+
+class ResourceInProject{
+-account : Account
+-role : Role
+-period : Period
+-costPerHour : double
+-allocation : double
++getAccount() : Account
++getRole() : Role
++getPeriod() : Period
++getCostPerHour() : double
++getAllocation() : double
++getAccount().equals() : Account
+}
+
+class RoleContainer{
++getProductOwnerRole() : String
+-contains() : Role
+}
+
+class AccountDTO{
+-email: String
+-name: String
++getEmail(): String
++getName(): String
+}
+
+class Period {
++create(): String
+}
+
+class Role {
++create(): String
+}
+@enduml

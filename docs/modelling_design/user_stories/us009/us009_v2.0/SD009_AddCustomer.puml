@@ -1,0 +1,50 @@
+@startuml
+
+legend top
+SD US007 - Create Customer
+end legend
+
+autoactivate on
+
+boundary " " as Administrator #white
+participant ": Route" as Route
+participant ": CustomerDTO" as CustomerDTO
+participant CustomerController as CustomerController
+participant CreateCustomerSectorService as CreateCustomerSectorService
+participant CreateCustomerSectorServiceImpl as CreateCustomerSectorServiceImpl
+participant CustomerSectorID as CustomerSectorID
+participant Description as Description
+participant FactoryCustomer as FactoryCustomer
+participant FactoryCustomerImpl as FactoryCustomerImpl
+participant Customer as Customer
+participant InMemoryCustomerRepository as InMemoryCustomerRepository
+
+
+
+autonumber 1.1
+Administrator o-> Route #b: POST (/customers))
+Route -> CustomerDTO #b: createCustomerSector(CustomerDTO CustomerDTO)
+CustomerDTO -> CustomerController #b: createCustomerSector(CustomerDTO CustomerDTO)
+deactivate CustomerDTO
+CustomerController -> CreateCustomerSectorService #b: createAndSaveCustomer(String id, String name, String nif)
+CreateCustomerSectorService -> CreateCustomerSectorServiceImpl #b : createCustomer(CustomerID customerID, Name name, Nif nif)
+CreateCustomerSectorServiceImpl -> CustomerSectorID ** #b : create VO CustomerSectorID
+CreateCustomerSectorServiceImpl -> Description ** #b : create VO Description
+
+CreateCustomerSectorServiceImpl -> FactoryCustomer #b: createCustomer(CustomerID customerID, CustomerName customerName, CustomerNif customerNif)
+FactoryCustomer -> FactoryCustomerImpl #b: createCustomer(CustomerID customerID, CustomerName customerName, CustomerNif customerNif)
+FactoryCustomerImpl ->Customer ** #b: Customer (CustomerID customerID, CustomerName customerName, CustomerNif customerNif)
+FactoryCustomerImpl --> FactoryCustomer #b: Customer
+FactoryCustomer --> CreateCustomerSectorServiceImpl #b: Customer
+
+CreateCustomerSectorServiceImpl -> InMemoryCustomerRepository #b : containsID(Customer customer)
+InMemoryCustomerRepository --> CreateCustomerSectorServiceImpl #b : true = containsID(Customer customer)
+CreateCustomerSectorServiceImpl -> InMemoryCustomerRepository #b : save(Customer customer)
+InMemoryCustomerRepository --> CreateCustomerSectorServiceImpl #b: Customer
+CreateCustomerSectorServiceImpl --> CreateCustomerSectorService #b: Customer
+CreateCustomerSectorService --> CustomerController #b: Customer
+CustomerController --> Route #b: Customer
+
+Route -->o Administrator #b: response(json)
+deactivate Route
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+
+legend top
+US022 - As Team Member, I want to view the Scrum Board of current sprint
+end legend
+
+actor "Team Member" as A
+participant System as B
+
+autonumber
+activate A #lightgrey
+activate B #lightgrey
+
+A -> B: View Scrum Board of current Sprint of a given project
+A <-- B: Display Scrum Board of current Sprint
+@enduml

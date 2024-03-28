@@ -1,0 +1,179 @@
+@startuml
+
+legend top
+CD US014 - As Manager, I want to get a list of all human resources in a project
+end legend
+
+'..|> implementation
+'-- associado
+'..> depende
+'*-- agrega
+'- atributo
+'+ método
+
+
+Package Controller {
+class "ProjectController" as controller {
++resourcesInProjectDTO(projectCode)
+}
+}
+
+
+Package Service {
+Package Interface {
+interface "ListResourcesService" as interfaceService {
++getResourcesInProjectDTO(projectCode)
+}
+}
+class "ListResourcesServiceImpl" as serviceImpl {
++getResourcesInProjectDTO(projectCode)
+-getProject(projectCode)
+}
+}
+
+Package ddd {
+interface "Repository<ProjectCode, Project>" as interfacePrjRepo {
++ofIdentity(projectCode)
+}
+}
+
+Package Model {
+Package Project {
+Package Project {
+class "Project" as Project <<(A,SandyBrown) Aggregate Root>> {
++getResources()
+}
+class "ResourceInProject" as Resource <<(E, Yellow) Entity>>{
++getResourceInProjectID()
++getEmail()
++getRole()
++getPeriod()
++getCostPerHour()
++getAllocation()
+}
+
+
+Package value_objects {
+class "ProjectCode" as projCode <<(V, LightBlue) Value ValueObject>>{
+-code : String
++getProjectCode()
+}
+class "Name" as name <<(V, LightBlue) Value ValueObject>>{
+-value : String
+}
+class "Description" as description <<(V, LightBlue) Value ValueObject>>{
+-text : String
+}
+class "CustomerID" as customerID <<(V, LightBlue) Value ValueObject>>{
+-idOfCustomer : String
+}
+class "BusinessSectorID" as businessSectorID <<(V, LightBlue) Value ValueObject>>{
+-id : String
+}
+class "TypologyID" as typologyID <<(V, LightBlue) Value ValueObject>>{
+-idOfTypology : String
+}
+class "ProjectStatus" as projStatus <<(V, LightBlue) Value ValueObject>>{
+-statusDescription : String
+}
+class "PositiveNumber" as positiveNumber <<(V, LightBlue) Value ValueObject>>{
+-number : int
+}
+class "Cost" as cost <<(V, LightBlue) Value ValueObject>>{
+-value : double
+-currency: String
++getValue()
++getCurrency()
+}
+class "Period" as period <<(V, LightBlue) Value ValueObject>>{
+-startDate : LocalDate
+-endDate: LocalDate
++getStartDate()
++getEndDate()
+}
+class "ResourceInProjectID" as ResourceID <<(V, LightBlue) Value ValueObject>>{
+-resourceOfProjectID : String
++getResourceOfProjectID()
+}
+class "Role" as role <<(V, LightBlue) Value ValueObject>>{
+-description : String
++getDescription()
+}
+class "Email" as email <<(V, LightBlue) Value ValueObject>>{
+-emailAddress : String
++getEmail()
+}
+class "Allocation" as allocation <<(V, LightBlue) Value ValueObject>>{
+-percentageAllocation : Double
++getAllocation()
+}
+}
+}
+
+
+Package Mapper {
+class "ResourceInProjectDTO" as ResourceDTO {
+- projectCode : String
+- resourceInProjectID : String
+- email : String
+- role : String
+- allocation : Double
+- costPerHour : Double
+- currency : String
+- startDate : String
+- endDate : String
++setProjectCode(projectCode);
++setResourceInProjectID(resourceInProjectID);
++setEmail(email);
++setRole(role);
++setStartDate(startDate);
++setEndDate(endDate);
++setCostPerHour(costPerHour);
++setCurrency(currency);
++setAllocation(allocation);
+}
+class "ResourceInProjectMapper" as Mapper {
++toResourcesDTOList(List<ResourceInProject> resources, projectCode)
++createResourceDTO(projectCode,resourceInProjectID,email,role,period,cost,allocation)
+}
+}
+
+controller  ..>  interfaceService
+controller  ..> projCode
+
+serviceImpl ..|> interfaceService
+serviceImpl ..> interfacePrjRepo
+serviceImpl ..> Mapper
+serviceImpl ..> projCode
+
+interfacePrjRepo ..> Project
+interfacePrjRepo ..> projCode
+
+Mapper ..> ResourceDTO
+Mapper ..> Resource
+Mapper ..> projCode
+
+
+
+Project "1" --> "1" projCode
+Project "1" --> "1" name
+Project "1" --> "1" description
+Project "1" --> "1" customerID
+Project "1" --> "1" businessSectorID
+Project "1" --> "1" typologyID
+Project "1" --> "1" projStatus
+Project "1" --> "1" positiveNumber
+Project "1" --> "1" cost
+Project "1" --> "1" period
+Project "1"*--"*" Resource
+
+Resource "1" --> "1" ResourceID
+Resource "1" --> "1" email
+Resource "1" --> "1" role
+Resource "1" --> "1" period
+Resource "1" --> "1" cost
+Resource "1" --> "1" allocation
+
+
+
+@enduml@enduml

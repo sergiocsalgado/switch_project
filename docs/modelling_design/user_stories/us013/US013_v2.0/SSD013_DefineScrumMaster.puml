@@ -1,0 +1,21 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+SSD - System Sequence Diagram
+US013 As Manager, I want to define the SM of a project
+end legend
+
+autonumber
+
+actor Manager #lightgrey
+activate Manager #lightgrey
+participant System #lightgrey
+activate System #lightgrey
+
+autonumber 1.1
+Manager -> System #lightgrey : Define Scrum Master in Project
+System --> Manager : Scrum Master defined in Project
+
+@enduml

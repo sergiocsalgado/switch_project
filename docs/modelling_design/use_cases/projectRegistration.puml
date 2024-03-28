@@ -1,0 +1,11 @@
+@startuml
+
+left to right direction
+actor "Manager" as fc
+rectangle System {
+  usecase "Project Registration" as UC1
+}
+fc --> UC1
+
+@enduml
+

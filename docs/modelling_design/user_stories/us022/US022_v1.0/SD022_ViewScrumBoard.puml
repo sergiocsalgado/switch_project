@@ -1,0 +1,74 @@
+@startuml
+
+legend top
+US022 - As Team Member, I want to view the Scrum Board of current sprint.
+end legend
+
+actor "Team Member" as A
+participant ": ViewScrumBoardUI" as B
+participant ": ViewScrumBoardController" as C
+participant ": ProjectContainer" as E
+participant "project : Project" as F
+participant "sprintContainer\n: SprintContainer" as G
+participant "currentSprint\n: Sprint" as H
+participant ": userStoryMapper" as L
+participant "us : UserStory" as M
+participant ":Status" as N
+activate A #lightgrey
+autonumber 1.1
+A -> B: List Scrum Board \nof current Sprint
+
+activate B #lightgrey
+B -> C: userStoryDTO = viewScrumBoard(projectCode)
+
+
+activate C #lightgrey
+C -> E: project = getProject (projectCode)
+activate E #lightgrey
+
+
+deactivate E
+C -> F: sprintContainer = getSprintContainer()
+activate F #lightgrey
+deactivate F
+
+
+C -> G #lightgrey: currentSprint = getScrumBoard()
+activate G #lightgrey
+deactivate G
+
+C -> H #lightgrey: scrumBoard = getScrumBoardList()
+activate H #lightgrey
+deactivate H
+
+C -> L: getUserStoriesDTO (scrumBoard)
+
+activate L #lightgrey
+L --> "List<UserStoryDTO>\n: userStoryDTO" ** : create new list \nfor userStoryDTO
+loop for each us in userStories
+L->M: userStoryNumber = getUserStoryNumber()
+activate M #lightgrey
+deactivate M #lightgrey
+L->M: userStoryText = getUserStoryText()
+activate M #lightgrey
+deactivate M
+L->M: status = getStatus()
+activate M #lightgrey
+M->N: description = getDescription()
+activate N #lightgrey
+deactivate N
+deactivate M
+
+
+L->"List<UserStoryDTO>\n: userStoryDTO" : add userStory to userStoryDTO
+activate "List<UserStoryDTO>\n: userStoryDTO" #lightgrey
+end
+deactivate "List<UserStoryDTO>\n: userStoryDTO"
+L -> C: List<UserStoryDTO>
+deactivate L
+C --> B: List<UserStoryDTO>
+deactivate C
+B --> A: Display Scrum Board \n of current Sprint
+deactivate B
+
+@enduml

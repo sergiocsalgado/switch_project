@@ -1,0 +1,77 @@
+@startuml
+
+autonumber 1.1
+
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 250
+skinparam sequenceParticipant underline
+
+boundary " " #white
+participant ": Route" as Route
+
+participant ": ProjectController" as Controller
+participant ": RegisterProjectService" as Service
+participant ":ProjectRepository" as Repo
+participant "project : Project" as Project
+participant "ResourcesInProjectMapper" as Mapper
+participant "responseEntity : ResponseEntity" as Response
+participant "resourcesInProjectDTO : ResourcesInProjectDTO" as DTO
+participant "resourcesDTO : List<ResourcesInProjectDTO>" as ListDTO
+
+" " o-> Route : GET (/projects/{projectCode}/resources) (json)
+activate Route
+
+
+
+Route -> Controller #b: resourcesInProjectDTO(projectCode)
+
+
+activate Controller
+
+Controller -> Service :  getResourcesInProjectDTO(projectCode)
+
+activate Service
+
+Service -> Service : getProject(projectCode)
+
+activate Service
+
+Service -> Repo : project = ofIdentity(projectCode)
+activate Repo
+deactivate Repo
+
+deactivate Service
+
+Service -> Project : List<ResourcesInProject> resources = getResources()
+
+activate Project
+deactivate Project
+
+
+Service -> Mapper : toResourcesDTOList(resources, projectCode);
+activate Mapper
+Mapper --> ListDTO ** : create
+
+loop for each resource in resources
+Mapper --> DTO ** : create
+Mapper --> ListDTO : add resourcesInProjectDTO
+end loop
+
+deactivate Mapper
+
+
+Service -> Controller : resourcesDTO
+deactivate Service
+
+
+
+
+Controller --> Response ** : create(resourcesDTO,HttpStatus.CREATED)
+Controller --> Route : responseEntity
+deactivate Controller
+
+Route -->o " " : response(json)
+deactivate Route
+
+@enduml

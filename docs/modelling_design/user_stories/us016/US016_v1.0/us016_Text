@@ -1,0 +1,7 @@
+US016 As Authenticated User, I want to get a list of all projects I'm currently allocated to
+
+The user will:
+	- Authenticate into the system;
+	- Ask a list of all the projects he is currently allocated to;
+	- The System will display the list of all those projects.
+

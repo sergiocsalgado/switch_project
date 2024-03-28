@@ -1,0 +1,38 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+legend top
+SD US007 - Create a new project typology
+end legend
+
+actor Administrator as A
+participant ": CreateProjectTypologyUI" as B
+participant ": TypologyController" as C
+participant ": TypologyContainer" as D
+participant ": FactoryTypology" as E << (I,#ADD1B2) >>
+
+autonumber 1.1
+activate  A #lightgrey
+A -> B #lightgrey: Create project typology
+activate  B #lightgrey
+B -> C #lightgrey: createProjectTypology(description)
+activate  C #lightgrey
+C -> D #lightgrey: createProjectTypology(description)
+activate  D #lightgrey
+
+autonumber 1.3.1
+D --> E : createProjectTypology (description)
+activate E #lightgrey
+E --> "typology: Typology" ** : createProjectTypology (description)
+deactivate E
+D -> D #grey: addProjectTypology (typology)
+autonumber 1.4
+
+D --> C:  true
+deactivate D
+C --> B:  true
+deactivate C
+B --> A: Project typology created
+deactivate B
+
+@enduml

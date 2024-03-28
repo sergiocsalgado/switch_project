@@ -1,0 +1,153 @@
+@startuml
+/'Domain Model'/
+
+/'title'/
+
+legend top
+Domain Model
+end legend
+
+/'Class'/
+
+Object "Profile" as Profile {
+-description
+}
+
+Object "Account" as Account {
+-email
+-name
+-phoneNumber
+-photo_optional
+-status
+}
+
+Object "Project" as Project {
+-projectCode
+-projectName
+-projectDescription
+-sprintDuration
+-numberSprints
+-budget
+}
+
+Object "Customer" as Customer {
+-name
+}
+
+Object "BussinessSector" as BussinessSector {
+-description
+}
+
+Object "Typology" as Typology {
+-description
+}
+
+Object "Period" as Period {
+-startDate
+-endDate
+}
+
+Object "ProjectStatus" as ProjectStatus {
+-description
+}
+
+Object "ResourceInProject" as ResourceInProject {
+-percentageAllocation
+-costPerHour
+}
+
+Object "Role" as Role{
+-description
+}
+
+Object "Sprint" as Sprint {
+-sprintID
+}
+
+Object "Task" as Task {
+-name
+-description
+-percentageExecution
+-hoursSpend
+}
+
+Object "Status" as Status {
+-description
+}
+
+Object "UserStory" as UserStory {
+-userStoryNumber
+-actor
+-userStoryText
+-listOfAcceptanceCriteria
+}
+
+Object "Effort" as Effort {
+-storyPoints
+}
+
+/'Directions'/
+
+Project "*" -- "1" Customer : owned by a  >
+Project "*" -- "1" BussinessSector : integrated in a  >
+Project "*" -- "1" Typology : described a  >
+Project "*" --- "1" ProjectStatus : estimated an  >
+Project "1" -- "1" Period : active in a >
+ResourceInProject "*" -- "1" Period : within a  >
+ResourceInProject "*" -- "1" Project : allocated to >
+ResourceInProject "*" - "1" Role : associates to >
+Account "1" -- "*" ResourceInProject : represents a >
+Account "*" - "1" Profile :owns a >
+Account "*" - "1" Project :manages a >
+
+Task "*" -- "1" Period : during a >
+Sprint "1" -- "1" Period : during a >
+Sprint "1" -- "*" UserStory : contains a >
+Project "1" --- "*" Sprint : constituted by >
+Project "1" -- "*" UserStory : constituted by >
+UserStory "0..1" -- "*" Task : originates a  >
+Sprint "1" -- "*" Task : originates a  >
+UserStory "*" -- "1" Status : currently in a  >
+UserStory "*" -- "1" Effort : estimated an  >
+ResourceInProject "1" -- "*" Task : working on a  >
+Task "*" --- "1" Status : currently in a  >
+Task "*" -- "1" Effort : estimated an  >
+
+/'notas'/
+
+note right of Profile
+    Administrator
+    Manager
+    User
+end note
+
+note right of Role
+    Project Manager
+    Product Owner
+    Scrum Master
+    Team Member
+end note
+
+note right of ProjectStatus
+    Planned
+    Inception
+    Elaboration
+    Construction
+    Transition
+    Warranty
+    Closed
+end note
+
+note right of Status
+    Planned
+    Running
+    Finished
+    Blocked
+end note
+
+note right of Typology
+    Fixed Cost
+    Time and materials
+end note
+
+@enduml

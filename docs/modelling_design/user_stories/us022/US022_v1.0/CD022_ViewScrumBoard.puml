@@ -1,0 +1,78 @@
+@startuml
+
+legend top
+CD US022 - As Team Member, I want to view the Scrum Board of current sprint.
+end legend
+
+ViewScrumBoardUI ..> ViewScrumBoardController
+ViewScrumBoardUI ..> UserStoryDTO
+ViewScrumBoardController ..> ProjectContainer: projectContainer
+ViewScrumBoardController ...> Project
+ViewScrumBoardController ...> SprintContainer
+ViewScrumBoardController ...> UserStory
+ViewScrumBoardController ...> UserStoryDTO
+ViewScrumBoardController ...> UserStoryMapper: userStoryMapper
+ProjectContainer "1"*--"*" Project :contains
+Project --> SprintContainer: contains
+SprintContainer --> Sprint: contains
+SprintContainer --> UserStory
+Sprint -> UserStory: contains
+UserStory -> Status
+UserStoryMapper .> UserStory
+UserStoryMapper ..> UserStoryDTO
+UserStoryMapper ..> Status
+
+
+class ViewScrumBoardController {
+-getProject(projectCode): Project
+-getSprintContainer(projectCode): SprintContainer
+-getScrumBoard(projectCode): List<UserStory>
++viewScrumBoard(projectCode): List<UserStoryDTO>
+}
+
+class UserStoryMapper {
+- createUSDTO(userStoryNumber,\n userStoryText, status):UserStoryDTO
++ getUserStoriesDTO(sprintBacklog)\n:List<UserStoryDTO>
+}
+
+class UserStoryDTO {
++ userStoryNumber: String
++ userStoryText: String
++ status: String
++ setUserStoryNumber():void
++ setUserStoryText():void
++ setStatus():void
+}
+
+class ProjectContainer {
++getProject(projectCode): Project
+}
+
+class Project {
++getSprintContainer(): SprintContainer
+}
+
+class SprintContainer{
++getScrumBoard(): List<UserStory>
+}
+
+class Sprint{
+- sprintBacklog: List<UserStory>
++ getScrumBoardList(): List<UserStory>
+}
+
+class UserStory {
+-userStoryNumber: String
+-userStoryText: String
+-status: Status
++ getUserStoryNumber(): String
++ getUserStoryText(): String
++ getStatus(): Status
+}
+
+class Status {
+-description: String
++getDescription(): String
+}
+
+@enduml

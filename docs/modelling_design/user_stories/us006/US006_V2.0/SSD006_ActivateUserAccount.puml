@@ -1,0 +1,18 @@
+@startuml
+
+legend top
+SSD - US006 - As Administrator, I want to activate an user account
+end legend
+
+autonumber 1
+
+actor Administrator
+
+activate Administrator #lightgrey
+Administrator -> System: Activate an account
+activate System #lightgrey
+Administrator <-- System: Account Active
+deactivate
+
+@enduml
+

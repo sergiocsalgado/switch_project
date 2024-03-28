@@ -1,0 +1,31 @@
+@startuml
+skinparam linetype ortho
+
+'HumanResources Aggregate'
+package HumanResources {
+    object "Account" as Account <<Entity>> <<Root>> {
+    Email
+    Name
+    PhoneNumber
+    AccountStatus
+    ProfileID
+    }
+}
+object "Email" as AccountID <<Value Object>> \n <<ID>> {
+}
+
+'Profiles Aggregate'
+package Profiles {
+    object "Profile" as Profile <<Entity>> <<Root>> {
+    Description
+    ProfileID
+    }
+}
+object "ProfileID" as ProfileID <<Value Object>> \n <<ID>> {
+}
+
+Account " " -d-> "id" "AccountID"
+Account " " -d-> "1" "ProfileID"
+Profile " " -d-> "id" "ProfileID"
+
+@enduml

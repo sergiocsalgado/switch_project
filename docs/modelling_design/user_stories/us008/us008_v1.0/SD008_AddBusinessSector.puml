@@ -1,0 +1,39 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+legend top
+SD US008 Add Business Sector
+end legend
+autoactivate on
+
+actor Administrator as A
+participant ": BusinessSectorUI" as B
+participant ":BusinessSectorController" as C
+participant ": Company" as D
+participant ":BusinessSectorContainer" as E
+participant "businessSector\n:BusinessSector" as G
+
+
+
+
+
+autonumber 1.1
+activate  A #lightgrey
+A -> B #lightgrey: Add Business Sector (description)
+B -> C #lightgrey: addBusinessSector (description)
+C -> D #lightgrey: addBusinessSector (description)
+D -> E #lightgrey: addBusinessSector (description)
+E -> G ** : create
+E -> E #grey: saveBusinessSector(businessSector)
+deactivate E
+
+E --> D:true
+
+
+
+D --> C:  true
+C --> B:  true
+B --> A: "Business Sector Added"
+
+@enduml

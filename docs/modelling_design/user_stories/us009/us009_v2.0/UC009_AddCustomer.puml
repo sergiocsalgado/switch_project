@@ -1,0 +1,13 @@
+@startuml
+
+
+actor "Administrator"
+
+left to right direction
+rectangle "System"{
+
+    "Administrator" --> (Add a Customer)
+
+}
+
+@enduml

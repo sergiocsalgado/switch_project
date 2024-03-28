@@ -1,0 +1,5 @@
+The administrator will:
+	- Open the profile creation and editing section;
+	- Start a new profile, insert data and permissions;
+	- The System will verify the data, create profile, and save it.
+

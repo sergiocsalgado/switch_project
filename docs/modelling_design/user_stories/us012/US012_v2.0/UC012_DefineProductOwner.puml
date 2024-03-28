@@ -1,0 +1,16 @@
+@startuml
+
+legend top
+UC US012 As Manager, I want to define the PO of a project
+end legend
+left to right direction
+actor "Manager"
+rectangle System {
+    "Manager" -----> (List all Accounts) : need
+    (List all Accounts) <. (Define PO of a Project) : include
+    "Manager" -----> (List all Projects) : need
+    (List all Projects) <. (Define PO of a Project) : include
+    "Manager" -----> (Define PO of a Project) : to
+}
+
+@enduml

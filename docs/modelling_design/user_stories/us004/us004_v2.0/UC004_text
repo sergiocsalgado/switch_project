@@ -1,0 +1,8 @@
+# Primary Actor:
+Administrator
+
+# Main Success Scenario:
+1. The Administrator requests the list of users from the system
+2. The system returns a list of all users
+3. The Administrator requests the user status list
+3. The system returns a list of the users status

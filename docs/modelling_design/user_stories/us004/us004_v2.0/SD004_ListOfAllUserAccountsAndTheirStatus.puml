@@ -1,0 +1,52 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+SD US004 List all User Accounts and their Status
+end legend
+
+autoactivate on
+autonumber 1.1
+
+actor "Administrator" as A
+activate A #lightgrey
+participant ":AccountsAndStatusUI" as B
+participant ":AccountsAndStatusController" as C
+participant "AccountStatusMapper" as D
+
+
+
+A -> B #lightgrey: List Accounts And Status
+B -> C #lightgrey: getAccountsAndStatus()
+participant ":Company" as F
+C -> F #lightgrey: getAccountsAndStatus()
+participant "ac:AccountContainer" as G
+F -> G #lightgrey: addAccountAndStatus()
+G --> "accountsToReturn\n:List<Account>" **: create
+loop for each account in ac
+G -> "accountsToReturn\n:List<Account>" #lightgrey: addAccountAndStatus()
+deactivate
+end
+G --> F: ListAccountsAndStatus
+F --> C: ListAccountsAndStatus
+C -> D #lightgrey: getAccountAndStatus()
+
+
+
+D --> "listAccountDTO\n:AccountStatusDTO" ** : create
+loop
+D -> "AccountStatusDTO" #lightgrey: account.getEmail()
+deactivate
+D -> "AccountStatusDTO" #lightgrey: account.getStatus()
+deactivate
+end
+
+
+
+D --> C: ListAccountDTO
+C --> B: ListAccountDTO
+B --> A: Display List
+
+@enduml
+

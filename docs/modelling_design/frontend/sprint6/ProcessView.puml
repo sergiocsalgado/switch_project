@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+participant Actor as A
+participant Client as B
+participant Server as C
+participant DB as D
+
+autonumber
+
+A -> B: Associate/Define role
+B -> C: Fetch data
+C -> D: Fetch data
+D --> C: data
+C --> B: data
+B -> B #b:Display form
+B --> A #b:Select email
+A -> B #b:Submit form
+B -> C #b:Associate role in server
+C -> D #b:Associate role in DB
+D --> C #b: Success
+C --> B #b: Success
+B --> A #b: Success
+
+@enduml

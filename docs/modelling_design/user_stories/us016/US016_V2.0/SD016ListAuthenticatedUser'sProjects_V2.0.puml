@@ -1,0 +1,191 @@
+@startuml
+
+legend top
+SD US016: List Authenticated User's Projects
+end legend
+
+skinparam sequence {
+    LifeLineBackgroundColor #lightgrey
+}
+skinparam sequenceMessageAlign left
+
+autonumber
+
+boundary " " #white
+participant ": Route" as route
+participant ": ListUserProjectsController" as controller
+participant "response : ResponseEntity" as response
+participant ": ListUserProjectsService" as service
+participant "email:Email" as V.O
+participant "Repository <Projects>" as projects << (I,#ccb3ff) >>
+participant "Repository <CustomerID, Customer>" << (I,#ccb3ff) >>
+participant "Repository <TypologyID, Typology>" << (I,#ccb3ff) >>
+participant "Repository <BusinessSectorID, BusinessSector>" << (I,#ccb3ff) >>
+participant "Project" as project
+participant "ResourceInProject" as rip
+participant Collectors as collector
+participant "userProjects List<Project>" as userProjects
+participant ": Map<CustomerID, String>" as mc
+participant ": Map<TypologyID, String>" as mt
+participant ": Map<BusinessSectorID, String>" as mbs
+participant ProjectDTOMapper
+participant ": List<ProjectDTO>" as DTO
+
+
+" " -> route: GET /team/{email}
+activate route
+
+route -> controller : listAllUserProjects(String email, String date)
+activate controller
+
+controller -> service: listAllUserProjects(email, date)
+activate service
+
+service --> V.O **:create
+
+autonumber 5.0
+service -> service: getCustomers()
+activate service
+
+service -> "Repository <CustomerID, Customer>": findAll()
+activate "Repository <CustomerID, Customer>"
+"Repository <CustomerID, Customer>" --> service: List<Customer>
+deactivate
+service -> collector: toMap()
+activate collector
+collector -> collector: getCustomerID
+activate collector
+deactivate
+collector -> collector: getName().getValue()
+activate collector
+
+deactivate
+service <-- collector: Map<CustomerID, String>
+deactivate
+deactivate
+
+
+autonumber 6.0
+service -> service: getTypologies()
+activate service
+service -> "Repository <TypologyID, Typology>" : findAll()
+activate "Repository <TypologyID, Typology>"
+"Repository <TypologyID, Typology>"  --> service: List<Typology>
+deactivate
+
+service -> collector: toMap()
+activate collector
+collector -> collector: getTypologyID
+activate collector
+deactivate
+collector -> collector: getDescription().getDescription()
+activate collector
+deactivate
+service <-- collector: Map<CustomerID, String>
+deactivate
+deactivate
+
+
+autonumber 7.0
+service -> service: getBusinessSectors()
+activate service
+service -> "Repository <BusinessSectorID, BusinessSector>": findAll()
+activate "Repository <BusinessSectorID, BusinessSector>"
+"Repository <BusinessSectorID, BusinessSector>" --> service: List<BusinessSector>
+deactivate
+service -> collector: toMap()
+activate collector
+collector -> collector: getBusinessSectorID
+activate collector
+deactivate
+collector -> collector: getBusinessSectorDescription().getDescription()
+activate collector
+deactivate
+
+
+service <-- collector: Map<CustomerID, String>
+deactivate
+deactivate
+
+
+autonumber 8
+service -> service : getUserProjects(Email emailVO, LocalDate localDate)
+activate service
+service -> projects: findAll()
+activate projects
+projects --> service : List <Project>
+deactivate
+deactivate
+service -> DTO** : create
+
+autonumber 10.0
+loop for each project in projects
+service -> project :  resourceIsInProject(Email email, LocalDate date)
+activate project
+loop for each resources in resources
+project -> rip : .getEmail().equals(email)
+activate rip
+rip --> project: email
+deactivate
+project -> rip : .getPeriod().getStartDate()
+activate rip
+rip --> project : startDate
+deactivate
+project -> rip : .getPeriod().getEndDate()
+activate rip
+rip -> project : endDate
+deactivate
+project -> rip : resourceStartDate.isBefore(date) && resourceEndDate.isAfter(date)
+activate rip
+rip --> project : true
+deactivate
+end loop
+project --> service : true
+deactivate
+service -> userProjects: add
+activate userProjects
+deactivate
+end loop
+autonumber 11
+
+autonumber 12.0
+loop for each project in userProjects
+service -> mc : customerName = getCustomerID()
+activate mc
+deactivate
+service -> mbs: businessSectorDescription = getBusinessSectorID()
+activate mbs
+deactivate
+service -> mt : typologyDescription = getTypologyID()
+activate mt
+deactivate
+service -> ProjectDTOMapper : ProjectDTO = toDTOWithoutIDs(project, customerName, businessSectorDescription, typologyDescription);
+activate ProjectDTOMapper
+ProjectDTOMapper -> DTO : add
+activate DTO
+end loop
+
+autonumber 13
+DTO --> ProjectDTOMapper : projectsDTO
+deactivate
+ProjectDTOMapper --> service : projectsDTO
+deactivate
+service --> controller : projectsDTO
+deactivate
+
+controller --> response **: ResponseEntity<>(projectsDTO,HttpStatus.OK)
+
+controller --> route : response
+deactivate controller
+
+route --> " ": response(json)
+deactivate route
+
+
+
+
+
+
+
+
+@enduml

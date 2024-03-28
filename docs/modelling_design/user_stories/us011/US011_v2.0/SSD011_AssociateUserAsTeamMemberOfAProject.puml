@@ -1,0 +1,21 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+SSD - System Sequence Diagram
+SSD US011 Associate a User as Team Member of a Project
+end legend
+
+autonumber
+
+actor Manager #lightgrey
+activate Manager #lightgrey
+participant System #lightgrey
+activate System #lightgrey
+
+autonumber 1.1
+Manager -> System #lightgrey : Define a User/Team Member in Project
+System --> Manager : User/Team Member defined in Project
+
+@enduml

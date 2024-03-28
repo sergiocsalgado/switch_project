@@ -1,0 +1,16 @@
+@startuml
+
+legend top
+UC US013 Define Scrum Master in Project
+end legend
+left to right direction
+actor "Manager"
+rectangle System {
+    "Manager" --> (List all Accounts)
+    (List all Accounts) <. (Define Scrum Master in Project) : includes
+    "Manager" --> (List all Projects)
+    (List all Projects) <. (Define Scrum Master in Project) : includes
+    "Manager" --> (Define Scrum Master in Project)
+}
+
+@enduml

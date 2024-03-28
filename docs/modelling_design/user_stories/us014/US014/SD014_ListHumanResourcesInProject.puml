@@ -1,0 +1,49 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+legend top
+SD US014 List All Human Resources In Project
+end legend
+autoactivate on
+
+actor Manager    as A
+participant ": ListResourcesUI" as B
+participant ": ListResourcesController" as C
+participant ": Company" as D
+participant "projectContainer\n : ProjectContainer" as E
+participant "project : Project" as F
+participant ": ListResourcesMapper" as G
+
+autonumber 1.1
+activate A #lightgrey
+A -> B #lightgrey: List all Projects available
+ref over B : US015
+B --> A #lightgrey: List of all Projects \n with their projectCode
+
+autonumber 2.1
+A -> B #lightgrey: List all Human Resources\n in the Project
+B -> C #lightgrey: listResources (projectCode)
+
+C->D #lightgrey: projectContainer = getProjectContainer ()
+deactivate
+
+C->E #lightgrey: project = getProject (projectCode)
+deactivate
+
+C->F #lightgrey: resourcesInProjectContainer = getResourcesInProject (projectCode)
+
+F --> "resourcesInProjectContainer:\nResourcesInProjectContainer" ** : create
+deactivate
+
+C -> G #lightgrey: getResourcesDTO (resourceInProjectContainer, date)
+
+G --> "List<ResourcesInProjectDTO>" ** : create new list
+ref over G : US014 : Mapping Process
+
+G --> C #lightgrey: List<ResourcesInProjectDTO>
+
+C-->B: List<ResourcesInProjectDTO>
+
+B-->A: Display Resources List
+
+@enduml

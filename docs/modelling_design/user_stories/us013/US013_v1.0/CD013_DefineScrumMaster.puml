@@ -1,0 +1,110 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+CD US013 Define the Scrum Master of a Project
+end legend
+
+DefineScrumMasterUI ..> DefineScrumMasterController
+DefineScrumMasterController ..> Company :company
+DefineScrumMasterController ..> AccountContainer :accountContainer
+Company ..> AccountContainer :accountContainer
+Company ..> ProjectContainer :projectContainer
+DefineScrumMasterController ..> AccountMapper :accountMapper
+DefineScrumMasterController ..> ProjectContainer :projectContainer
+DefineScrumMasterController ..> Project :project
+Project ..> ResourceInProject :resourceInProject
+ResourceInProject ..> ScrumMasterContainer :scrumMasterContainer
+ProjectContainer "1"*--"*" Project :projects
+AccountMapper "1"*--"*" AccountDTO: accountsDTO
+ScrumMasterContainer "1"*--"*" ScrumMaster: scrumMasters
+
+class DefineScrumMasterUI{
+}
+
+class DefineScrumMasterController{
++DefineScrumMasterController(Company company,
+ProjectContainer projectContainer, AccountContainer accountContainer)
++getAccounts(): List<Account>
++getAccountDTO(): List<AccountDTO>
++getAccountByEmail(String email): Account
++getProjectByCode(String projectCode): Project
++defineScrumMaster(String email,String projectCode,double allocation): boolean
++doesNotExceedPercentageAllocation(String email, double allocation): boolean
+}
+
+class Company{
++Company(AccountContainer accountContainer,
+ProfileContainer profileContainer)
++getAccounts(): List<Account>
++getAllProjects(): List<Project>
+}
+
+class AccountContainer{
++AccountContainer()
++getAccount(String email): Account
+}
+
+class AccountMapper{
++listAccountsDTO(List<Account> accounts): List<AccountsDTO>
+}
+
+class Project{
++Project(String projectCode, String projectName, String projectDescription,\nCustomer customer,BusinessSector businessSector,
+Typology typology, ProjectStatus projectStatus,ResourceInProject resourceInProject)
+-typology: Typology
+-businessSector: BusinessSector
+-customer: Customer
+-projectStatus: ProjectStatus
+-projectCode: String
+-projectName: String
+-projectDescription: String
++getResourceInProject(): ResourceInProject
+}
+
+class ResourceInProject{
++ResourceInProject(ProjectManagerContainer projectManagerContainer,\nProductOwnerContainer productOwnerContainer,\nScrumMasterContainer scrumMasterContainer,
+TeamMemberContainer teamMemberContainer)
++defineScrumMaster(Account account, double allocation): boolean
++getCurrentScrumMaster(): ScrumMaster
++isInProject(String email): boolean
++getAllocationInProject(String email): double
+-getScrumMasterAllocation(String email): double
+}
+
+class ScrumMasterContainer{
++ScrumMasterContainer()
++defineScrumMaster(Account account, double allocation): boolean
+-addScrumMasterToPastScrumMastersList(): void
++getAllocation(String email): double
++isScrumMaster(String email): boolean
++getScrumMaster(): ScrumMaster
+}
+
+class ProjectContainer{
++ProjectContainer()
++getProject(String projectCode): Project
++doesNotExceedPercentageAllocation(String email, double allocation): boolean
+}
+
+class ScrumMaster{
+-account: Account
+-allocation: double
++ScrumMaster(Account account, double allocation, double costPerHour)
++getAccount():Account
++getStartDate(): String
++getAllocation(): double
++setEndDate(): void
++copy(): ScrumMaster
+}
+
+class AccountDTO{
+-email: String
+-name: String
++AccountDTO(String email, String name)
++getEmail(): String
++getName(): String
+}
+
+@enduml

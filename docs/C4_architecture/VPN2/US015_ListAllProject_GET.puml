@@ -1,0 +1,37 @@
+@startuml
+
+legend top
+Vista Processos Nível 2 - US015 - As Manager, I want to get a list of all projects
+end legend
+
+skinparam sequence {
+LifeLineBackgroundColor #lightgrey
+}
+
+actor Manager
+
+activate Manager
+
+Manager -> "<<Container>> \n: G5_FE" : List all projects
+
+activate "<<Container>> \n: G5_FE"
+
+"<<Container>> \n: G5_FE" -> "<<Container>> \n: G5_BE" : GET/projects
+
+activate "<<Container>> \n: G5_BE"
+
+"<<Container>> \n: G5_BE" -> "<<Container>> \n: G5_DB" : List<Project> projects = findAll()
+
+activate "<<Container>> \n: G5_DB"
+
+deactivate
+
+"<<Container>> \n: G5_BE" --> "<<Container>> \n: G5_FE" : 201/400/404
+
+deactivate
+
+"<<Container>> \n: G5_FE" --> Manager : OK/~OK
+
+deactivate
+
+@enduml

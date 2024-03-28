@@ -1,0 +1,48 @@
+@startuml
+
+autonumber 1.1
+
+skinparam sequenceArrowThickness 1
+skinparam maxmessagesize 250
+
+legend top
+SD US020 Add User Story From ProductBacklog To SprintBacklog
+end legend
+
+boundary " " #white
+participant ": Route" as Route
+participant ": UserStoryID" as Route
+
+
+
+
+" " o-> Route : @PatchMapping("/{projectCode}/product-backlog/\n{userStoryID}/{sprintID}")) (json)
+activate Route
+
+participant Route
+Route -> UserStoryController : addUserStoryFromProductBacklogToSprintBacklog()
+activate UserStoryController
+create UserStoryID
+UserStoryController -> UserStoryID : new
+activate UserStoryID
+UserStoryID --> UserStoryController : userStoryID
+deactivate UserStoryID
+create SprintID
+UserStoryController -> SprintID : new
+activate SprintID
+SprintID --> UserStoryController : sprintID
+deactivate SprintID
+create ProjectCode
+UserStoryController -> ProjectCode : new
+activate ProjectCode
+ProjectCode --> UserStoryController : projectCode
+deactivate ProjectCode
+UserStoryController -> AddUserStoryToSprintBacklogServiceImpl : addUserStoryToSprintBacklog(UserStoryID userStoryID, SprintID sprintID, ProjectCode projectCode)
+activate AddUserStoryToSprintBacklogServiceImpl
+AddUserStoryToSprintBacklogServiceImpl --> UserStoryController : userStoryID, sprintID, projectCode
+deactivate AddUserStoryToSprintBacklogServiceImpl
+UserStoryController --> "responseEntity: ResponseEntity" : ResponseEntity<>(true, HttpStatus.OK);
+"responseEntity: ResponseEntity" --> UserStoryController : return true
+UserStoryController --> Route : user story is added to sprint backlog
+Route ->o " " : response(json)
+@enduml

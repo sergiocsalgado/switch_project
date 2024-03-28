@@ -1,0 +1,44 @@
+@startuml
+skinparam linetype ortho
+
+
+'Projects Aggregate'
+package Projects {
+    object "Project" as Project <<Entity>> <<Root>> {
+    ProjectCode
+    Name
+    Description
+    CustomerID
+    BusinessSectorID
+    TypologyID
+    PositiveNumber
+    Period
+    ProjectStatus
+    Cost
+    }
+}
+object "ProjectCode" as ProjectID <<Value Object>> \n <<ID>> {
+}
+
+
+'UserStories Aggregate'
+package UserStories {
+    object "UserStory" as UserStory <<Entity>> <<Root>> {
+    UserStoryID
+    ProjectCode
+    UserStoryNumber
+    Name
+    Description
+    UserStoryStatus
+    Priority
+    Effort
+    }
+}
+object "UserStoryID" as UserStoryID <<Value Object>> \n <<ID>> {
+}
+
+
+Project " " -d-> "id" "ProjectID"
+UserStory " " -d-> "id" "UserStoryID"
+UserStory "1" -d-> "1" "ProjectID"
+@enduml

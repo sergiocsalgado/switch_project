@@ -1,0 +1,13 @@
+@startuml
+
+legend top
+UC US003 - Set Account Profile
+end legend
+
+left to right direction
+actor "Administrator" as fc
+rectangle System {
+  usecase "Set User Profile" as UC1
+}
+fc --> UC1
+@enduml

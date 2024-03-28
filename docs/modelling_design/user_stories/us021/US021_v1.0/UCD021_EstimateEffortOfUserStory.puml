@@ -1,0 +1,18 @@
+@startuml
+
+legend top
+SSD US021 As Team Member, I Want to Estimate the Effort
+of a User Story in a Sprint, during the Sprint Planning Ceremony
+end legend
+
+
+left to right direction
+
+actor "Team Member"
+rectangle "System"{
+
+"Team Member" --> (Add the Effort of a User Story in a Sprint)
+
+}
+
+@enduml

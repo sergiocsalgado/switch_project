@@ -1,0 +1,23 @@
+@startuml
+
+legend top
+Vista Processos Nível 1 - US015 - As Manager, I want to get a list of all projects
+end legend
+
+skinparam sequence {
+LifeLineBackgroundColor #lightgrey
+}
+
+actor Manager
+
+activate Manager
+
+Manager -> "<<System (C4)>> \n g5 : G5" : 1: List all projects
+
+activate "<<System (C4)>> \n g5 : G5"
+
+"<<System (C4)>> \n g5 : G5" --> Manager : 2.1: OK/~OK
+
+deactivate "<<System (C4)>> \n g5 : G5"
+
+@enduml

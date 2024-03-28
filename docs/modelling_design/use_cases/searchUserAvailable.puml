@@ -1,0 +1,15 @@
+@startuml
+
+
+actor "Administrator"
+
+left to right direction
+rectangle "System"{
+
+    "Administrator" --> (List Users Accounts)
+
+    "Administrator" --> (Check accounts availability)
+
+}
+
+@enduml

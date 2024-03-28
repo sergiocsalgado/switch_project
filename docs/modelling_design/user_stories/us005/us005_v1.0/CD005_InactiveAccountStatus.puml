@@ -1,0 +1,42 @@
+@startuml
+
+'status = (boolean) false
+
+legend top
+CD US005 Inactivate Account
+end legend
+
+InactivateAccountUI" "..>"  "InactivateAccountController
+InactivateAccountController" "..>" "Company : company
+Company " "..>" "AccountContainer : accountContainer
+AccountContainer"1 "*--"1..*"Account : contains
+
+class InactivateAccountUI{
+}
+
+class InactivateAccountController {
++InactivateAccountController(Company company)
++inactivateAccount(String email) : boolean
+}
+
+class Company {
++Company(AccountContainer accountContainer)
++inactivateAccount(String email) : boolean
+}
+class AccountContainer {
++AccountContainer()
++listAccounts() : List
+}
+
+class Account {
+-email: String
+-name: String
+-phoneNumber: String
+-status: boolean
+-profile: Profile
++Account(String email, String name, String phoneNumber, \n boolean status, Profile profile)
++verifyEmail(String email) : String
++setStatus(boolean status) : boolean
+}
+
+@enduml

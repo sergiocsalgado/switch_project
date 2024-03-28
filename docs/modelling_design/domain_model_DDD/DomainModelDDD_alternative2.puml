@@ -1,0 +1,71 @@
+@startuml
+
+package Project {
+    object "Project" as Project <<Entity>> <<Root>>{
+        Name
+        Description
+        BusinessSector
+        Typology
+        Period
+        ProjectStatus
+    }
+    object "ResourceInProject" as ResourceInProject <<Value Object>>{
+        Role
+        Period
+        Cost
+        Allocation
+    }
+    object "Sprint" as Sprint <<Entity>> {
+        Period
+    }
+    object "SprintID" as SprintID <<Value Object>> \n <<ID>>
+    Project "1" --> "*" ResourceInProject
+    Project "1" --> "*" Sprint
+    Sprint " " --> "id" SprintID
+}
+
+object "ProjectID" as ProjectID <<Value Object>> \n <<ID>>{
+}
+
+package UserStory {
+    object "UserStory" as UserStory <<Entity>> <<Root>> {
+        Description
+        Profile
+        UserStoryStatus
+        Priority
+        Effort
+    }
+}
+
+object "UserStoryID" as UserStoryID <<Value Object>> \n <<ID>> {
+}
+
+package Customer {
+    object "Customer" as Customer <<Entity>> <<Root>> {
+        Name
+        Nif
+    }
+}
+
+object "CustomerID" as CustomerID <<Value Object>> \n <<ID>> {
+}
+
+package HumanResource {
+    object "Account" as Account <<Entity>> <<Root>> {
+        Profile
+    }
+}
+
+object "AccountID" as AccountID <<Value Object>> \n <<ID>> {
+}
+
+Project " " -> "id" ProjectID
+Project "1" --> "1" CustomerID
+ResourceInProject "1" ---> "1" AccountID
+UserStory " " --> "id" UserStoryID
+UserStory "1" --> "1" ProjectID
+Sprint "1" --> "*" UserStoryID
+Customer " " ---> "id" CustomerID
+Account " " -> "id" AccountID
+
+@enduml

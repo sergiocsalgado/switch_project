@@ -1,0 +1,45 @@
+@startuml
+
+legend top
+Vista Processos Nível 2 - US001 - As Administrator, I want to create user profiles
+end legend
+
+skinparam sequence {
+LifeLineBackgroundColor #lightgrey
+}
+
+actor Administrator
+
+activate Administrator
+
+Administrator -> "<<Container>> \n: G5_FE" : Create user profile
+
+activate "<<Container>> \n: G5_FE"
+
+"<<Container>> \n: G5_FE" --> Administrator : UI
+
+deactivate "<<Container>> \n: G5_FE"
+
+Administrator -> "<<Container>> \n: G5_FE" : description
+
+activate "<<Container>> \n: G5_FE"
+
+"<<Container>> \n: G5_FE" -> "<<Container>> \n: G5_BE" : POST/profiles
+
+activate "<<Container>> \n: G5_BE"
+
+"<<Container>> \n: G5_BE" -> "<<Container>> \n: G5_DB" : newProfile = save(Profile profile)
+
+activate "<<Container>> \n: G5_DB"
+
+deactivate
+
+"<<Container>> \n: G5_BE" --> "<<Container>> \n: G5_FE" : 201/400
+
+deactivate "<<Container>> \n: G5_BE"
+
+"<<Container>> \n: G5_FE" --> Administrator : CREATED/~CREATED
+
+deactivate
+
+@enduml

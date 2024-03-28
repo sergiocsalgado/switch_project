@@ -1,0 +1,15 @@
+@startuml
+
+
+actor "Manager"
+
+left to right direction
+rectangle "System"{
+
+    "Manager" --> (List all Projects)
+    (List all Projects) <. (List all Human Resources\n of a Project) : include
+    "Manager" --> (List all Human Resources\n of a Project)
+
+}
+
+@enduml

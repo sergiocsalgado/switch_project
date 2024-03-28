@@ -1,0 +1,5 @@
+The user will:
+	- Authenticate into the system;
+	- Ask a list of all the projects he is currently allocated to;
+	- The System will display the list of all those projects.
+

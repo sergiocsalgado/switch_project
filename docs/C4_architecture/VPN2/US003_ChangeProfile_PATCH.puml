@@ -1,0 +1,45 @@
+@startuml
+
+legend top
+Vista Processos Nível 2 - US003 - As Administrator, I want to change the profile of an user account
+end legend
+
+skinparam sequence {
+LifeLineBackgroundColor #lightgrey
+}
+
+actor Administrator
+
+activate Administrator
+
+Administrator -> "<<Container>> \n: G5_FE" : Change profile of an account
+
+activate "<<Container>> \n: G5_FE"
+
+"<<Container>> \n: G5_FE" --> Administrator : UI
+
+deactivate "<<Container>> \n: G5_FE"
+
+Administrator -> "<<Container>> \n: G5_FE" : emailAddress, profileID
+
+activate "<<Container>> \n: G5_FE"
+
+"<<Container>> \n: G5_FE" -> "<<Container>> \n: G5_BE" : PATCH /accounts/{emailAddress}/{profileID}
+
+activate "<<Container>> \n: G5_BE"
+
+"<<Container>> \n: G5_BE" -> "<<Container>> \n: G5_DB" : newAccount = save(Account account)
+
+activate "<<Container>> \n: G5_DB"
+
+deactivate
+
+"<<Container>> \n: G5_BE" --> "<<Container>> \n: G5_FE" : 200/400/404
+
+deactivate
+
+"<<Container>> \n: G5_FE" --> Administrator : OK/~OK
+
+deactivate
+
+@enduml

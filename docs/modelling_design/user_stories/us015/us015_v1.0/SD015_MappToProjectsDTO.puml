@@ -1,0 +1,52 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+SD US015 MappToProjectsDTO
+end legend
+
+autoactivate on
+autonumber 1.1
+
+activate ":ListAllProjectsController" #lightgrey
+participant ":ListAllProjectsController"
+participant "mapper:\nProjectDTOMapper"
+participant "prjContainer\n:ProjectContainer"
+participant "actContainer\n: AccountContainer"
+participant "account\n: Account"
+participant "profile\n: Profile"
+
+'ProjectDTO list building'
+autonumber 1.4
+":ListAllProjectsController" -> "mapper:\nProjectDTOMapper" #b: mappToProjectsDTO(projects)
+"mapper:\nProjectDTOMapper" -> "projectsDTO\n:List<ProjectDTO>" ** : create
+
+loop for each project in projects
+"mapper:\nProjectDTOMapper" -> "project: Project" #b:code = getProjectCode()
+deactivate
+"mapper:\nProjectDTOMapper" -> "project: Project" #b:name = getProjectName()
+deactivate
+"mapper:\nProjectDTOMapper" -> "project: Project" #b:customer = getCustomer()
+deactivate
+"mapper:\nProjectDTOMapper" -> "project: Project" #b:businessSector = getBusinessSector()
+deactivate
+"mapper:\nProjectDTOMapper" -> "project: Project" #b:status = getStatus()
+deactivate
+"mapper:\nProjectDTOMapper" -> "progectDTO\n: ProjectDTO" ** : create()
+"mapper:\nProjectDTOMapper" -> "progectDTO\n: ProjectDTO" #b : setCode(code)
+deactivate
+"mapper:\nProjectDTOMapper" -> "progectDTO\n: ProjectDTO" #b: setName(name)
+deactivate
+"mapper:\nProjectDTOMapper" -> "progectDTO\n: ProjectDTO" #b: setCustomer(customer)
+deactivate
+"mapper:\nProjectDTOMapper" -> "progectDTO\n: ProjectDTO" #b: setBusinessSector(businessSector)
+deactivate
+"mapper:\nProjectDTOMapper" -> "progectDTO\n: ProjectDTO" #b: setSatus(status)
+deactivate
+
+"mapper:\nProjectDTOMapper" -> "projectsDTO\n:List<ProjectDTO>" #b: add (projectDTO)
+deactivate
+end loop
+"mapper:\nProjectDTOMapper" --> ":ListAllProjectsController" #b: projectsDTO
+@enduml

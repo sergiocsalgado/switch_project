@@ -1,0 +1,18 @@
+@startuml
+
+
+actor Manager
+
+autonumber
+
+activate Manager #lightgrey
+
+Manager -> System: Requests a Project by its project code
+activate System #lightgrey
+Manager <-- System: Verify if Project existes and gives the Manager access to the\n project requested
+deactivate
+Manager -> System: Requests for a list of all human resources in that project
+activate System #lightgrey
+System --> Manager: Displays list of all human resources associated to that project
+deactivate
+@enduml

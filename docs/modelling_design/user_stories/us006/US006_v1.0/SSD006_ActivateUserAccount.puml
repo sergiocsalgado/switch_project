@@ -1,0 +1,14 @@
+@startuml
+
+legend top
+SSD US006 Activate Account
+end legend
+
+skinparam sequenceMessageAlign center
+actor Administrator
+
+Administrator -> System: 1. Activate Account
+Administrator <-- System: 2. Account Active
+
+@enduml
+

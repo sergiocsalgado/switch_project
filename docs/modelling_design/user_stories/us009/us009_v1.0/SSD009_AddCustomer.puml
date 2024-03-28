@@ -1,0 +1,12 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+actor Administrator
+
+activate Administrator #lightgrey
+Administrator -> System : 1. Add a Customer
+activate System #lightgrey
+Administrator <-- System : 2. Customer Added
+deactivate
+
+@enduml

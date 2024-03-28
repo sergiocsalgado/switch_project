@@ -1,0 +1,46 @@
+@startuml
+legend top
+CD US003 Set Account Profile
+end legend
+
+SetAccountProfileUI..>SetAccountProfileController
+SetAccountProfileController ..> AccountContainer: accountContainer
+AccountContainer "1"*--"*"Account: contains
+SetAccountProfileController ..> ProfileContainer: profileContainer
+ProfileContainer"1"*--"*"Profile: contains
+Account -> Profile: owns a
+
+class SetAccountProfileUI {
+
+}
+
+class SetAccountProfileController {
++setAccountProfile(String email, String description): boolean
+}
+
+class AccountContainer {
+-accounts: List<Account>
++AccountContainer()
+}
+
+class Account {
+-email: String
+-name: String
+-phoneNumber: String
+-status: boolean
++Account(email,name, phoneNumber, status, profile)
++setProfile(Profile profile)
+
+}
+class ProfileContainer {
+-profiles: List<Profile>
++ProfileContainer()
+}
+
+class Profile {
+-description
++Profile(description)
++getProfile(String description)
+}
+
+@enduml

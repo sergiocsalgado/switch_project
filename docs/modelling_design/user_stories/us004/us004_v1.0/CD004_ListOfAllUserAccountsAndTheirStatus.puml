@@ -1,0 +1,58 @@
+@startuml
+
+'..|> implementation
+'-- associado
+'..> depende
+
+skinparam sequenceMessageAlign center
+
+legend top
+CD US004 List all User Accounts and their Status
+end legend
+
+AccountsAndStatusUI..>AccountsAndStatusController
+AccountsAndStatusController..>" "Company: company
+Company " "..>" "AccountContainer : accountContainer
+AccountContainer"1 "*--"1..*"Account
+AccountStatusDTO<..AccountContainer
+
+class AccountsAndStatusUI {
+}
+
+class AccountsAndStatusController {
++AccountsAndStatusController(Company company)
++accountsAndStatus(): List
+}
+
+class Company{
++Company(AccountContainer accountContainer)
++accountsAndStatus(): List
+}
+
+class AccountContainer {
+-accounts: List<Account>
++AccountContainer()
++listAccounts() : List
+}
+
+class Account {
+-email: String
+-name: String
+-phoneNumber: String
+-status: boolean
+-profile: Profile
++Account(String email, String name, String phoneNumber,
+ boolean status, Profile profile)
++getEmail(): String
++getStatus(): boolean
+}
+
+class AccountStatusDTO {
+-email: String
+-status: boolean
++AccountStatusDTO(String email, boolean status)
++getEmail(): String
++getStatus(): boolean
+}
+
+@enduml

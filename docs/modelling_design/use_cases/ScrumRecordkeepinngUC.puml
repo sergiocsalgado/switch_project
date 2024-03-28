@@ -1,0 +1,10 @@
+@startuml
+title Scrum Recordkeepinng
+
+left to right direction
+actor user as user
+rectangle system {
+usecase "Scrum Activity" as UC1
+}
+user -->UC1
+@enduml

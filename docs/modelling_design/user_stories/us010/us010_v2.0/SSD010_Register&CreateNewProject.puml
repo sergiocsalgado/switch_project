@@ -1,0 +1,19 @@
+@startuml
+
+legend top
+SSD US010 As Manager, I want to register/create a new project
+end legend
+
+actor Manager
+
+activate Manager #lightgrey
+
+
+
+autonumber 1.1
+Manager -> System: Register project
+activate System#lightgrey
+Manager <-- System: Project registered
+deactivate
+
+@enduml

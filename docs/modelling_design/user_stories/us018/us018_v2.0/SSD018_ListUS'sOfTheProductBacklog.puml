@@ -1,0 +1,17 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+legend top
+US018 - As PO/SM/Team Member, I want to consult the
+product backlog,i.e. to get the list of user stories sorted by priority
+end legend
+
+actor "PO/SM/TM" as A
+participant System as B
+
+autonumber
+activate A #lightgrey
+activate B #lightgrey
+A -> B: List US of the product backlog
+A <-- B: Display user stories by priority
+@enduml

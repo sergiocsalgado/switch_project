@@ -1,0 +1,73 @@
+@startuml
+
+legend top
+CD US017 As Product Owner, I want to create a user story and add it to the ProductBacklog
+end legend
+
+'..|> implementation
+'-- associado
+'..> depende
+'*-- agrega
+'- atributo
+'+ método
+
+UserStoryUI ..> CreateUserStoryController
+ProjectContainer"1"*--"*" Project : contains
+Project --> ProductBacklog : has a
+ProductBacklog"1"*--"*" UserStory : contains
+CreateUserStoryController ..> ProjectContainer : projectContainer
+ProductBacklog ..> FactoryUserStory
+FactoryUserStoryImpl ..> UserStory
+FactoryUserStory <|..FactoryUserStoryImpl
+
+class UserStoryUI {
+}
+
+class CreateUserStoryController{
+-projectContainer: ProjectContainer
+
++createUserStory(ProjectCode projectCode, UserStoryID userStoryID, Name actor,
+                 Description userStoryText, UserStoryStatus status, Priority priority): Project
+-getProject(ProjectCode projectCode): Optional<Project>
+-getProductBacklog(Project project): ProductBacklog
+}
+
+class ProjectContainer{
+-projects: List<Project>
++getProjectByCode(ProjectCode projectCode): Optional<Project>
++registerProject(ProjectCode projectCode, Name projectName, Description projectDescription, CustomerID customerID,
+BusinessSector businessSector, Typology typology, ProjectStatus projectStatus)
+}
+
+class Project{
+-projectCode: ProjectCode
++getProjectCode(): ProjectCode
++getProductBacklog(): ProductBacklog
+}
+
+class ProductBacklog{
+-userStories: List<UserStory>
+-userStoryHistory: List<UserStoryID>
++createUserStory(ProjectCode projectCode, UserStoryID userStoryID, Name actor,
+Description userStoryText, UserStoryStatus status, Priority priority)
+}
+
+class UserStory{
+-UserStoryID: UserStoryID
+-actor: Name
+-userStoryText: Description
++UserStory(ProjectCode projectCode, UserStoryID userStoryID, Name actor, Description userStoryText,
+UserStoryStatus status, Priority priority, Effort effort)
+}
+
+class FactoryUserStoryImpl{
++createUserStory(ProjectCode projectCode, UserStoryID userStoryID, Name actor,
+Description userStoryText, UserStoryStatus status, Priority priority, Effort effort)
+}
+
+interface FactoryUserStory{
++createUserStory(ProjectCode projectCode, UserStoryID userStoryID, Name actor,
+Description userStoryText, UserStoryStatus status, Priority priority)
+}
+
+@enduml

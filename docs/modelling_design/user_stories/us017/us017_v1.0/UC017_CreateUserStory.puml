@@ -1,0 +1,17 @@
+@startuml
+
+legend top
+UC US017 As Product Owner, I want to create a user story and add it to the ProductBacklog
+end legend
+
+left to right direction
+
+actor "Product Owner"
+
+rectangle System {
+usecase "Create a User Story\n and add it to the\n ProductBacklog" as UC1
+}
+
+"Product Owner"-->UC1
+
+@enduml

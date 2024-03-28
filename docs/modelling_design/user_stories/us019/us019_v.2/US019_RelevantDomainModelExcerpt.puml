@@ -1,0 +1,38 @@
+@startuml
+
+Legend top
+DM - US019 - As Project Manager, I want to create a sprint
+end legend
+
+skinparam linetype ortho
+
+object "ProjectCode" as ProjectID <<Value Object>> \n <<ID>> {
+}
+
+package Sprints {
+    object "Sprint" as Sprint <<Entity>> <<Root>> {
+    Period
+    SprintStatus
+    }
+    object "SprintBacklog" as SprintBacklog <<Entity>> {
+    }
+    object "SprintBacklogID" as SprintBacklogID <<Value Object>> \n <<ID>> {
+    }
+
+}
+
+object "SprintID" as SprintID <<Value Object>> \n <<ID>> {
+}
+
+object "UserStoryID" as UserStoryID <<Value Object>> \n <<ID>> {
+}
+
+
+
+Sprint " " --> "id" "SprintID"
+Sprint "1" --> "1" "ProjectID"
+Sprint "1" --> "1" "SprintBacklog"
+SprintBacklog " " ---> "id" "SprintBacklogID"
+SprintBacklog "1" --> "*" "UserStoryID"
+
+@enduml

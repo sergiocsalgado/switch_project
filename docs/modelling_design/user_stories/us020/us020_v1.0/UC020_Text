@@ -1,0 +1,27 @@
+# Primary Actor:
+
+Team Member
+
+Resume User Story Scenario:
+
+The Team Member attends the sprint planning ceremony where the Product Owner presents the product backlog items for the
+upcoming sprint.
+The Team Member reviews the product backlog items and identifies a user story that they feel is a priority for the sprint.
+After that communicates their selection to the rest of the team and the Product Owner. Then adds the selected user story
+to the sprint backlog.
+Consequently the Team Member ensures that the user story is clear, actionable, and has acceptance criteria.
+The Team Member collaborates with the rest of the team to estimate the effort required to complete the user story.
+Ensures that the user story is well-defined and understood by the entire team.
+The team agrees on the user story and its acceptance criteria as part of the sprint commitment.
+By following this User Story Scenario, the Team Member successfully adds a user story from the product backlog to the
+sprint backlog, ensuring that the team is committed to completing it during the sprint planning ceremony.
+
+# Main Success Scenario:
+
+1. Team member is well authenticated with user profile;
+2. Team member requests list of all projects I'm currently allocated to;
+3. System responds with the list of these projects;
+4. Team member requests the list of user stories from the product backlog of a particular project;
+5. The system responds with the list of user stories for that product backlog;
+6. Team member request to add a user story to the sprint backlog;
+7. System responds that the user story was added to the sprint backlog;

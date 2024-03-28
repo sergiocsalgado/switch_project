@@ -1,0 +1,584 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+legend top
+Class Diagram
+end legend
+left to right direction
+
+AccountsAndStatusUI..>AccountsAndStatusController
+ActivateAccountUI..>ActivateAccountController
+BusinessSectorUI..>BusinessSectorController
+CreateProfileUI..>CreateProfileController
+CustomerUI..>CustomerController
+InactivateAccountUI..>InactivateAccountController
+ProjectUI..>ProjectController
+RegisterAccountUI..>RegisterAccountController
+SetAccountProfileUI..>SetAccountProfileController
+TypologyUI..>TypologyController
+DefineScrumMasterUI..>DefineScrumMasterController
+ListAllProjectsUI..>ListAllProjectsController
+ListResourcesUI..>ListResourcesController
+ListUserProjectsUI..>ListUserProjectsController
+DefineProductOwnerUI..>DefineProductOwnerController
+AssociateTeamMemberUI..>AssociateTeamMemberController
+
+
+
+
+AccountsAndStatusController..>Company : company
+ActivateAccountController..>Company : company
+BusinessSectorController..>Company : company
+CreateProfileController..>Company : company
+CustomerController..>Company : company
+InactivateAccountController..>Company : company
+ProjectController..>Company : company
+RegisterAccountController..>Company : company
+SetAccountProfileController..>Company : company
+TypologyController..>Company : company
+DefineScrumMasterController..>Company : company
+DefineScrumMasterController..>ProjectContainer : profileContainer
+DefineScrumMasterController..>AccountContainer : accountContainer
+ListAllProjectsController..>Company : company
+ListResourcesController..>Company : company
+ListUserProjectsController ..> Company : company
+AssociateTeamMemberController..> Company : company
+AssociateTeamMemberController..> AccountContainer : accountContainer
+AssociateTeamMemberController..> ProjectContainer : projectContainer
+AssociateTeamMemberController..> Project : project
+AssociateTeamMemberController..> AccountsMapper :accountsMapper
+DefineProductOwnerController ..> AccountMapper :accountMapper
+DefineScrumMasterController ..> AccountMapper :accountMapper
+ListResourcesController ..> ResourcesInProjectMapper : resourceInProjectMapper
+ListAllProjectsUIController ..> ProjectDTOMapper : projectDTOMapper
+ListUserProjectsController ..> ProjectDTOMapper : projectDTOMapper
+AccountsAndStatusController..> AccountStatusMapper : accountStatusMapper
+
+DefineProductOwnerController..> Company : company
+DefineProductOwnerController..> AccountContainer : accountContainer
+DefineProductOwnerController..> ProjectContainer : projectContainer
+DefineProductOwnerController..> Project : project
+
+Company..>AccountContainer : accountContainer
+Company..>ProfileContainer : profileContainer
+Company..>ProjectContainer : projectContainer
+Company..>TypologyContainer : typologyContainer
+Company..>BusinessSectorContainer :  businessSectorContainer
+Company..>CustomerContainer : customerContainer
+Company..>ProjectStatusContainer : projectStatusContainer
+
+AccountContainer"1"*--"*" Account : contains
+ProfileContainer"1"*--"*" Profile : contains
+ProjectContainer"1"*--"*" Project : contains
+TypologyContainer"1"*--"*" Typology : contains
+BusinessSectorContainer"1"*--"*" BusinessSector : contains
+CustomerContainer"1"*--"*" Customer : contains
+ProjectStatusContainer"1"*--"*" ProjectStatus : contains
+
+Account"*"-->"1" Profile : has a
+
+Project..> ResourceInProject : resourceInProject
+Project"*"-->"1" Typology : classified in
+Project"*"-->"1" BusinessSector : integrates in
+Project"*"-->"1" Customer : belongs to
+Project"*"-->"1" ProjectStatus : has a
+
+ResourceInProject..> TeamMemberContainer : teamMemberContainer
+ResourceInProject..> ScrumMasterContainer : scrumMasterContainer
+ResourceInProject..> ProductOwnerContainer : productOwnerContainer
+ResourceInProject..> ProjectManagerContainer : projectManagerContainer
+
+TeamMemberContainer"1"*--"*"TeamMember : contains
+ScrumMasterContainer"1"*--"*"ScrumMaster : contains
+ProductOwnerContainer"1"*--"*"ProductOwner : contains
+ProjectManagerContainer"1"*--"*"ProjectManager : contains
+
+TeamMember..> Account : account
+ScrumMaster..> Account : account
+ProductOwner..> Account : account
+ProjectManager..> Account : account
+
+AccountMapper "1"*--"*" AccountDTO :accountDTO
+ResourcesInProjectMapper..> ResourcesInProjectDTO : resourcesInProjectDTO
+ProjectDTOMapper ..> ProjectDTO : projectDTO
+AccountStatusMapper ..> AccountStatusDTO : accountStatusDTO
+
+class ListUserProjectsController {
++ ListUserProjectsController(Company company)
++ listAllUserProjects(String email) : List<Project>
++ listAllUserProjectsDTO(String email) : List<ProjectDTO>
+}
+
+class AccountsAndStatusController{
++ AccountsAndStatusController(Company company)
++ getAccountsAndStatus(): List<Account>
++ getAccountAndStatus(): List<AccountStatusDTO>
+}
+
+class ActivateAccountController{
++ ActivateAccountController(Company company)
++ activateAccount(String email): boolean
+}
+
+class BusinessSectorController{
++ BusinessSectorController(Company company)
++ addBusinessSector(String description): boolean
+}
+
+class CreateProfileController{
++ CreateProfileController(Company company)
++ createProfile(String description): boolean
+}
+
+class CustomerController{
++ CustomerController(Company company)
++ addCustomer(String name): boolean
+}
+
+class InactivateAccountController{
++ InactivateAccountController(Company company)
++ inactivateAccount(String email): boolean
+}
+
+class ProjectController{
++ ProjectController(Company company)
++ getListOfTypologiesDescriptions() : List<String>
++ getListOfBusinessSectorsDescriptions() : List<String>
++ getListOfCustomersNames() : List<String>
++ registerProject(String typologyDescription, String businessSectorDescription,
+String customerName, String projectCode, String projectName, String projectDescription) : boolean
+
+}
+
+class RegisterAccountController{
++ RegisterAccountController(Company company)
++ registerAccount(String email, String name,
+String phoneNumber, boolean status): boolean
+}
+
+class SetAccountProfileController{
++ SetAccountProfileController((Company company)
++ setAccountProfile(String email, String description): boolean
+}
+
+class TypologyController{
++ TypologyController(Company company)
++ createProjectTypology(String description): boolean
+}
+
+class DefineScrumMasterController{
++ DefineScrumMasterController(Company company,
+ProjectContainer projectContainer, AccountContainer accountContainer)
++ getAccounts(): List<Account>
++ getAccountDTO(): List<AccountDTO>
++ getAccountByEmail(String email): Account
++ getProjectByProjectCode(String projectCode): Project
++ defineScrumMaster(String email,String projectCode,
+double allocation, double costPerHour): boolean
++ doesNotExceedPercentageAllocation(String email,
+double allocation) : boolean
+}
+
+class ListAllProjectsController{
++ ListAllProjectsController(Company company)
+- getAllProjects(): List<Project>
++ getProjects(): List<ProjectDTO>
+}
+
+class ListResourcesController{
+- projectCode: String
++ ListResourcesController(Company company, String projectCode)
++ getProjectContainer(): ProjectContainer
++ getProject(): Project
++ getResourcesInProject(): ResourceInProject
++ resourcesInProjectDTO (): List<ResourcesInProjectDTO>
+
+class AssociateTeamMemberController{
++ AssociateTeamMemberController(Company company, AccountContainer accountContainer, \n ProjectContainer projectContainer, Project project)
++ getAccounts() : List<Account>
++ getAccountDto() : List<AccountDTO>
++ getAccountByEmail(String email) : Account
++ getProjectByCode(String projectCode) : Project
++ associateTeamMember(Account account, double allocation, double costPerHour) : boolean
++ doesNotExceedPercentageAllocation(String email, double allocation) : boolean
+}
+
+class DefineProductOwnerController{
++ DefineProductOwnerController(Company company, ProjectContainer projectContainer,
+AccountContainer accountContainer)
++ getAccounts() : List<Account>
++ getAccountDTO() : List<AccountDTO>
++ getAccountByEmail(String email) : Account
++ getProjectByProjectCode(String projectCode : Project
++ defineProductOwner(Account account, double allocation, double costPerHour) : boolean
+
+}
+
+class Company{
++ Company()
++ Company(AccountContainer accountContainer,
+ProfileContainer profileContainer)
++ Company (TypologyContainer typologyContainer)
++ Company (CustomerContainer customerContainer)
++ Company (BusinessContainer businessContainer)
++ Company (ProjectContainer projectContainer)
++ createProfile(String description): boolean
++ registerAccount(String email, String name,
+String phoneNumber, boolean status)
++ setAccountProfile(String email, String description): boolean
++ inactivateAccount(String email): boolean
++ activateAccount(String email): boolean
++ addBusinessSector(String description) : boolean
++ createProjectTypology(String description) : boolean
++ addCustomer(String name) : boolean
++ getCustomerContainer() : CustomerContainer
++ getAccounts() : List<Account>
++ getAllProjects() : List<Project>
++ getProjectContainer() : ProjectContainer
++ getListOfTypologiesDescriptions() : List<String>
++ getListOfBusinessSectorsDescriptions() : List<String>
++ getListOfCustomersNames() : List<String>
++ registerProject(String projectCode, String projectName, String projectDescription,
+ String customerName, String businessSectorDescription, String typologyDescription)
++ listAllUserProjects(String email) : List<Project>
++ getAccount (String email) : Account
++ getAccountAndStatus() : List<Account>
+}
+
+class AccountContainer{
++ AccountContainer()
++ getAccount(String email) : Account
++ saveAccount(String email, String name, String phoneNumber,
+boolean status, Profile profile) : boolean
++ addAccount(Account account) : boolean
++ getAccounts() : List<Account>
++ getAccountAndStatus() : List<Account>
+}
+
+class ProfileContainer{
++ ProfileContainer()
++ createProfile(String description): boolean
++ saveProfile(Profile profile): boolean
++ getDefaultProfile(): Profile
++ listProfiles(): List<Profile>
+}
+
+class ProjectContainer{
++ ProjectContainer()
++ registerProject(String projectCode, String projectName,
+String projectDescription, Customer customer, BusinessSector businessSector,
+Typology typology, ProjectStatus projectStatus)
+- addProject(Project project) : boolean
++ getProjects() : List<Project>
++ getProject(String projectCode) : Project
++ doesNotExceedPercentageAllocation(String email, double allocation) : boolean
++ listUserProjects(String email) : List<Project>
+}
+
+class TypologyContainer{
++ TypologyContainer()
++ createProjectTypology(String description): boolean
++ addProjectTypology(Typology typology): boolean
++ getTypology(String description): boolean
++ listOfTypologies(): List<Typology>
++ getListOfTypologiesDescriptions() : List<String>
+}
+
+class BusinessSectorContainer{
++ BusinessSectorContainer()
++ addBusinessSector(String description): boolean
++ saveBusinessSector(BusinessSector businessSector): boolean
++ getBusinessSector(String description): BusinessSector
++ listBusinessSector(): List<BusinessSector>
++ getListOfBusinessSectorsDescriptions() : List<String>
+}
+
+class CustomerContainer{
++ CustomerContainer()
++ addCostumer(String name): boolean
++ saveCustomer(Costumer customer): boolean
++ getCustomer(String name): Customer
++ lisCostumers(): List<Customer>
++ getListOfCustomersNames() : List<String>
+}
+
+class ProjectStatusContainer{
++ ProjectStatusContainer()
++ createProjectStatus(String description) : boolean
++ saveProjectStatus(ProjectStatus projectStatus) : boolean
++ getDefaultProjectStatus() : ProjectStatus
++ listProjectStatuses() : List<ProjectStatus>
+
+}
+
+class ResourceInProject{
++ ResourceInProject()
++ ResourceInProject(ProjectManagerContainer projectManagerContainer, \n ProductOwnerContainer productOwnerContainer, \n ScrumMasterContainer scrumMasterContainer,TeamMemberContainer teamMemberContainer)
++ associateTeamMember(Account account, double allocation, double costPerHour) : boolean
++ defineProjectManager(Account account, double allocation, double costPerHour) : boolean
++ defineScrumMaster(Account account, double allocation, double costPerHour) : boolean
++ defineProductOwner(Account account, double allocation, double costPerHour) : boolean
++ getCurrentProjectManager() : ProjectManager
++ getCurrentProductOwner() : ProductOwner
++ getCurrentScrumMaster() : ScrumMaster
++ getCurrentTeamMembers() : List<TeamMember>
++ isInProject(String email) : boolean
++ getAllocationInProject(String email) : double
++ getProjectManagerAllocation(String email) : double
++ getProductOwnerAllocation(String email) : double
++ getScrumMasterAllocation(String email) : double
++ getTeamMemberAllocation(String email) : double
+}
+
+class Account{
+- name: String
+- email: String
+- phoneNumber: String
+- status: boolean
++ Account (String email, String name, String phoneNumber,
+boolean status, Profile profile)
++ getEmail(): String
++ getName(): String
++ getPhoneNumber(): String
++ getStatus(): String
++ getProfile(): Profile
++ setName(String name): boolean
++ setPhoneNumber(String phoneNumber): boolean
++ setStatus(boolean status): boolean
++ setProfile(Profile profile): boolean
++ verifyEmail(String email): boolean
++ copy() : Account
+}
+
+
+class Profile{
+- description: String
++ Profile(String description)
++ verifyDescription(String description): boolean
++ copy(): Profile
+
+}
+
+class Project{
+- projectCode: String
+- projectName: String
+- projectDescription: String
++ Project(String projectCode, String projectName, String projectDescription,
+Customer customer, BusinessSector businessSector, Typology typology, ProjectStatus projectStatus)
++ Project (String projectCode, String projectName, String projectDescription, Customer customer,
+BusinessSector businessSector, Typology typology, ProjectStatus projectStatus, ResourceInProject resourceInProject)
++ getProjectCode(): String
++ getProjectName(): String
++ getProjectDescription(): String
++ getCustomer() : Customer
++ getBusinessSector() : BusinessSector
++ getTypology() : Typology
++ getProjectStatus(): ProjectStatus
++ getResourceInProject(): ResourceInProject
++ setProjectStatus(ProjectStatus projectStatus): boolean
++ copy() : Project
+}
+
+class Typology{
+- description: String
++ Typology (String description)
++ copy() : Typology
++ verifyTypology(String description): boolean
++ getDescription() : String
+}
+
+class BusinessSector{
+- description: String
++ BusinessSector(String description)
++ verifyBusinessSector(String description): boolean
++ copy(): BusinessSector
++ getDescription() : String
+}
+
+class Customer{
+- name: String
++ Customer(String name)
++ verifyName(String name): boolean
++ copy() : Customer
++ getName() : String
+
+}
+
+class ProjectStatus{
+- description: String
++ ProjectStatus(String description)
++ verifyDescription(String description) : boolean
++ copy() : ProjectStatus
++ getDescription(): String
+}
+
+class ProjectManagerContainer{
++ ProjectManagerContainer()
++ getProjectManager() : ProjectManager
++ defineProjectManager(Account account, double allocation, double costPerHour) : boolean
++ addProjectManagerToPastProjectMembersList() : void
++ isProjectManager(String email) : boolean
++ getAllocation(String email) : double
++ getPastProjectManagers(): List<ProjectManager>
+}
+
+class ProductOwnerContainer{
++ ProductOwnerContainer()
++ defineProductOwner(Account account,double allocation,double costPerHour)
++ addProductOwnerToPastProductOwnerList() : void
++ getPastProductOwners() : List<ProductOwner>
++ getAllocation(String email) : double
++ isProductOwner(String email) : boolean
++ getProductOwner() : ProductOwner
+}
+
+class ScrumMasterContainer{
++ ScrumMasterContainer()
++ defineScrumMaster(Account account, double allocation, double costPerHour): boolean
++ addScrumMasterToPastScrumMastersList() : void
++ getScrumMaster() : ScrumMaster
++ getPastScrumMasters() : List<ScrumMaster>
++ getAllocation(String email) : double
++ isScrumMaster(String email) : boolean
+}
+
+class TeamMemberContainer{
++ TeamMemberContainer()
++ associateTeamMember(Account account, double allocation, double costPerHour) : boolean
++ addToPastTeamMembers(Account account) : boolean
++ getTeamMembers() : List<TeamMember>
++ getPastTeamMembers() : List<TeamMember>
++ getAllocation(String email) : double
++ isTeamMember(String email) : boolean
++ getTeamMember(String email) : TeamMember
+}
+
+class ProjectManager{
+- final description : String
+- final startDate: String
+- endDate : String
+- allocation : double
+- costPerHour : double
++ ProjectManager(Account account, double allocation, double costPerHour)
++ copy() : ProjectManager
++ setEndDate() : void
++ getStartDate() : String
++ getEndDate() : String
++ getAccount(): Account
++ getDescription(): String
++ getAllocation() : double
++ getCostPerHour() : double
+}
+
+class ProductOwner{
+- final description: String
+- final startDate: String
+- endDate: String
+- allocation: double
+- costPerHour: double
++ ProductOwner(Account account,
+double allocation, double costPerHour)
++ getAccount(): Account
++ getDESCRIPTION() : String
++ getStartDate() : String
++ setEndDate() : void
++ getEndDate() : String
++ getAllocation() : double
++ getCostPerHour() : double
++ copy() : ProductOwner
+
+}
+
+class ScrumMaster{
+- final description: String
+- startDate: String
+- allocation: double
+- costPerHour: double
+- endDate: String
++ ScrumMaster(Account account,
+double allocation, double costPerHour)
++ getAccount(): Account
++ getStartDate(): String
++ getAllocation(): double
++ getDescription() : String
++ setEndDate() : void
++ getEndDate() : String
++ copy() : ScrumMaster
+}
+
+class TeamMember{
+- final description: String
+- final startDate : String
+- endDate : String
+- allocation : double
+- costPerHour : double
++ TeamMember(Account account,
+double allocation, double costPerHour)
++ getAccount(): Account
++ getDESCRIPTION() : String
++ getStartDate() : String
++ setEndDate() : void
++ getEndDate() : String
++ getAllocation() : boolean
++ copy() : TeamMember
+}
+
+class AccountMapper{
++ listAccountsDTO(List<Account> accounts) : List<AccountDTO>
+}
+
+class AccountDTO{
+- email : String
+- name : String
++ AccountDTO(String email, String name)
++ getEmail() : String
++ getName() : String
+}
+
+class ProjectDTO{
+- final code: String
+- final name : String
+- final customer : String
+- final businessSector : String
+- final status : String
++ ProjectDTO(String code, String name, String custumer, \n String businessSector, String status)
++ getCode() : String
++ getName() : String
++ getCustomer() : String
++ getBusinessSector() : String
++ getStatus() : String
+}
+
+class ProjectDTOMapper{
++ getProjectsDTO(List<Project> projects) : List<ProjectDTO>
+}
+
+class ResourcesInProjectDTO{
+- email : String
+- name : String
+- description : String
++ ResourcesInProjectDTO(String email, String name, String description)
++ getEmail() : String
++ getName() : String
++ getDescription() : String
+}
+
+class ResourcesInProjectMapper{
++ ResourcesInProjectMapper()
++ getProjectManagerInfo(ProjectManager projectManager) : void
++ getScrumMasterInfo(ScrumMaster scrumMaster) : void
++ getProductOwnerInfo(ProductOwner productOwner) : void
++ getTeamMemberInfo(List<TeamMember> teamMembers) : ResourcesInProjectDTO
++ getResourcesDTO(ResourceInProject resourceInProject) : List<ResourcesInProjectDTO>
+}
+
+class AccountStatusDTO{
+- final EMAIL : String
+- final STATUS :  boolean
++ AccountStatusDTO (String email,Boolean status)
+}
+
+class AccountStatusMapper{
++ listAccountAndStatusDTO(List<Account> accounts) : List<AccountStatusDTO>
+}
+
+@enduml

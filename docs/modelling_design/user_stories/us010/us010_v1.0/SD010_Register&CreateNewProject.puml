@@ -1,0 +1,46 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+SD US010 Register/create a new project
+end legend
+
+autoactivate on
+
+actor "Manager" as 0
+activate 0 #lightgrey
+participant ":ProjectUI" as 1
+participant ":ProjectController" as 2
+participant ":Company" as 3
+
+
+participant "customerContainer\n:CustomerContainer" as 5
+participant "customer\n:Customer" as 9
+
+
+
+participant "projectStatusContainer\n:ProjectStatusContainer" as 10
+participant "projectContainer\n:ProjectContainer" as 12
+autonumber 1.1
+0 -> 1 #lightgrey: Register project with projectCode,\n projectName, projectDescription,\n customer, businessSector and typology
+1 -> 2 #lightgrey: registerProject(projectCode,\n projectName, projectDescription,\n customer, businessSector, typology)
+2 -> 3 #lightgrey: registerProject(projectCode,\n projectName, projectDescription,\n customer, businessSector, typology)
+3 -> 5 #lightgrey: customer = getCustomer(name)
+deactivate
+3 -> 6 #lightgrey: businessSector = getBusinessSector(description)
+deactivate
+3 -> 4 #lightgrey: typology = getTypology(description)
+deactivate
+3 -> 10 #lightgrey: projectStatus = getDefaultProjectStatus()
+deactivate
+3 -> 12 #lightgrey: registerProject(projectCode, projectName, projectDescription, customer, businessSector, typology, projectStatus)
+12 --> "project:Project" ** : createProject(projectCode,\n projectName, projectDescription,\n customer, businessSector,\n typology, projectStatus)
+12 -> 12 #grey: addProject(project)
+deactivate
+12 --> 3 : true
+3 --> 2 : true
+2 --> 1 : true
+1 --> 0 : Project registered
+
+@enduml

@@ -1,0 +1,109 @@
+@startuml
+/'Domain Model'/
+
+/'title'/
+
+legend top
+Relevant Domain Model
+end legend
+
+/'Class'/
+
+
+
+
+Object "Project" as Project {
+-projectCode
+-projectName
+-projectDescription
+-sprintDuration
+-numberSprints
+-budget
+}
+
+Object "Customer" as Customer {
+-name
+}
+
+Object "BussinessSector" as BussinessSector {
+-description
+}
+
+Object "Typology" as Typology {
+-description
+}
+
+Object "Period" as Period {
+-startDate
+-endDate
+}
+
+Object "ProjectStatus" as ProjectStatus {
+-description
+}
+
+
+Object "Sprint" as Sprint {
+-sprintID
+}
+
+
+Object "Status" as Status {
+-description
+}
+
+Object "UserStory" as UserStory {
+-userStoryNumber
+-actor
+-userStoryText
+-listOfAcceptanceCriteria
+}
+
+Object "Effort" as Effort {
+-storyPoints
+}
+
+/'Directions'/
+
+Project "*" -- "1" Customer : owned by a  >
+Project "*" -- "1" BussinessSector : integrated in a  >
+Project "*" -- "1" Typology : described a  >
+Project "*" --- "1" ProjectStatus : estimated an  >
+Project "1" -- "1" Period : active in a >
+
+
+Sprint "1" -- "1" Period : during a >
+Sprint "1" -- "*" UserStory : contains a >
+Project "1" --- "*" Sprint : constituted by >
+Project "1" -- "*" UserStory : constituted by >
+UserStory "*" -- "1" Status : currently in a  >
+UserStory "*" -- "1" Effort : estimated an  >
+
+
+
+/'notas'/
+
+
+note right of ProjectStatus
+    Planned
+    Inception
+    Elaboration
+    Construction
+    Transition
+    Warranty
+    Closed
+end note
+
+note right of Status
+    Planned
+    Running
+    Finished
+    Blocked
+end note
+
+note right of Typology
+    Fixed Cost
+    Time and materials
+end note
+
+@enduml

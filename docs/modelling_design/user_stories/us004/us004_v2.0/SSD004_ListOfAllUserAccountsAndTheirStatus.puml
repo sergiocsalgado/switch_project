@@ -1,0 +1,17 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+CD US004 List all User Accounts and their Status
+end legend
+
+actor "Administrator" as Actor #lightgrey
+participant "System" as System #lightgrey
+
+autonumber1.1
+
+Actor -> System : List Accounts And Status
+System --> Actor: Display List
+
+@enduml

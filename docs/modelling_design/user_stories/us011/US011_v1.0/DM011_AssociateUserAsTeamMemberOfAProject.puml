@@ -1,0 +1,61 @@
+@startuml
+/'Domain Model'/
+
+/'title'/
+
+legend top
+US011 - Domain Model
+end legend
+
+/'Class'/
+
+Object "Profile" as Profile {
+-description
+}
+
+Object "Account" as Account {
+-email
+-name
+-photo_optional
+-phoneNumber
+-status
+-password
+}
+
+Object "Project" as Project {
+-code
+-name
+-description
+-startDate
+-endDate
+-numberSprints
+-sprintDuration
+-businessSector
+-customer
+-budget
+-typology
+}
+
+Object "TeamMember" as TeamMember{
+-startDate
+-endDate
+-percentageAllocation
+-costPerHour
+}
+
+/'Directions'/
+
+TeamMember"*" -- "1" Project : allocated to >
+Account "1" -- "1" TeamMember : represents a >
+Account "*" - "1" Profile :owns a >
+
+/'notas'/
+
+note right of Profile
+    Administrator
+    Manager
+    User
+end note
+
+
+@enduml

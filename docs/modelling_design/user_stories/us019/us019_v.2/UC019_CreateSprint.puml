@@ -1,0 +1,16 @@
+@startuml
+
+legend top
+UC - US019 - As Project Manager, I want to create a sprint
+end legend
+
+actor "Project Manager"
+
+left to right direction
+rectangle "System"{
+
+    "Project Manager" --> (Create a Sprint)
+
+}
+
+@enduml

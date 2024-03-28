@@ -1,0 +1,13 @@
+@startuml
+legend top
+UC US010 Register/create a new project
+end legend
+left to right direction
+actor Manager
+rectangle System {
+usecase "Register/Create project" as UC1
+}
+ Manager-->UC1
+
+
+@enduml

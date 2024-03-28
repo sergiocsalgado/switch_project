@@ -1,0 +1,16 @@
+@startuml
+
+legend top
+UC - US005 - As Administrator, I want to inactivate an user account
+end legend
+
+actor "Administrator"
+
+left to right direction
+rectangle "System"{
+
+    "Administrator" --> (Inactivate User Account)
+
+}
+
+@enduml

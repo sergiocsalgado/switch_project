@@ -1,0 +1,17 @@
+
+@startuml
+
+legend top
+US016 As Authenticated User, I want to get a list of all projects I'm currently allocated to
+end legend
+
+autonumber
+autoactivate on
+actor AuthenticatedUser as AuthenticatedUser
+activate AuthenticatedUser #lightgrey
+
+AuthenticatedUser -> System #lightgrey: Request a list of all projects the user is currently allocated to
+System --> AuthenticatedUser: Displays the list of all those projects
+
+
+@enduml

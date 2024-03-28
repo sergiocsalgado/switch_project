@@ -1,0 +1,42 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+legend top
+SD US002 Register Account
+end legend
+autoactivate on
+autonumber 1.1
+
+actor Administrator as A
+participant ": RegisterAccountUI" as B
+participant ": RegisterAccountController" as C
+participant ": Company" as D
+participant ": ProfileContainer" as E
+participant ": AccountContainer" as F
+
+activate A #lightgrey
+A -> B #lightgrey: Register Account
+
+B -> C #lightgrey: registerAccount (email, name,\n phone number, status)
+C -> D #lightgrey: registerAccount (email, name,\n phone number, status)
+D->E #lightgrey: default Profile
+
+E-->D: "User" profile
+
+D-> F#lightgrey: registerAccount(email, name,\n phone number, status, profile)
+
+F --> "account: Account" ** : create (email, name,\n phone number, status, profile)
+
+F->F #lightgrey: saveAccount (email, name,\n phone number, status, profile)
+deactivate
+
+
+F --> D: true
+D --> C: true
+
+C-->B: true
+
+B-->A: Account registered
+
+
+@enduml

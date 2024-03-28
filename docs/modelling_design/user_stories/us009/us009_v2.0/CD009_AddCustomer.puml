@@ -1,0 +1,98 @@
+@startuml
+skinparam linetype ortho
+legend top
+CD US009 Add Customer
+end legend
+
+package Controller {
+    class "CustomerController" as CustomerController {
+        + addCustomer(CustomerDTO customerDTO)
+        + getCustomers()
+    }
+}
+
+package Service {
+    package interfaces {
+        interface "CreateCustomerService" as  CreateCustomerService {
+            + createAndSaveCustomer(String id, String name, String nif)
+        }
+    }
+    class "CreateCustomerServiceImpl" as CreateCustomerServiceImpl {
+     + containsID(Customer customer)
+     - existDescription(Description customerDescription)
+     + createAndSaveCustomer(String id, String name, String nif)
+    }
+}
+package Mapper {
+    class "CustomerMapper" as CustomerMapper {
+        + toDTO(Customer customer)
+        + listCustomerDTO(List<Customer> customers)
+    }
+    class "CustomerDTO " as CustomerDTO {
+     - customerID : String
+     - name : String
+     - nif : String
+     + getCustomerID()
+     + setCustomerID(String customerID)
+     + getName()
+     + setName(String name)
+     + getNif()
+     + setNif(String nif)
+     }
+}
+
+package ddd {
+    interface "InMemoryCustomerRepository" as InMemoryCustomerRepository {
+        +save(Customer entity)
+        + findAll()
+        + ofIdentity(CustomerID id)
+        + containsOfIdentity(CustomerID id)
+}
+}
+
+package Model {
+ package Typology {
+        class "FactoryCustomerImpl " as FactoryCustomerImpl   {
+           + createCustomer(CustomerID customerID, Name name, Nif nif)
+        }
+             interface "FactoryCustomer" as FactoryCustomer {
+                     + createCustomer(CustomerID customerID, Name name, Nif nif)
+            }
+                class " Customer" as  Customer <<(A,SandyBrown) Aggregate Root>> {
+                    + verifyName(Name name)
+                    + copy()
+                    + getName()
+                    + getNif()
+                    + getCustomerID()
+                }
+}
+    package value_objects {
+        class "CustomerID " as CustomerID  <<(V, LightBlue) Value Object>>  {
+            - idOfCustomer : String
+            + getIdOfCustomer()
+        }
+        class "Name" as Name <<(V, LightBlue) Value Object>> {
+             - value : String
+             + getValue()
+        }
+        class "Nif" as Nif <<(V, LightBlue) Value Object>> {
+             - nifValue : String
+             + getNif()
+             - verifyNif(String nif)
+        }
+ }
+ CustomerController ..> CreateCustomerService
+ CustomerController ..> CustomerDTO
+ CustomerController ..> CustomerMapper
+ CreateCustomerService ..> CreateCustomerServiceImpl
+ CreateCustomerServiceImpl ..> Nif
+ CreateCustomerServiceImpl ..> Name
+ CreateCustomerServiceImpl ..> CustomerID
+ CreateCustomerServiceImpl ..> FactoryCustomer
+ FactoryCustomer ..> FactoryCustomerImpl
+ FactoryCustomerImpl ..> Customer
+ CreateCustomerServiceImpl ..> InMemoryCustomerRepository
+
+
+@enduml
+

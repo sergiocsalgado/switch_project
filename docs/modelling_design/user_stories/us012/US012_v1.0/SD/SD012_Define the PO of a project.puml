@@ -1,0 +1,151 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+CD US012 Define the Product Owner of a Project
+end legend
+
+autoactivate on
+
+actor Manager
+activate Manager #lightgrey
+participant ":DefineProductOwnerUI"
+participant ":DefineProductOwnerController"
+participant ":Company"
+participant "accountContainer:AccountContainer"
+participant "account:Account"
+participant ":AccountMapper"
+participant ":ProjectContainer"
+participant "project:Project"
+participant "resource\n:ResourceInProjectContainer"
+participant ":RoleContainer"
+participant "resourceInProject\n:ResourceInProject"
+participant "role:Role"
+participant ":AccountContainer"
+participant ":Account"
+
+autonumber 1.1
+'list Accounts
+Manager -> ":DefineProductOwnerUI" #b: Asks for Accounts
+":DefineProductOwnerUI" -> ":DefineProductOwnerController" #b:  getAccountsDTO()
+":DefineProductOwnerController" -> ":Company" #b:  getAccounts()
+":Company"-->"listAccount :List<Accounts>"** #b: createListAccounts()
+":Company"-->":DefineProductOwnerController" #b: listAccounts
+
+":DefineProductOwnerController"->":AccountMapper" #b:listAccountDTO()
+":AccountMapper"-->"listAccountsDTO \n:List<AccountsDTO>"** #b: createListAccountsDTO()
+
+loop for each account in listAccounts
+":AccountMapper"->"listAccount :List<Accounts>" #b: account=get(i)
+deactivate
+":AccountMapper"->":AccountMapper" #b: accountDTO=AccountDTO(email, name)
+":AccountMapper"-->"accountDTO \n:AccountDTO"** #b: createAccountDTO()
+deactivate
+":AccountMapper"->"listAccountsDTO \n:List<AccountsDTO>"  #b: addAccountDTO(accountDTO)
+deactivate
+end
+
+":AccountMapper"-->":DefineProductOwnerController" #b: listAccountsDTO
+":DefineProductOwnerController"-->":DefineProductOwnerUI"  #b: listAccountsDTO
+":DefineProductOwnerUI" -->Manager  #b: Shows list of accounts
+
+autonumber 2.1
+'list projects
+autoactivate off
+Manager -> ":DefineProductOwnerUI" #b: Asks for list of projects
+ref over ":DefineProductOwnerUI"
+US015 - As Manager, I want
+to get a list of all projects.
+end
+
+":DefineProductOwnerUI" -->Manager  #b: Shows list of projects
+autoactivate on
+
+'doesNotExceedAllocation
+autonumber 3
+Manager -> ":DefineProductOwnerUI" #b: Define Product Owner of a Project
+autonumber 3.1
+":DefineProductOwnerUI" -> ":DefineProductOwnerController" #b: defineProductOwner(email,\nprojectCode,allocation,\ncostPerHour,starDate)
+autonumber 3.1.1
+":DefineProductOwnerController" -> ":Company" #b:  doesNotExceedAllocation(allocation)
+autonumber 3.1.1.1
+":Company"->":ProjectContainer" #b: doesNotExceedAllocation(allocation)
+":ProjectContainer"-->":Company" #b: true
+autonumber 3.1.2
+":Company"-->":DefineProductOwnerController" #b: true
+
+'getResourceInProjectContainer
+autonumber 3.1.3
+":DefineProductOwnerController" -> ":Company" #b: getResourceInProjectContainer(code)
+autonumber 3.1.3.1
+":Company"->":ProjectContainer" #b: getProject(code)
+autonumber 3.1.3.1.1
+loop
+":ProjectContainer"->"project:Project" #b: getProject(code)
+"project:Project"-->":ProjectContainer" #b: projectCode
+":ProjectContainer"->":ProjectContainer" #b: code.equals(projectCode)
+end
+":ProjectContainer"-->":Company" #b: project
+deactivate
+autonumber 3.1.3.2
+":Company"->":ProjectContainer" #b: getResourceInProjectContainer()
+":ProjectContainer"-->":Company" #b: resourceInProjectContainer
+autonumber 3.1.4
+":Company" --> ":DefineProductOwnerController" #b: ResourceInProjectContainer
+
+
+'getAccount
+autonumber 3.1.5
+":DefineProductOwnerController" -> ":Company" #b: getAccount(email)
+autonumber 3.1.5.1
+":Company"->":AccountContainer" #b: getAccount(email)
+autonumber 3.1.5.1.1
+loop
+":AccountContainer"->":Account" #b: verifyEmail(email)
+":Account"-->":AccountContainer" #b: true
+end
+autonumber 3.1.5.2
+":AccountContainer"-->":Company" #b: account
+autonumber 3.1.6
+":Company" --> ":DefineProductOwnerController" #b: account
+
+'getProjectManagerRole
+autonumber 3.1.7
+":DefineProductOwnerController" -> ":Company" #b: getProductOwner("product owner")
+autonumber 3.1.7.1
+":Company"->":RoleContainer" #b: getProductOwner("product owner")
+autonumber 3.1.7.1.1
+":RoleContainer"-->"role:Role"** #b: create("product owner")
+autonumber 3.1.7.1.2
+":RoleContainer"->":RoleContainer" #b: contains(role)
+autonumber 3.1.7.1.3
+":RoleContainer"-->":Company" #b: projectManagerRole
+deactivate
+autonumber 3.1.8
+":Company" --> ":DefineProductOwnerController" #b: projectManagerRole
+
+'ProjectDefineRole
+autonumber 3.1.9
+":DefineProductOwnerController" -> "resource\n:ResourceInProjectContainer" #b: projectDefineRole(account,role,allocation,costPerHour,startDate(n days from now))
+autonumber 3.1.9.1
+"resource\n:ResourceInProjectContainer" -> "period:Period"** #b: create(n days from now)
+autonumber 3.1.9.2
+"resource\n:ResourceInProjectContainer" -> "resourceInProject\n:ResourceInProject"** #b: create(account,\nrole,period,allocation,costPerHour)
+autonumber 3.1.9.3
+loop
+"resource\n:ResourceInProjectContainer" -> "resource\n:ResourceInProjectContainer" #b: isInProject(account)
+autonumber 3.1.9.4
+"resource\n:ResourceInProjectContainer" -> "resource\n:ResourceInProjectContainer" #b: verifyPeriod(startDate)
+end
+autonumber 3.1.9.5
+"resource\n:ResourceInProjectContainer" --> ":DefineProductOwnerController" #b: true
+deactivate
+deactivate
+autonumber 3.2
+":DefineProductOwnerController" --> ":DefineProductOwnerUI" #b: true
+autonumber 3.3
+":DefineProductOwnerUI" --> "Manager" #b: "Product Owner Defined"
+
+
+@enduml

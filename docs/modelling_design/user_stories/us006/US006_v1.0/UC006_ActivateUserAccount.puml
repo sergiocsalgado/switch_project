@@ -1,0 +1,16 @@
+@startuml
+
+legend top
+UC US006 Activate Account
+end legend
+
+actor "Administrator"
+left to right direction
+
+rectangle "System"{
+
+"Administrator" --> (Activate User Account)
+
+}
+
+@enduml

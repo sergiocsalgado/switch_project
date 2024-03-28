@@ -1,0 +1,13 @@
+# Primary Actor:
+Administrator
+
+# Main Success Scenario:
+1.	Administrator is well authenticated with administrator profile
+2.	System presents options: create user account, set profile of user account, set status of user account, list users accounts and status
+3.	Administrator requests to set profile of user account
+4.	System requests to enter user account e-mail and profile
+5.	Administrator inputs user e-mail and profile
+6.	Administrator saves changes made
+7.	System displays set profile confirmation
+8.  Administrator confirms changes
+9.  System display changes confirmation

@@ -1,0 +1,9 @@
+@startuml
+
+Actor Manager
+
+autonumber
+Manager -> System: List all projects
+System --> Manager: Project list
+
+@enduml

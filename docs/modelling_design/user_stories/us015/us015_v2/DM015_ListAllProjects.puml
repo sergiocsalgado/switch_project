@@ -1,0 +1,61 @@
+@startuml
+/'Domain Model'/
+
+/'title'/
+legend top
+Domain Model Excerpt
+end legend
+
+/'Class'/
+Object "Project" as Project {
+-projectCode
+-projectName
+-projectDescription
+-sprintDuration
+-numberSprints
+-budget
+}
+
+Object "Account" as Account {
+-email
+}
+
+Object "Profile" as Profile {
+-description
+}
+
+Object "BusinessSector" as BusinessSector {
+-description
+}
+Object "Custumer" as Custumer {
+-name
+}
+Object "ProjectStatus" as ProjectStatus {
+-description
+}
+
+/'Directions'/
+Account "1" - "*" Project :knows >
+Profile "1" - "1"  Account :owns a <
+Project "*" - "1" ProjectStatus : defined by >
+Project "*" - "1" Custumer : owned by >
+Project "*" - "1" BusinessSector : part of >
+
+
+/'notas'/
+
+note left of Profile
+    Manager
+end note
+
+note right of ProjectStatus
+    Planned
+    Inception
+    Elaboration
+    Construction
+    Transition
+    Warranty
+    Closed
+end note
+
+@enduml

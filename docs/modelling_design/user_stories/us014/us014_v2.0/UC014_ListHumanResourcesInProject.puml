@@ -1,0 +1,13 @@
+@startuml
+
+
+actor "Manager"
+
+left to right direction
+rectangle "System"{
+
+    "Manager" --> (List all Human Resources\n of a Project)
+
+}
+
+@enduml

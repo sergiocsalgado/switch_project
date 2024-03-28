@@ -1,0 +1,28 @@
+@startuml
+
+legend top
+DM - US006 - As Administrator, I want to activate an user account
+end legend
+
+skinparam linetype ortho
+
+
+
+'HumanResources Aggregate'
+package HumanResources {
+    object "Account" as Account <<Entity>> <<Root>> {
+    Name
+    PhoneNumber
+    AccountStatus
+    }
+}
+object "Email" as AccountID <<Value Object>> \n <<ID>> {
+}
+
+object "ProfileID" as ProfileID <<Value Object>> \n <<ID>> {
+}
+
+Account " " -d-> "id" "AccountID"
+Account " " -d-> "1" "ProfileID"
+
+@enduml

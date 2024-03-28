@@ -1,0 +1,16 @@
+@startuml
+
+legend top
+US001 - As Administrator, I want to create user profiles
+end legend
+
+actor "Administrator"
+
+left to right direction
+rectangle "System"{
+
+    "Administrator" --> (Create Profile)
+
+}
+
+@enduml

@@ -1,0 +1,97 @@
+@startuml
+
+legend top
+CD US011 Associate a User as Team Member of a project
+end legend
+
+AssociateTeamMemberUI ..> AssociateTeamMemberController
+AssociateTeamMemberController ..> Company : company
+Company ..> AccountContainer : accountContainer
+Company ..> ProjectContainer : projectContainer
+AssociateTeamMemberController ..> AccountContainer :accountContainer
+AssociateTeamMemberController ..> AccountsMapper :accountsMapper
+AssociateTeamMemberController ..> ProjectContainer :projectContainer
+AssociateTeamMemberController ..> Project :project
+Project ..> ResourceInProject :resourceInProject
+ResourceInProject ..> TeamMemberContainer :teamMemberContainer
+ProjectContainer "1"*--"*" Project :projects
+TeamMemberContainer "1"*--"*" TeamMember :teamMembers
+AccountsMapper "1"*--"*" AccountDTO :accountsDTO
+
+
+class AssociateTeamMemberUI{
+}
+
+class AssociateTeamMemberController{
++getAccounts() :List<Account>
++getAccountDTO() :List<AccountDTO>
++getAccountByEmail(String email) :Account
++getProjectByProjectCode(String projectCode) :Project
++associateTeamMember(String email, String projectCode, double allocation, double costPerHour) :boolean
++doesNotExceedPercentageAllocation(String email, double allocation) :boolean
+}
+
+class Company{
++getAccounts() :List<Account>
+}
+
+class AccountContainer{
++getAccount(String email) :Account
+}
+
+class AccountsMapper{
++listAccountsDTO(List<Account> accounts) :List<AccountDTO>
+}
+
+class ProjectContainer{
++getProject(String projectCode) :Project
++doesNotExceedPercentageAllocation(String email, double allocation) :boolean
+}
+
+class Project{
+-typology: Typology
+-businessSector: BusinessSector
+-customer: Customer
+-projectStatus: ProjectStatus
+-projectCode: String
+-projectName: String
+-projectDescription: String
++getResourceInProject() :ResourceInProject
+}
+
+class ResourceInProject{
++associateTeamMember(Account account, double allocation,double costPerHour) :boolean
++getCurrentTeamMembers() :List<TeamMember>
++isInProject(String email) :boolean
++getAllocationInProject(String email) :double
+-getTeamMemberAllocation(String email) :double
+}
+
+class TeamMemberContainer{
++associateTeamMember(Account account, double allocation, double costPerHour) :boolean
++getTeamMembers() :List<TeamMember>
++getAllocation(String email) :double
++isTeamMember(String email) :boolean
++getTeamMember(String email) :TeamMember
+
+}
+
+class TeamMember{
+-account :Account
+-allocation :double
+-costPerHour :double
++getAccount() :Account
++getStartDate() :String
++setEndDate() :void
++getAllocation() :double
++copy() :TeamMember
+}
+
+class AccountDTO{
+-email: String
+-name: String
++getEmail() :String
++getName() :String
+}
+
+@enduml

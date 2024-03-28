@@ -1,0 +1,186 @@
+@startuml
+
+legend top
+CD - US019 - As Project Manager, I want to create a sprint
+end legend
+
+skinparam linetype ortho
+
+Package Controller {
+class SprintController {
++createSprint(String projectCode, SprintDTO sprintDTO)
+}
+}
+
+Package Mapper {
+class SprintDTO {
+- projectCode : String
+- sprintID : String
+- sprintNumber : int
+- startDate : String
+- endDate : String
+- sprintStatus : String
++ getProjectCode()
++ setProjectCode(String projectCode)
++ getSprintID()
++ setSprintID(String sprintID)
++ getSprintNumber()
++ setSprintNumber(int sprintNumber)
++ getStartDate()
++ setStartDate(String startDate)
++ getEndDate()
++ setEndDate(String endDate)
++ getSprintStatus()
++ setSprintStatus(String sprintStatus)
+}
+class SprintMapper {
++ toDTO(Sprint sprint)
+}
+}
+
+Package Service {
+class CreateSprintServiceImpl {
++ createAndSaveSprint(String id,\n int number, String sprintStartDate,\n String sprintEndDate, String projectCode
+}
+Package Interface {
+interface SprintService {
+createAndSaveSprint(String sprintID,\n int sprintNumber, String startDate,\n String endDate, String projectCode)
+}
+}
+}
+
+Package Model {
+Package Project {
+class Project <<(A,SandyBrown) Aggregate Root>> {
++getProjectCode()
++getProjectName()
++getProjectDescription()
++getCustomerID()
++getBusinessSectorID()
++getTypologyID()
++getPeriod()
++getProjectStatus()
++getSprintDuration()
++getNumberOfPlannedSprints()
++getBudget()
+}
+}
+Package Sprint {
+class FactorySprintImpl {
++ createSprint(ProjectCode projectCode,\n SprintID sprintID, SprintNumber sprintNumber,\n Period period, SprintBacklog sprintBacklog,\n SprintStatus sprintStatus)
+}
+Interface FactorySprint {
++ createSprint(ProjectCode projectCode, \nSprintID sprintID, SprintNumber sprintNumber,\n Period period, SprintBacklog sprintBacklog)
+}
+class Sprint <<(A,SandyBrown) Aggregate Root>> {
++ getSprintID()
++ getSprintNumber()
++ getPeriod()
++ getProjectCode()
++ getSprintBacklog()
+}
+class SprintBacklog <<(E, DarkGreen) Entity>> {
+- SprintBacklogID ( SprintBacklogID sprintBacklogID)
+- List<UserStoryID> userStories
+}
+class FactorySprintBacklogImpl {
++ create(SprintBacklogID sprintBacklogID)
+}
+Interface FactorySprintBacklog {
++ create( SprintBacklogID sprintBacklogID);
+}
+}
+Package ValueObject {
+class ProjectCode <<(V, LightBlue) Value Object>> {
+- code : String
++ getProjectCode()
+}
+class SprintID <<(V, LightBlue) Value Object>> {
+- code : String
++ getSprintID()
+}
+class SprintNumber <<(V, LightBlue) Value Object>> {
+- number : int
++ getNumber()
+}
+class Period <<(V, LightBlue) Value Object>> {
+- LocalDate : startDate
+- LocalDate : endDate
++ getStartDate()
++ getEndDate()
+}
+class SprintStatus <<(V, LightBlue) Value Object>> {
+- description : String
++ getDescription()
+}
+class SprintBacklogID <<(V, LightBlue) Value Object>> {
+- idDescription : String
++ getIdDescription()
+}
+class UserStoryID <<(V, LightBlue) Value Object>> {
+- idUserStory : String
++ getUserStoryID()
+}
+}
+}
+
+Package Ddd {
+interface "Repository<ProjectCode, Project>" as repositoryProject {
++ofIdentity(projectCodeOfSprint)
+}
+interface "Repository<SprintID, Sprint>" as repositorySprint {
++save(sprint)
++containsOfIdentity(sprint.getSprintID())
++findAll()
++ofIdentity(sprintID)
+}
+}
+
+'..|> implementation
+'-- associado
+'..> depende
+'*-- agrega
+'- atributo
+'+ método
+
+SprintController ..> SprintMapper
+SprintController ..> SprintService
+SprintController ..> SprintDTO
+
+SprintMapper ..> SprintDTO
+SprintMapper ..> Sprint
+
+SprintService <|.. CreateSprintServiceImpl
+
+CreateSprintServiceImpl ..> repositoryProject
+CreateSprintServiceImpl ..> repositorySprint
+CreateSprintServiceImpl ..> FactorySprint
+CreateSprintServiceImpl ..> FactorySprintBacklog
+
+repositorySprint ..> Sprint
+repositorySprint ..> SprintID
+
+repositoryProject ..> Project
+repositoryProject ..> ProjectCode
+
+Project "1"-->"1" ProjectCode
+
+Sprint "1" --> "1" SprintID
+Sprint "1" --> "1" ProjectCode
+Sprint "1" *-- "1" SprintBacklog
+
+FactorySprint ..> ProjectCode
+FactorySprint ..> SprintID
+FactorySprint ..> SprintNumber
+FactorySprint ..> Period
+FactorySprint ..> SprintStatus
+FactorySprint <|.. FactorySprintImpl
+FactorySprint ..> SprintBacklog
+
+FactorySprintBacklog <|.. FactorySprintBacklogImpl
+FactorySprintBacklog ..> SprintBacklogID
+
+SprintBacklog ..> SprintBacklogID
+SprintBacklog --> "*" UserStoryID
+
+@enduml

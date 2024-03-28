@@ -1,0 +1,97 @@
+@startuml
+
+'..|> implementation
+'-- associado
+'..> depende
+'*-- agrega
+'- atributo
+'+ método
+
+skinparam linetype ortho
+
+legend top
+CD - US005 - As Administrator, I want to inactivate an user account
+end legend
+
+package Controller {
+class AccountController {
++ changeStatus(ChangeStatusDTO changeStatusDTO)
+}
+}
+
+package Mapper {
+class ChangeStatusDTO {
+- emailAddress : String
+- status : String
+}
+}
+
+package Service {
+package Interfaces {
+interface ChangeStatusService {
+changeStatus(String email, String accountStatus) : boolean
+}
+class ChangeStatusServiceImpl {
++ changeStatus(String emailInput, String accountStatusInput) : boolean
+}
+}
+}
+
+package Ddd {
+interface Repository<Email, Account> {
++ofIdentity(Id id)
+}
+}
+
+package Model {
+package HumanResource {
+class Account <<(A, SandyBrown) Aggregate Root>> {
++getEmail()
++getStatus()
++setStatus()
+}
+class FactoryAccountImpl {
++createAccount(Email email, Name name, PhoneNumber
+phoneNumber, AccountStatus status, ProfileID profile)
+}
+interface FactoryAccount {
+createAccount(Email email, Name name, PhoneNumber
+phoneNumber, AccountStatus status, ProfileID profile)
+}
+}
+
+package ValueObjects as "ValueObjects"{
+class AccountStatus <<(V, LightBlue) Value Object>> {
+- status : String
++ getEmail()
+}
+class Email <<(V, LightBlue) Value Object>> {
+- emailAddress : String
++ getStatus()
+}
+}
+}
+
+'..|> implementation
+'-- associado
+'..> depende
+'*-- agrega
+'- atributo
+'+ método
+
+Account ..> Email
+Account ..> AccountStatus
+AccountController ..> ChangeStatusDTO
+AccountController ..> ChangeStatusService
+ChangeStatusService ..> Account
+ChangeStatusServiceImpl --|>  ChangeStatusService
+ChangeStatusServiceImpl ..> Repository
+ChangeStatusServiceImpl ..> FactoryAccount
+ChangeStatusServiceImpl ..> Email
+ChangeStatusServiceImpl ..> AccountStatus
+FactoryAccountImpl ..> AccountStatus
+FactoryAccountImpl ..> Email
+Repository ..> Account
+Repository ..> Email
+
+@enduml

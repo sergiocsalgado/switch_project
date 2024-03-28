@@ -1,0 +1,39 @@
+
+@startuml
+
+legend top
+US019 As Project Manager, I want to create a sprint
+end legend
+
+
+actor ProjectManager as A
+participant ": SprintUI" as B
+participant ": SprintController" as C
+participant ": ProjectContainer" as E
+participant " prj: Project" as F
+participant ": SprintContainer" as G
+participant FactorySprint << (I,#ccb3ff) >>
+
+autoactivate on
+autonumber 1.1
+
+A -> B #lightgrey: Create a Sprint
+B -> C #lightgrey: createSprint(projectCode,sprintID, period)
+C -> E #lightgrey: project = getProject(projectCode)
+E --> C #lightgrey: project
+
+C -> F #lightgrey: getSprintContainer(projectCode)
+F -> G #lightgrey: addSprint(sprintID, period)
+G -> FactorySprint  #lightgrey: createSprint(sprintID, period)
+FactorySprint --> "sprint:Sprint" **#lightgrey: create
+FactorySprint --> G #lightgrey: sprint
+G -> G #lightgrey: saveSprint(sprint)
+deactivate
+
+G --> F #lightgrey: true
+F --> C #lightgrey: true
+C --> B #lightgrey: true
+B --> A #lightgrey: "Sprint created successfully "
+
+
+@enduml

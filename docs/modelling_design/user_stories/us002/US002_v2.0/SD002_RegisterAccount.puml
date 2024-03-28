@@ -1,0 +1,108 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+legend top
+SD US002 Register Account
+end legend
+autoactivate on
+autonumber 1
+
+skinparam maxmessagesize 250
+
+boundary " " #white
+participant ": Route" as Route
+participant "accountDTO : AccountDTO" as DTO
+participant ": AccountController" as Controller
+participant ": RegisterAccountService" as Service
+participant ": Profile" as Profile
+participant ProfileRepository << (I,#ccb3ff) >>
+participant FactoryAccount << (I,#ccb3ff) >>
+participant AccountRepository << (I,#ccb3ff) >>
+participant ": AccountMapper" as Mapper
+participant "account : Account" as Account
+
+
+participant "email : Email" as Email
+participant "name: Name" as Name
+participant "phoneNumber : PhoneNumber" as PhoneNumber
+participant "status : AccountStatus" as Status
+
+participant "responseEntity : ResponseEntity" as Response
+
+
+" " o-> Route : POST (/accounts)
+activate Route #lightgrey
+
+Route --> DTO ** #b: create
+
+Route -> Controller #b: createAccount (AccountDTO accountDTO)
+ref over Controller: unwrapping accountDTO
+
+activate Controller #lightgrey
+
+Controller -> Service : createAccount (String email, String name, String phoneNumber,String status)
+
+activate Service #lightgrey
+
+Service --> Email ** #b: create
+Service --> Name ** #b: create
+Service --> PhoneNumber ** #b: create
+Service --> Status ** #b: create
+
+Service -> Profile : getProfileID()
+
+activate Profile #lightgrey
+
+Profile -> ProfileRepository : getUserProfile()
+
+activate ProfileRepository #lightgrey
+
+ProfileRepository --> Profile : profile
+deactivate ProfileRepository
+
+Profile --> Service : profileID
+deactivate Profile
+
+Service -> FactoryAccount : createAccount(email, name, phoneNumber, status, profileID)
+
+activate FactoryAccount #lightgrey
+
+FactoryAccount --> Account ** #b: create
+deactivate FactoryAccount
+deactivate FactoryAccount
+
+Service -> AccountRepository : verify notExistsAccount(account)
+activate AccountRepository #lightgrey
+
+AccountRepository --> Service : true
+deactivate AccountRepository
+
+Service -> AccountRepository : save(account)
+
+activate AccountRepository #lightgrey
+
+AccountRepository --> Service : account
+deactivate AccountRepository
+
+Service --> Controller : account
+deactivate Service
+
+
+Controller -> Mapper : toDTO(account)
+
+activate Mapper #lightgrey
+
+Mapper --> Controller : exitDTO
+deactivate Mapper
+
+
+
+Controller --> Response ** : create(exitDTO,HttpStatus.CREATED)
+
+Controller --> Route : ResponseEntity<>(exitDTO,HttpStatus.CREATED)
+deactivate Controller
+
+Route -->o " " : response(json)
+deactivate Route
+
+@enduml

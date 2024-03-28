@@ -1,0 +1,117 @@
+@startuml
+
+legend top
+CD US010 Register/create a new project
+end legend
+
+'..|> implementation
+'-- associado
+'..> depende
+'*-- agrega
+'- atributo
+'+ método
+
+ProjectUI ..> ProjectController
+CustomerContainer"1"*--"*" Customer : contains
+BusinessSectorContainer"1"*--"*" BusinessSector : contains
+TypologyContainer"1"*--"*" Typology : contains
+ProjectStatusContainer"1"*--"*" ProjectStatus : contains
+ProjectContainer"1"*--"*" Project : contains
+Project "*"-->"1" Customer : belongs to
+Project "*"-->"1" BusinessSector : integrates in
+Project "*"-->"1" Typology : classified in
+Project "*"-->"1" ProjectStatus : has a
+ProjectController ..> Company : company
+Company ..> ProjectContainer : projectContainer
+
+class ProjectUI {}
+
+class ProjectController{
++ProjectController(Company company)
++getListOfTypologiesDescriptions() : List<String>
++getListOfBusinessSectorsDescriptions() : List<String>
++getListOfCustomersNames() : List<String>
++registerProject(String typologyDescription, String businessSectorDescription, String customerName, String projectCode, String projectName, String projectDescription) : boolean
+}
+
+class Company{
++Company()
++getListOfTypologiesDescriptions() : List<String>
++getListOfBusinessSectorsDescriptions() : List<String>
++getListOfCustomersNames() : List<String>
++registerProject(String projectCode, String projectName, String projectDescription, String customerName, String businessSectorDescription, String typologyDescription)
+}
+
+class TypologyContainer{
+-typologies : List<Typology>
++TypologyContainer()
++getTypology(String description) : Typology
++getListOfTypologiesDescriptions() : List<String>
+
+}
+class Typology{
+-description : String
++Typology(String description)
++getDescription() : String
++verifyTypology(String description) : boolean
++copy() : Typology
+}
+
+class ProjectContainer{
++ProjectContainer()
+-projects : List<Project>
++registerProject(String projectCode, String projectName, String projectDescription, Customer customer, BusinessSector businessSector, Typology typology, ProjectStatus projectStatus) : boolean
+-addProject(Project project) : boolean
+}
+
+class Project{
++Project(String projectCode,\n String projectName, String projectDescription,\n Customer customer, BusinessSector businessSector,\n Typology typology, ProjectStatus projectStatus)
+-projectCode : String
+-projectName : String
+-projectDescription : String
+}
+
+class BusinessSectorContainer{
+-businessSectors : List<BusinessSector>
++BusinessSectorContainer()
++getBusinessSector(String description) : BusinessSector
++getListOfBusinessSectorsDescriptions() : List<String>
+}
+
+class BusinessSector{
+-description : String
++BusinessSector(String description)
++getDescription() : String
++verifyBusinessSector(String description) : boolean
++copy() : BusinessSector
+}
+
+class CustomerContainer{
+-customers : List<Customer>
++CustomerContainer()
++getCustomer(String name) : Customer
++getListOfCustomersNames() : List<String>
+}
+
+class Customer{
+-name : String
++Customer(String name)
++getName() : String
++verifyName(String name) : boolean
++copy() : Customer
+}
+
+class ProjectStatusContainer{
+-projectStatuses : List<ProjectStatus>
++ProjectStatusContainer()
++getDefaultProjectStatus() : ProjectStatus
++listProjectStatuses() : List<ProjectStatus>
+}
+
+class ProjectStatus{
+-description : String
++ProjectStatus(String description)
++copy() : ProjectStatus
+}
+
+@enduml@enduml

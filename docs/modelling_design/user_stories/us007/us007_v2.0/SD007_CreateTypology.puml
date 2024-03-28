@@ -1,0 +1,46 @@
+@startuml
+legend top
+SD US007 - Create Typology
+end legend
+
+autoactivate on
+
+boundary " " as Administrator #white
+participant ": Route" as Route
+participant ": TypologyDTO" as TypologyDTO
+participant TypologyController as TypologyController
+participant CreateTypologyService as CreateTypologyService
+participant TypologyID as TypologyID
+participant Description as Description
+participant FactoryTypology as FactoryTypology
+participant FactoryTypologyImpl as FactoryTypologyImpl
+participant "typology:Typology" as Typology
+participant InMemoryTypologyRepository as InMemoryTypologyRepository
+participant TypologyDTOMapper as TypologyDTOMapper
+participant "responseEntity : ResponseEntity" as Response
+
+
+autonumber 1.1
+Administrator o-> Route #b: POST (/typologies))
+Route -> TypologyDTO ** #b: createTypology(TypologyDTO typologyDTO)
+Route -> TypologyController #b: createTypology(TypologyDTO typologyDTO)
+TypologyController -> CreateTypologyService #b: createTypology(String typologyID, String typologyDescription)
+CreateTypologyService -> TypologyID ** #b : create VO TypologyID
+CreateTypologyService -> Description ** #b : create VO Description
+
+CreateTypologyService -> FactoryTypology #b: createTypology(TypologyID typologyID, Description typologyDescription)
+FactoryTypology -> Typology ** #b: Typology (TypologyID typologyID, Description typologyDescription)
+FactoryTypology --> CreateTypologyService#b: typology
+
+CreateTypologyService -> InMemoryTypologyRepository #b : containsIDOrDescription(Typology typology)
+InMemoryTypologyRepository --> CreateTypologyService #b : true = containsIDOrDescription(Typology typology)
+CreateTypologyService -> InMemoryTypologyRepository #b : save(Typologies typology)
+InMemoryTypologyRepository --> CreateTypologyService #b: typology
+CreateTypologyService --> TypologyController : typology
+TypologyController -> TypologyDTOMapper ** #b: toDTO( Typology typology)
+TypologyController --> "responseEntity : ResponseEntity" ** #b: ResponseEntity<>(typologyCreated, HttpStatus.CREATED)
+TypologyController --> Route #b: ResponseEntity<>(typologyCreated, HttpStatus.CREATED)
+
+Route -->o Administrator #b: response(json)
+deactivate Route
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+left to right direction
+actor "Administrator" as fc
+rectangle System {
+  usecase "Register Account" as UC1
+}
+fc --> UC1
+@enduml

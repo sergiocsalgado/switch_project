@@ -1,0 +1,23 @@
+[
+  {
+    "userstoryid":"US1",
+    "userstorynumber":"1",
+    "userstoryactor":"Product Owner",
+    "userstorytext":" As Product Owner, I want to create a user story and add it to the Product Backlog.",
+    "listacceptancecriteria":"Fail to create US due to insufficient/invalid information"
+  },
+  {
+    "userstoryid":"US2",
+    "userstorynumber":"2",
+    "userstoryactor":"Project Manager",
+    "userstorytext":"As Project Manager, I want to create a sprint.",
+    "listacceptancecriteria":"Fails to create a sprint because there is another sprint with the same number."
+  },
+  {
+    "userstoryid":"US3",
+    "userstorynumber":"2",
+    "userstoryactor":"Team Member",
+    "userstorytext":"As Team Member, I want to view the Scrum Board of current sprint.",
+    "listacceptancecriteria":"Returns an empty list if the sprint backlog is empty."
+  }
+]

@@ -1,0 +1,16 @@
+@startuml
+
+legend top
+US016 As Authenticated User, I want to get a list of all projects I'm currently allocated to
+end legend
+
+actor AuthenticatedUser
+
+left to right direction
+rectangle "System"{
+
+    AuthenticatedUser --> (List all the projects I'm allocated to)
+
+}
+
+@enduml

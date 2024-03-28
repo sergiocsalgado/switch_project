@@ -1,0 +1,15 @@
+@startuml
+
+legend top
+UC US004 List all User Accounts and their Status
+end legend
+
+left to right direction
+actor Administrator
+rectangle System {
+usecase "List User Accounts and Status" as UC1
+}
+ Administrator-->UC1
+
+
+@enduml

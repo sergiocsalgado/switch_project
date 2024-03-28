@@ -1,0 +1,82 @@
+@startuml
+skinparam linetype ortho
+package Customer {
+    object "Customer" as Customer <<Entity>> <<Root>> {
+    Name
+    Nif
+    }
+}
+
+object "CustomerID" as CustomerID <<Value Object>> \n <<ID>> {
+}
+
+package Project {
+    object "Project" as Project <<Entity>> <<Root>> {
+    Name
+    Description
+    BusinessSector
+    Typology
+    Period
+    ProjectStatus
+    }
+
+    object "ResourceInProject" as ResourceInProject <<Entity>> {
+    Name
+    Role
+    Period
+    }
+}
+
+object "ResourceInProjectID" as ResourceInProjectID <<Value Object>> \n <<ID>> {
+}
+
+object "ProjectCode" as ProjectID <<Value Object>> \n <<ID>> {
+}
+
+object "UserStoryID" as UserStoryID <<Value Object>> \n <<ID>> {
+}
+
+package UserStory {
+    object "UserStory" as UserStory <<Entity>> <<Root>> {
+    Name
+    Description
+    UserStoryStatus
+    Priority
+    Effort
+    }
+}
+
+package Sprint {
+    object "Sprint" as Sprint <<Entity>> <<Root>> {
+    Period
+    }
+}
+
+object "SprintID" as SprintID <<Value Object>> \n <<ID>> {
+}
+
+package HumanResource {
+    object "Account" as Account <<Entity>> <<Root>> {
+    Profile
+    Name
+    PhoneNumber
+    AccountStatus
+    }
+}
+
+object "Email" as AccountID <<Value Object>> \n <<ID>> {
+}
+
+Sprint "1" -d--> "*" UserStoryID
+UserStory " " -d-> "id" UserStoryID
+Customer " " -d-> "id" CustomerID
+Project "1" -d--> "1" CustomerID
+Project " " -d--> "id" ProjectID
+UserStory "1" --d-> "1" ProjectID
+Sprint "1" -d--> "1" ProjectID
+Sprint " " -d-> "id" SprintID
+Account " " -d-> "id" AccountID
+ResourceInProject " " -d-> "1" AccountID
+ResourceInProject " " -d-> "1" ResourceInProjectID
+
+@enduml

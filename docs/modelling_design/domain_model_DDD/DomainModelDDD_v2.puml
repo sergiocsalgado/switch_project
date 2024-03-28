@@ -1,0 +1,127 @@
+@startuml
+skinparam linetype ortho
+
+'Customer Aggregate'
+package Customers {
+    object "Customer" as Customer <<Entity>> <<Root>> {
+    Name
+    Nif
+    }
+}
+object "CustomerID" as CustomerID <<Value Object>> \n <<ID>> {
+}
+
+'BusinessSectors Aggregate'
+package BusinessSectors {
+    object "BusinessSector" as BusinessSector <<Entity>> <<Root>> {
+    Description
+    }
+}
+object "BusinessSectorID" as BusinessSectorID <<Value Object>> \n <<ID>> {
+}
+
+'Typologies Aggregate'
+package Typologies {
+    object "Typology" as Typology <<Entity>> <<Root>> {
+    Description
+    }
+}
+object "TypologyID" as TypologyID <<Value Object>> \n <<ID>> {
+}
+
+'Projects Aggregate'
+package Projects {
+    object "Project" as Project <<Entity>> <<Root>> {
+    Name
+    Description
+    Period
+    ProjectStatus
+    }
+
+    object "ResourceInProject" as ResourceInProject <<Entity>> {
+    Role
+    Period
+    Cost
+    Allocation
+    }
+    object "ResourceInProjectID" as ResourceInProjectID <<Value Object>> \n <<ID>> {
+    }
+}
+object "ProjectCode" as ProjectID <<Value Object>> \n <<ID>> {
+}
+
+'UserStories Aggregate'
+package UserStories {
+    object "UserStory" as UserStory <<Entity>> <<Root>> {
+    UserStoryNumber
+    Description
+    Name
+    UserStoryStatus
+    Priority
+    Effort
+    }
+}
+object "UserStoryID" as UserStoryID <<Value Object>> \n <<ID>> {
+}
+
+package Sprints {
+    object "Sprint" as Sprint <<Entity>> <<Root>> {
+    Period
+    SprintStatus
+    }
+    object "SprintBacklog" as SprintBacklog <<Entity>> {
+    }
+    object "SprintBacklogID" as SprintBacklogID <<Value Object>> \n <<ID>> {
+    }
+
+}
+
+object "SprintID" as SprintID <<Value Object>> \n <<ID>> {
+}
+
+'HumanResources Aggregate'
+package HumanResources {
+    object "Account" as Account <<Entity>> <<Root>> {
+    Name
+    PhoneNumber
+    AccountStatus
+    }
+}
+object "Email" as AccountID <<Value Object>> \n <<ID>> {
+}
+
+'Profiles Aggregate'
+package Profiles {
+    object "Profile" as Profile <<Entity>> <<Root>> {
+    Description
+    }
+}
+object "ProfileID" as ProfileID <<Value Object>> \n <<ID>> {
+}
+
+Account " " -d-> "id" "AccountID"
+Account " " -d-> "1" "ProfileID"
+Profile " " -d-> "id" "ProfileID"
+
+Customer " " -d-> "id" "CustomerID"
+BusinessSector " " -d-> "id" "BusinessSectorID"
+Typology " " -d-> "id" "TypologyID"
+
+Project "1" ---> "1" "CustomerID"
+Project "1" ---> "1" "BusinessSectorID"
+Project "1" ---> "1" "TypologyID"
+Project "1" -d-> "0..*" "ResourceInProject"
+Project " " -d-> "id" "ProjectID"
+ResourceInProject " " -d-> "1" "AccountID"
+ResourceInProject " " -d-> "1" ResourceInProjectID
+
+UserStory " " -d-> "id" "UserStoryID"
+UserStory "1" -d-> "1" "ProjectID"
+
+Sprint " " --> "id" "SprintID"
+Sprint "1" --> "1" "ProjectID"
+Sprint "1" --> "1" "SprintBacklog"
+SprintBacklog " " ---> "id" "SprintBacklogID"
+SprintBacklog "1" --> "*" "UserStoryID"
+
+@enduml

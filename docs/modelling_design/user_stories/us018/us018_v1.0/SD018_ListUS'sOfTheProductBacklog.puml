@@ -1,0 +1,71 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+legend top
+US018 - As PO/SM/Team Member, I want to consult the product backlog,i.e. to get the list of user stories sorted by priority
+end legend
+
+actor "PO/SM/TM" as A
+participant ": ListUserStoriesUI" as B
+participant ": ListUserStoriesController" as C
+participant ": ProjectContainer" as E
+participant "project : Project" as F
+participant ": ProductBacklog" as G
+participant ": userStoryMapper" as H
+participant "us : UserStory" as I
+participant ":UserStoryStatus" as J
+activate A #lightgrey
+autonumber 1.1
+A -> B: List User Stories of \nthe product backlog
+
+activate B #lightgrey
+B -> C: userStoryDTO = getProductBacklogDTO(projectCode)
+
+
+activate C #lightgrey
+C -> E: project = getProject (projectCode)
+activate E #lightgrey
+
+
+deactivate E
+C -> F: productBacklog = getProductBacklog()
+activate F #lightgrey
+deactivate F
+
+
+C -> G #lightgrey: userStories = getUserStories()
+activate G #lightgrey
+deactivate G
+
+C -> H: getUserStoriesDTO (userStories)
+
+activate H #lightgrey
+H --> "List<UserStoryDTO>\n: userStoryDTO" ** : create new list \nfor userStoryDTO
+loop for each us in userStories
+H->I: userStoryID = getUserStoryID();
+activate I #lightgrey
+deactivate I #lightgrey
+H->I: userStoryText = getUserStoryText()
+activate I #lightgrey
+deactivate I
+H->I: status = getStatus()
+activate I #lightgrey
+I->J: getStatus()
+activate J #lightgrey
+deactivate J
+deactivate I
+
+H->"usDTO:UserStoryDTO"**: createUSDTO (userStoryID, userStoryText, status)
+
+H->"List<UserStoryDTO>\n: userStoryDTO" : add usDTO to List
+activate "List<UserStoryDTO>\n: userStoryDTO" #lightgrey
+end
+deactivate "List<UserStoryDTO>\n: userStoryDTO"
+H -> C: List<UserStoryDTO>
+deactivate H
+C --> B: List<UserStoryDTO>
+deactivate C
+B --> A: Display user stories by priority
+deactivate B
+
+@enduml

@@ -1,0 +1,90 @@
+@startuml
+skinparam linetype ortho
+legend top
+CD US008 Add Business Sector
+end legend
+
+package Controller {
+    class "BusinessSectorController" as BusinessSectorController {
+        + addBusinessSector(BusinessSectorDTO businessSectorDTO)
+        + getBusinessSectors()
+    }
+}
+
+package Service {
+    package interfaces {
+        interface "AddBusinessSectorService" as  AddBusinessSectorService {
+            +addBusinessSector(String bSectorID, String bSectorDescription)
+        }
+    }
+    class "AddBusinessSectorServiceImpl" as AddBusinessSectorServiceImpl {
+     + containsIDOrDescription(BusinessSector businessSector)
+     - existDescription(Description businessSectorDescription)
+     + addBusinessSector(String bSectorID, String bSectorDescription)
+    }
+}
+package Mapper {
+    class "BusinessSectorMapper" as BusinessSectorMapper {
+        + toDTO(BusinessSector businessSector)
+        + listBusinessSectorDTO(List<BusinessSector> businessSectors)
+    }
+    class "BusinessSectorDTO " as BusinessSectorDTO {
+     - SbusinessSectorID : String
+     - description : String
+     + getBusinessSectorID()
+     + setBusinessSectorID(String businessSectorID)
+     + getDescription()
+     + setDescription(String description)
+     }
+}
+
+package ddd {
+    interface "InMemoryBusinessSectorRepository" as InterfaceBusnessSector {
+        +save(BusinessSector entity)
+        + findAll()
+        + ofIdentity(BusinessSectorID id)
+        + containsOfIdentity(BusinessSectorID id)
+}
+}
+
+package Model {
+ package Typology {
+        class "FactoryBusinessSectorImpl " as FactoryBusinessSectorImpl   {
+           + addBusinessSector(BusinessSectorID businessSectorID,
+           Description businessSectorDescription)
+        }
+             interface "FactoryBusinessSector" as FactoryBusinessSector {
+                     +addBusinessSector(BusinessSectorID businessSectorID,
+                     Description businessSectorDescription)
+            }
+                class "BusinessSector" as BusinessSector <<(A,SandyBrown) Aggregate Root>> {
+                    + verifyBusinessSectorDescription(Description businessSectorDescription)
+                    + copy()
+                    + getBusinessSectorID()
+                    + getBusinessSectorDescription()
+                }
+}
+    package value_objects {
+        class "BusinessSectorID" as BusinessSectorID <<(V, LightBlue) Value Object>>  {
+            - id : String
+            + getId()
+        }
+        class "Description" as description <<(V, LightBlue) Value Object>> {
+                    -text : String
+                    +getDescription()
+                }
+
+BusinessSectorController ..> AddBusinessSectorService
+BusinessSectorController ..> BusinessSectorDTO
+BusinessSectorController ..> BusinessSectorMapper
+AddBusinessSectorService ..> AddBusinessSectorServiceImpl
+AddBusinessSectorServiceImpl ..> description
+AddBusinessSectorServiceImpl ..> BusinessSectorID
+AddBusinessSectorServiceImpl ..> FactoryBusinessSector
+FactoryBusinessSector ..> FactoryBusinessSectorImpl
+FactoryBusinessSectorImpl ..> BusinessSector
+AddBusinessSectorServiceImpl ..> InterfaceBusnessSector
+
+
+@enduml
+

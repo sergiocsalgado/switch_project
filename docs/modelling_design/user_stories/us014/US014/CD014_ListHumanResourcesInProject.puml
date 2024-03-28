@@ -1,0 +1,135 @@
+@startuml
+legend top
+US014 - List Human Resources in a Project
+end legend
+
+'..|> implementation
+'-- associado
+'..> depende
+
+ListResourcesUI..>ListResourcesController
+ProjectContainer "1" *-- "*" Project : projects
+ListResourcesController..> Company : company
+ListResourcesController ..> ResourcesInProjectMapper : resourceInProject
+ResourcesInProjectMapper..> ResourcesInProjectDTO : List <ResourcesInProjectDTO>
+Company..> ProjectContainer : projectContainer
+Project ..> ResourceInProject : resourceInProject
+ResourceInProject "1" --> "1" ProjectManager\nContainer :projectManagerContainer
+ResourceInProject "1" --> "1" ScrumMaster\nContainer : scrumMasterContainer
+ResourceInProject "1" --> "1" ProductOwner\nContainer : productOwnerContainer
+ResourceInProject "1" --> "1" TeamMember\nContainer : teamMemberContainer
+ProjectManager\nContainer "1" *-- "*" ProjectManager : projectManagers
+ScrumMaster\nContainer "1" *-- "*" ScrumMaster : scrumMasters
+ProductOwner\nContainer "1" *-- "*" ProductOwner : productOwners
+TeamMember\nContainer "1" *-- "*" TeamMember : teamMembers
+ProjectManager -- Account
+ScrumMaster -- Account
+ProductOwner -- Account
+TeamMember -- Account
+
+class ListResourcesUI {}
+
+class ListResourcesController{
+-projectCode:String
++ListResourcesController(Company company,\n String projectCode)
++getProjectContainer():ProjectContainer
++getProject():Project
++getResourceInProject():ResourceInProject
++resourcesInProjectDTO():List<ResourcesInProjectDTO>
+}
+
+class ResourcesInProjectMapper{
++ResourcesInProjectMapper()
+-getProjectManagerInfo(ProjectManager projectManager)
+-getProductOwnerInfo(ProductOwner productOwner)
+-getScrumMasterInfo(ScrumMaster ScrumMaster)
++getTeamMemberInfo(List<TeamMember> teamMembers):ResourcesInProjectDTO
+}
+
+class ResourcesInProjectDTO{
+-email:String
+-name:String
+-description:String
++ResourcesInProjectDTO(String email,\n String name,String description)
+}
+
+class Company{
++Company(ProjectContainer)
++getProjectContainer():ProjectContainer
+}
+
+class ProjectContainer{
++ProjectContainer()
++getProject(projectCode):Project
+}
+
+class Project {
++Project(resourceInProject)
++getResourceInProject():ResourceInProject
+}
+
+class ResourceInProject{
++ResourceInProject(projectManagerContainer, productOwnerContainer,\n scrumMasterContainer, teamMemberContainer)
++getCurrentProjectManager():ProjectManager
++getCurrentProductOwner():ProductOwner
++getCurrentScrumMaster():ScrumMaster
++getCurrentTeamMembers():List<TeamMember>
+}
+
+class ProjectManager\nContainer{
++ProjectManager()
++getProjectManager():ProjectManager
+}
+
+class ProductOwner\nContainer{
++ProductOwner()
++getProductOwner():ProductOwner
+}
+
+class ScrumMaster\nContainer{
++ScrumMaster()
++getScrumMaster():ScrumMaster
+}
+
+class TeamMember\nContainer {
++TeamMember()
++getTeamMembers():List<TeamMember>
+}
+
+class ProjectManager{
+-description:String
++ProjectManager(Account account)
++getAccount():Account
++getDescription():String
+}
+
+class ProductOwner{
+-description:String
++ProjectManager(Account account)
++getAccount():Account
++getDescription():String
+}
+
+class ScrumMaster{
+-description:String
++ProjectManager(Account account)
++getAccount():Account
++getDescription():String
+}
+
+class TeamMember {
+-description:String
++ProjectManager(Account account)
++getAccount():Account
++getDescription():String
+}
+
+class Account {
+-email:String
+-name:String
++Account(String email, String name)
++getEmail():String
++getName():String
+}
+
+@enduml

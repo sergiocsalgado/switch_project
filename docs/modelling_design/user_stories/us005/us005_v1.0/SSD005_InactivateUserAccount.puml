@@ -1,0 +1,12 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+actor Administrator
+
+activate Administrator #lightgrey
+Administrator -> System: 1. Inactivate an account
+activate System #lightgrey
+Administrator <-- System: 2. Account Inactive
+deactivate
+
+@enduml

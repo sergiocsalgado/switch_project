@@ -1,0 +1,17 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+US020 - As Team Member, I want to add a user story in the product backlog
+to the sprint backlog, during the sprint planning ceremony
+end legend
+
+Actor TeamMember #lightgrey
+participant System #lightgrey
+autonumber
+TeamMember -> System: Add this user story from product backlog to sprint backlog of this project
+System --> TeamMember: Confirmation that the user story was added to the sprint backlog
+
+@enduml
+

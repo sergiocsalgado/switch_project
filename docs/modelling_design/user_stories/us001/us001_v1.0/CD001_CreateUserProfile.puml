@@ -1,0 +1,43 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+'..|> implementation
+'-- associado
+'..> depende
+
+ legend top
+US001 - As Administrator, I want to create user profiles
+ end legend
+
+CreateProfileUI..>CreateProfileController
+CreateProfileController..>Company: company
+Company..>ProfileContainer: profileContainer
+ProfileContainer"1"*--"*"Profile
+
+class CreateProfileUI {
+}
+
+class CreateProfileController {
++CreateProfileController(Company company)
++createProfile(String description): boolean
+}
+class Company{
++Company(AccountContainer accountContainer,
+ProfileContainer profileContainer)
++createProfile(String description): boolean
+
+}
+
+class ProfileContainer {
+-profiles : List <Profile>
++ProfileContainer()
++createProfile(String description): boolean
+-saveProfile(Profile profile): boolean
+}
+
+class Profile {
+-description : String
++Profile(String description)
+}
+
+@enduml

@@ -1,0 +1,127 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+skinparam linetype ortho
+legend top
+Class Diagram US018 - As PO/SM/Team Member, I want to consult the product backlog,
+                                i.e. to get the list of user stories sorted by priority
+end legend
+
+ListUserStoriesUI..>ListUserStoriesController
+ListUserStoriesUI..>UserStoryDTO
+ListUserStoriesController..>ProjectContainer:projectContainer
+ListUserStoriesController..>Project
+ListUserStoriesController..>UserStoryDTO
+UserStoryMapper..>UserStoryDTO: userStories
+UserStoryMapper..>UserStory
+UserStoryDTO..>UserStoryStatus
+UserStoryDTO..>Effort
+UserStoryDTO..>Description
+UserStory->UserStoryStatus
+UserStory->ProjectCode
+UserStory->UserStoryID
+UserStory->Description
+UserStory->Name
+UserStory->Priority
+UserStory->Effort
+ListUserStoriesController..>UserStoryMapper: userStoryMapper
+ProjectContainer "1"*--"*" Project: contains
+Project "1"-->"1" ProductBacklog: contains
+ProductBacklog -> UserStory: contains
+
+class ListUserStoriesUI {}
+
+class ListUserStoriesController{
+- getProject(projectCode) : Project
+- getProductBacklog(projectCode) : ProductBacklog
++ getProductBacklogDTO(projectCode): List<UserStoryDTO>
+}
+
+class ProjectContainer{
+- projects: List<Project>
++ getProject(projectCode): Project
+}
+
+class Project{
++ getProductBacklog() : ProductBacklog
+}
+
+class UserStoryMapper{
+- createUSDTO(userStoryID,\n userStoryText, status):UserStoryDTO
++ getUserStoriesDTO(userStories)\n:List<UserStoryDTO>
+}
+
+class UserStory{
+-projectCode: ProjectCode
+-userStoryNumber: UserStoryID
+-userStoryText: Description
+-actor: Name
+-status: UserStoryStatus
+-priority: Priority
+-effort: Effort
++getProjectCode() : ProjectCode
++getUserStoryID() : UserStoryID
++getActor() : Name
++getUserStoryText() : Description
++getStatus() : UserStoryStatus
++getPriority() : Priority
++getEffort() : Effort
+}
+
+class UserStoryStatus{
+- description: String
++ create(String description)
+- invalidStatus(String description)
++ getDescription()
+}
+
+class Name{
+- value: String
+}
+class ProjectCode{
+- PREFIX = "PRJ": String
+- increment = 1: String
+- code: String
++ generateCode()
++ resetIncrement()
++ getProjectCode()
+}
+class UserStoryID{
+- PREFIX = "US": String
+- increment = 1: String
+- userStoryID: String
++ create(String userStoryID)
++ generateNextIncrement()
+- increment()
++ resetIncrement() : void
++ getUserStoryID()
+}
+class Description{
+- text: String
++ create(String description)
++getDescription()
+}
+class Priority{
+- index : int
++ create(int index)
++ getIndex()
+}
+class Effort{
+- storyPoints: int
++ getStoryPoints()
+}
+
+class UserStoryDTO{
++ userStoryNumber: UserStoryID
++ userStoryText: Description
++ status: UserStoryStatus
++ setUserStoryID():void
++ setUserStoryText():void
++ setStatus():void
+}
+
+class ProductBacklog{
+- userStories: List<UserStory>
++ getUserStories(): List<UserStory>
+}
+
+@enduml

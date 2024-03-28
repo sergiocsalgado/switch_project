@@ -1,0 +1,191 @@
+@startuml
+legend top
+CD US017 - As Product Owner, I want to create
+  a user story and add it to the ProductBacklog
+end legend
+
+skinparam linetype ortho
+
+Package Controller {
+class "UserStoryController" as userStoryController {
++createUserStoryAndAddToProductBacklog(projectCode, userStoryDTO)
+}
+}
+
+Package Service {
+Package Interface {
+interface "CreateUserStoryService" as interfaceService {
++createUserStory(projectCode, userStoryID, \n userStoryNumber, actor, userStoryText, priority)
+}
+}
+class "RegisterProjectServiceImpl" as serviceImpl {
+-STATUS_PLANNED : String
++createUserStory(projectCode, userStoryID, \n userStoryNumber, actor, userStoryText, priority)
+-addUserStory (userStory, priority, userStoryID, projectCode)
+-validateUserStory (userStory)
+-sortList()
+-setPriority(userStory, priority)
+}
+}
+
+Package ddd {
+interface "Repository<ProjectCode, Project>" as interfaceProjectRepository {
++containsOfIdentity(projectCode)
++save(project)
+}
+
+interface "Repository<UserStoryID, UserStory>" as interfaceUserStoryRepository {
++findAll()
++containsOfIdentity(userStoryID)
++ofIdentity(userStoryID)
+}
+}
+
+Package Model {
+Package UserStory {
+interface "FactoryUserStory" as factoryUserStory {
++createUserStory(userStoryID, projectCode, \n userStoryNumber, actor, userStoryText, status, priority);
+}
+
+class "UserStory" as UserStoryClass <<(A,SandyBrown) Aggregate Root>> {
++getUserStoryID()
++getProjectCode()
++getUserStoryNumber
++getActor()
++getUserStoryText()
++getStatus()
++getPriority()
++getEffort()
+}
+}
+
+package Project {
+class "Project" as project <<(A,SandyBrown) Aggregate Root>> {
++getProjectCode()
++getProjectName()
++getProjectDescription()
++getCustomerID()
++getBusinessSectorID()
++getTypologyID()
++getPeriod()
++getProjectStatus()
++getSprintDuration()
++getNumberOfPlannedSprints()
++getBudget()
+}
+}
+
+Package value_objects {
+class "ProjectCode" as projCode <<(V, LightBlue) Value ValueObject>>{
+-code : String
++getProjectCode()
+}
+class "Name" as actor <<(V, LightBlue) Value ValueObject>>{
+-value : String
++getValue()
+}
+class "Description" as userStoryText <<(V, LightBlue) Value ValueObject>>{
+-text : String
++getDescription()
+}
+class "UserStoryID" as userStoryID <<(V, LightBlue) Value ValueObject>>{
+-idUserStory : String
++getUserStoryID()
+}
+class "UserStoryNumber" as userStoryNumber <<(V, LightBlue) Value ValueObject>>{
+-number : String
++getNumber()
+}
+class "UserStoryStatus" as status <<(V, LightBlue) Value ValueObject>>{
+-description : String
++getDescription()
+}
+class "Priority" as priority <<(V, LightBlue) Value ValueObject>>{
+-index : int
++getIndex()
+}
+class "Effort" as effort <<(V, LightBlue) Value ValueObject>>{
+-STORY_POINTS_ZERO : int
+-STORY_POINTS_ONE : int
+-STORY_POINTS_TWO : int
+-STORY_POINTS_THREE : int
+-STORY_POINTS_FIVE : int
+-STORY_POINTS_EIGHT : int
+-STORY_POINTS_THIRTEEN : int
+-STORY_POINTS_TWENTY : int
+-STORY_POINTS_FORTY : int
+-storyPoints : int
+-isInvalidStoryPoints(storyPoints)
++getStoryPoints()
+}
+}
+}
+
+
+Package Mapper {
+class "UserStoryDTO" as userStoryDTO {
+- projectCode : String
+- userStoryID : String
+- userStoryText : String
+- status : String
+- userStoryNumber : String
+- actor : String
+- priority : int
++getUserStoryID()
++setUserStoryID(String userStoryID)
++getProjectCode()
++setProjectCode(String projectCode)
++getUserStoryNumber()
++setUserStoryNumber(String userStoryNumber)
++getActor()
++setActor(String actor)
++getUserStoryText()
++setUserStoryText(String userStoryText)
++getStatus()
++setStatus(String status)
++getPriority()
++setPriority(int priority)
+}
+class "UserStoryMapper" as userStoryMapper {
++ toDTO(userStory)
+}
+}
+
+userStoryController ..> interfaceService
+userStoryController ..> userStoryDTO
+userStoryController ..> userStoryMapper
+
+serviceImpl ..|> interfaceService
+serviceImpl ..> interfaceUserStoryRepository
+serviceImpl ..> interfaceProjectRepository
+serviceImpl ..> factoryUserStory
+
+interfaceUserStoryRepository ..> UserStoryClass
+interfaceUserStoryRepository ..> userStoryID
+
+interfaceProjectRepository ..> project
+interfaceProjectRepository ..> projCode
+
+userStoryMapper ..> userStoryDTO
+userStoryMapper ..> UserStoryClass
+
+UserStoryClass "1" --> "1" projCode
+UserStoryClass "1" --> "1" userStoryID
+UserStoryClass "1" --> "1" userStoryNumber
+UserStoryClass "1" --> "1" actor
+UserStoryClass "1" --> "1" userStoryText
+UserStoryClass "1" --> "1" status
+UserStoryClass "1" --> "1" priority
+UserStoryClass "1" --> "1" effort
+
+factoryUserStory ..> projCode
+factoryUserStory ..> userStoryID
+factoryUserStory ..> userStoryNumber
+factoryUserStory ..> actor
+factoryUserStory ..> userStoryText
+factoryUserStory ..> status
+factoryUserStory ..> priority
+factoryUserStory ..> effort
+
+project "1" --> "1" projCode
+@enduml

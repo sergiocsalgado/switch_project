@@ -1,0 +1,24 @@
+@startuml
+legend top
+SSD US013 Define Scrum Master in Project
+end legend
+Actor Manager
+
+autoactivate on
+
+autonumber 1.1
+activate Manager #lightgrey
+Manager -> System #lightgrey: Asks for lists of Accounts
+System --> Manager #lightgrey: Shows list of Accounts
+
+autonumber 2.1
+
+Manager -> System #lightgrey: Asks for list of Projects
+System --> Manager #lightgrey: Shows list of Projects
+
+autonumber 3.1
+Manager -> System #lightgrey: Define Scrum in Project
+System --> Manager #lightgrey: Scrum Master defined in Project
+
+
+@enduml

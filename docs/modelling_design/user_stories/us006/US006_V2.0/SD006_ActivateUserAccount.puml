@@ -1,0 +1,46 @@
+@startuml
+
+legend top
+SD - US006 - As Administrator, I want to activate an user account
+end legend
+
+skinparam sequence {
+LifeLineBackgroundColor #lightgrey
+}
+
+boundary " " #white
+participant ":Route"
+participant ":AccountController"
+participant "dto:ChangeStatusDTO" as 0
+participant ":ChangeStatusService"
+participant "email:Email" as 1
+participant "accountStatus:AccountStatus" as 2
+participant "accRep:AccountRepository"
+
+autonumber 1.1
+autoactivate on
+
+" " o-> ":Route" : PATCH (/accounts/status) (json)
+
+":Route" -> ":AccountController" : changeStatus(ChangeStatusDTO changeStatusDTO)
+":AccountController" -> 0 : email = getEmailAddress()
+deactivate
+":AccountController" -> 0 : accountStatus = getStatus()
+deactivate
+":AccountController" -> ":ChangeStatusService" : changeStatus(String email, String accountStatus)
+":ChangeStatusService" --> 1 ** #b : create(email)
+":ChangeStatusService" --> 2 ** #b : create(accountStatus)
+":ChangeStatusService" -> "accRep:AccountRepository" : accRep = ofIdentity(email)
+deactivate
+":ChangeStatusService" -> ":ChangeStatusService" : true = accountOptional.isPresent()
+deactivate
+":ChangeStatusService" -> ":ChangeStatusService" : Account account = accountOptional.get()
+deactivate
+":ChangeStatusService" -> ":Account" : setStatus(accountStatus)
+":Account" --> ":ChangeStatusService" : true
+":ChangeStatusService" --> ":AccountController" : create(HttpStatus.OK)
+":AccountController" --> ":Route" : responseEntity(changeStatusDTO, HttpStatus.OK)
+
+":Route" -->o " " : response(json)
+
+@enduml

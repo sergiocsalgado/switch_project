@@ -1,0 +1,116 @@
+@startuml
+
+'..|> implementation
+'-- associado
+'..> depende
+'*-- agrega
+'- atributo
+'+ método
+
+skinparam linetype ortho
+
+skinparam sequenceMessageAlign center
+
+legend top
+CD US004 List all User Accounts and their Status
+end legend
+
+package Controller {
+class AccountController {
++ getAccountsAndStatus(): ResponseEntity
+}
+}
+
+package Mapper {
+class AccountMapper {
++ listAccountsDTO()
++ toDTO()
+}
+class AccountDTO {
+- email: String
+- name: String
+- phoneNumber: String
+- status: String
+}
+}
+
+package Service {
+class AccountsAndStatusServiceImpl {
+- accountRepository: Repository<Email, Account>
++ getAccountAndStatus(): List<AccountDTO>
+}
+package Interfaces {
+interface AccountsAndStatusService {
+getAccountAndStatus(): List<AccountDTO>
+}
+}
+}
+
+package Ddd {
+interface Repository<Email, Account> {
++ findAll(): List<T>
+}
+}
+
+package Model {
+package HumanResource {
+class Account <<(A, SandyBrown) Aggregate Root>> {
++getEmail()
+}
+class "HumanResource" as Resource <<(E, Yellow) Entity>>{
++getEmail()
++getName()
++getPhoneNumber()
++getStatus()
++getProfileID()
+}
+package ValueObjects as "ValueObjects"{
+class Email <<(V, LightBlue) Value Object>> {
+- emailAddress : String
++ getStatus()
+}
+class AccountName <<(V, LightBlue) Value Object>> {
+- name: String
++ getAccountName(): String
+}
+class PhoneNumber <<(V, LightBlue) Value Object>> {
+- number : String
++ getPhoneNumber()
+}
+class AccountStatus <<(V, LightBlue) Value Object>> {
+- status : String
++ getStatus()
+}
+class ProfileID <<(V, LightBlue) Value Object>> {
+- idProfile : String
++ getProfileID()
+}
+}
+}
+
+
+}
+
+'..|> implementation
+'-- associado
+'..> depende
+'*-- agrega
+'- atributo
+'+ método
+
+AccountController ..> AccountsAndStatusService
+AccountsAndStatusServiceImpl ..> AccountMapper
+AccountMapper ..> AccountDTO
+AccountsAndStatusServiceImpl ..|>  AccountsAndStatusService
+AccountsAndStatusServiceImpl ..> Repository
+AccountMapper ..> Resource
+Repository ..> Account
+Repository "1"*--"*" Resource
+Resource ..> Email
+Resource ..> AccountName
+Resource ..> PhoneNumber
+Resource ..> AccountStatus
+Resource ..> ProfileID
+Account ..> Email
+
+@enduml

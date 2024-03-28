@@ -1,0 +1,144 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+skinparam linetype ortho
+legend top
+CD - Class Diagram
+US012 As Manager, I want to define the PO of a project
+end legend
+
+'..|> implementation
+'-- associado
+'..> depende
+'*-- agrega
+'- atributo
+'+ método
+
+
+package Controller{
+class "ProjectController" as ProjectController{
++defineRole(projectCode,resourcesInProjectDTO)
+}
+}
+
+package Mapper{
+class "ResourceInProjectDTO" as ResourceInProjectDTO{
++getResourceInProjectID()
++getEmail()
++getRole()
++getAllocation()
++getCostPerHour()
++getCurrency()
++getStartDate()
++getEndDate()
++setProjectCode(projectCode)
+}
+class "ResourceInProjectMapper" as ResourceInProjectMapper{
++toDTO(resourcesInProjectDTO)
+}
+}
+
+package Model{
+package Project{
+interface "FactoryResourceInProject" as FactoryResourceInProject {
+create(resourceInProjID, emailAddress, \n roleDescription, period, costHour, percentageAllocation)
+}
+class "FactoryResourceInProjectImpl" as FactoryResourceInProjectImpl {
++create(resourceInProjID, emailAddress, \n roleDescription, period, costHour, percentageAllocation)
+}
+class "Project" as ProjectClass <<(A, SandyBrown) Aggregate Root>>{
+-validResourceInProject(resourceInProject)
++roleDoesNotExistsInProject(role, startDate)
++resourceIsInProject(email, startDate)
++getResourceInProjectAllocation(email, startDate)
++roleDoesNotExistsInProject(role, startDate)
++addResourceInProject(resourceInProject)
+setResources(resources)
+}
+class "ResourceInProject" as ResourceInProject <<(E, DarkGreen) Entity>>{}
+}
+
+package ValueObjects{
+class "Role" as Role <<(V, LightBlue) Value Object>> {}
+class "ProjectCode" as ProjectCode <<(V, LightBlue) Value Object>> {}
+class "ResourceInProjectID" as ResourceInProjectIDVO <<(V, LightBlue) Value Object>> {}
+class "Email" as Email <<(V, LightBlue) Value Object>> {}
+class "Period" as Period <<(V, LightBlue) Value Object>> {}
+class "Cost" as Cost <<(V, LightBlue) Value Object>> {}
+class "Allocation" as Allocation <<(V, LightBlue) Value Object>> {}
+}
+
+}
+
+package DDD{
+interface "IRepository <ProjectCode, Project>" as IRepository{
+findAll()
+ofIdentity(id)
+}
+}
+
+package Service{
+interface "DefineRoleService" as DefineRoleService{
+defineRole(projectCode,resourceInProjectID,email,role,allocation,\n costPerHour,currency,startDate,endDate)
+ }
+class "DefineRoleServiceImpl" as DefineRoleServiceImpl{
+-isTeamMember(roleDescription)
+-roleDoesNotExistsInProject(project, role, startDate)
+-resourceNotInProject(project, startDate, email)
+-getProjectByCode(projectCode)
+-doesNotExceedPercentageAllocation(email, allocation,startDate)
++defineRole(projectCode,resourceInProjectID,email,role,allocation,\n costPerHour,currency,startDate,endDate)
+}
+}
+
+package Repository{
+
+class "ProjectRepositoryImpl" as ProjectRepositoryImpl{
++ ofIdentity(projectCode)
+}
+}
+
+
+
+
+ProjectController ..> DefineRoleService
+ProjectController ..> ResourceInProjectMapper
+ProjectController ..> ResourceInProjectDTO
+ProjectController ..> ResourceInProject
+
+DefineRoleService <|.. DefineRoleServiceImpl
+
+DefineRoleServiceImpl ..> IRepository
+DefineRoleServiceImpl ..> FactoryResourceInProject
+DefineRoleServiceImpl ..> ProjectClass
+DefineRoleServiceImpl ..> ResourceInProject
+DefineRoleServiceImpl "1" --> "1" ProjectCode
+DefineRoleServiceImpl "1" --> "1" ResourceInProjectIDVO
+DefineRoleServiceImpl "1" --> "1" Email
+DefineRoleServiceImpl "1" --> "1" Role
+DefineRoleServiceImpl "1" --> "1" Allocation
+DefineRoleServiceImpl "1" --> "1" Cost
+DefineRoleServiceImpl "1" --> "1" Period
+
+FactoryResourceInProject <|..FactoryResourceInProjectImpl
+
+IRepository<|..ProjectRepositoryImpl
+
+ProjectRepositoryImpl..>ProjectClass
+ProjectRepositoryImpl..>ProjectCode
+ProjectRepositoryImpl..>ResourceInProject
+
+
+ResourceInProjectMapper "1"*--"*" ResourceInProjectDTO :resourceInProjectDTO
+
+ProjectClass"1" *-- "*"ResourceInProject
+
+ResourceInProject"1" --> "1"ResourceInProjectIDVO
+ResourceInProject"1" --> "1"Email
+ResourceInProject"1" --> "1"Role
+ResourceInProject"1" --> "1"Period
+ResourceInProject"1" --> "1"Cost
+ResourceInProject"1" --> "1"Allocation
+
+
+@enduml

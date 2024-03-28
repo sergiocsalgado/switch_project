@@ -1,0 +1,114 @@
+@startuml
+
+autonumber 1.1
+
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 250
+skinparam sequenceParticipant underline
+
+boundary " " #white
+participant ": Route" as Route
+participant "projectDTO : ProjectDTO" as DTO
+participant ": ProjectController" as Controller
+participant ": RegisterProjectService" as Service
+participant ":Customer" as Cstmr
+participant ":BusinessSector" as BS
+participant ":Typology" as Typo
+participant ": IFactoryProject" as IFactoryProject
+participant "project : Project" as Project
+participant ": ProjectRepository" as Repo
+participant "ProjectDTOMapper" as Mapper
+participant "projectDTO : ProjectDTO" as projDTO
+
+
+
+
+participant "responseEntity : ResponseEntity" as Response
+
+
+
+" " o-> Route : POST (/projects) (json)
+activate Route
+
+Route --> DTO ** #b: create
+
+Route -> Controller #b: registerProject (projectDTO)
+
+
+activate Controller
+
+Controller -> Service :  registerProject (projectDTO)
+ref over Service: unwrapping projectDTO
+
+activate Service
+
+Service -> Service : getCustomerID(customer)
+
+activate Service
+
+Service -> Cstmr : customerID = getCustomerID()
+activate Cstmr
+deactivate Cstmr
+
+deactivate Service
+
+Service -> Service : getBusinessSectorID(businessSector)
+
+activate Service
+
+Service -> BS : businessSectorID = getBusinessSectorID()
+activate BS
+deactivate BS
+
+
+deactivate Service
+
+Service -> Service : getTypologyID(typology)
+
+activate Service
+
+Service -> Typo : typologyID = getTypologyID(typology)
+activate Typo
+deactivate Typo
+
+deactivate Service
+
+
+
+
+Service -> IFactoryProject : createProject(projectCode, projectName, projectDescription,customerID, businessSectorID, typologyID, projectStatus, sprintDuration,numberOfPlannedSprints, budget, period)
+
+activate IFactoryProject
+
+IFactoryProject --> Project ** : create
+
+deactivate IFactoryProject
+
+
+
+
+
+Service ->Repo : save(project)
+activate Repo
+deactivate Repo
+Service -> Controller : project
+deactivate Service
+
+
+Controller --> Mapper : toDTO(project)
+
+activate Mapper
+
+
+Mapper --> projDTO ** : create
+deactivate Mapper
+
+Controller --> Response ** : create(projectDTO,HttpStatus.CREATED)
+Controller --> Route : responseEntity
+deactivate Controller
+
+Route -->o " " : response(json)
+deactivate Route
+
+@enduml

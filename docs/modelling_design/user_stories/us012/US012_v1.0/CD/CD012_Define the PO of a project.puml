@@ -1,0 +1,97 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+CD US012 Define the Product Owner of a Project
+end legend
+
+DefineProductOwnerUI ..> DefineProductOwnerController
+DefineProductOwnerController ..> Company :company
+DefineProductOwnerController ..> AccountContainer :accountContainer
+Company ..> AccountContainer :accountContainer
+Company ..> ProjectContainer :projectContainer
+DefineProductOwnerController ..> AccountMapper :accountMapper
+DefineProductOwnerController ..> ProjectContainer :projectContainer
+DefineProductOwnerController ..> Project :project
+Project ..> ResourceInProject :resourceInProject
+ResourceInProject ..> ProductOwnerContainer :productOwnerContainer
+ProjectContainer "1"*--"*" Project :projects
+AccountMapper "1"*--"*" AccountDTO :accountsDTO
+ProductOwnerContainer "1"*--"*" ProductOwner: productOwners
+
+class DefineProductOwnerUI{
+}
+
+class DefineProductOwnerController{
++getAccounts(): List<Account>
++getAccountDTO(): List<AccountDTO>
++getAccountByEmail(String email): Account
++getProjectByCode(String projectCode): Project
++defineProductOwner(String email,String projectCode,double allocation,double costPerHour): boolean
++doesNotExceedPercentageAllocation(String email, double allocation): boolean
+}
+
+class Company{
++getAccounts(): List<Account>
+}
+
+class AccountContainer{
++getAccount(String email): Account
+}
+
+class AccountMapper{
++listAccountsDTO(List<Account> accounts): List<AccountsDTO>
+}
+
+class Project{
+-typology: Typology
+-businessSector: BusinessSector
+-customer: Customer
+-projectStatus: ProjectStatus
+-projectCode: String
+-projectName: String
+-projectDescription: String
++getResourceInProject(): ResourceInProject
+}
+
+class ResourceInProject{
++defineProductOwner(Account account, double allocation, double costPerHour): boolean
++getCurrentProductOwner(): ProductOwner
++isInProject(String email): booelan
++getAllocationInProject(String email): double
+-getProductOwnerAllocation(String email): double
+}
+
+class ProductOwnerContainer{
++defineProductOwner(Account account, double allocation, double costPerHour): boolean
+-addProductOwnerToPastProductOwnersList(): void
++getAllocation(String email): double
++isProductOwner(String email): boolean
++getProductOwner(): ProductOwner
+}
+
+class ProjectContainer{
++getProject(String projectCode): Project
++doesNotExceedPercentageAllocation(String email, double allocation): boolean
+}
+
+class ProductOwner{
+-account: Account
+-allocation: double
+-costPerHour: double
++getAccount(): Account
++getStartDate(): String
++getAllocation(): double
++setEndDate(): void
++copy(): ProductOwner
+}
+
+class AccountDTO{
+-email: String
+-name: String
++getEmail(): String
++getName(): String
+}
+
+@enduml

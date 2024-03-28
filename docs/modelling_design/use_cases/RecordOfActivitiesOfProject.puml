@@ -1,0 +1,48 @@
+@startuml
+
+
+actor "Product Owner"
+
+left to right direction
+rectangle "System"{
+
+    "Product Owner" --> (Product Backlog)
+    note right of (Product Backlog) : User Storie 001
+    note right of (Product Backlog) : User Storie 002
+}
+
+@enduml
+
+@startuml
+
+actor "Development Team"
+
+left to right direction
+rectangle "System"{
+
+    "Development Team" --> (Sprint Planning Ceremony)
+    "Development Team" --> (Sprint Backlog)
+    note right of (Sprint Planning Ceremony) : Goals or Activities
+    note right of (Sprint Backlog) : Task 001
+    note right of (Sprint Backlog) : Task 002
+}
+
+@enduml
+
+@startuml
+
+left to right direction
+actor "Scrum Master Team"
+rectangle "System" {
+    "Scrum Master Team" --> (Daily Scrum)
+    "Scrum Master Team" --> (Sprint Review)
+    "Scrum Master Team" --> (Product Increment)
+    "Scrum Master Team" --> (Product Backlog Grooming)
+}
+
+(Daily Scrum) --> "Devops Team"
+(Sprint Review) --> "Devops Team"
+(Product Increment) --> "Scrum Master"
+(Product Backlog Grooming) --> "Product Owner"
+
+@enduml

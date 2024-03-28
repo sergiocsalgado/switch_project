@@ -1,0 +1,8 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+actor Administrator as Administrator
+Administrator -> System: Add Business Sector
+System --> Administrator:  Business Add
+@enduml

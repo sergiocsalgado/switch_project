@@ -1,0 +1,17 @@
+@startuml
+
+legend top
+SSD - US005 - As Administrator, I want to inactivate an user account
+end legend
+
+autonumber 1
+
+actor Administrator
+
+activate Administrator #lightgrey
+Administrator -> System: Inactivate an account
+activate System #lightgrey
+Administrator <-- System: Account Inactive
+deactivate
+
+@enduml

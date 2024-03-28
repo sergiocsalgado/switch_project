@@ -1,0 +1,107 @@
+@startuml
+
+legend top
+SD: US022 - As Team Member, I want to view the Scrum Board of current sprint
+end legend
+
+skinparam sequence {
+    LifeLineBackgroundColor #lightgrey
+}
+
+boundary " " #white
+participant ": Route" as route
+participant ": ProjectController" as controller
+participant UserStoryMapper as mapper
+participant "response: ResponseEntity" as response
+participant ": ViewScrumBoardServiceImpl" as service
+participant "projectCode\n: ProjectCode" as projectCode
+participant ": Sprint" as sprint
+participant ": UserStory" as userStory
+participant "Repository <UserStoryID, UserStory>" << (I,#ccb3ff) >>
+
+autonumber 1
+" " o-> route : GET (/projects/{projectCodeInput}/scrum-board)
+activate route
+
+route -> controller: viewScrumBoard(projectCodeInput)
+activate controller
+
+controller -> service : getScrumBoard(projectCodeInput)
+
+activate service
+service --> projectCode ** : create(projectCodeInput)
+service -> service: validate projectCode
+service -> service: projectExists(projectCode)
+activate service
+
+autonumber 6.1.1
+service -> service: getCurrentSprint(projectID)
+activate service
+service -> service: fetch all sprints from repository
+
+service -> sprint: projectCode = getProjectCode()
+activate sprint
+deactivate sprint
+
+service -> service: filter sprints by projectCode and period
+service -> service: findFirst()
+service <-- service: Optional<sprint>
+deactivate service
+
+autonumber 6.2
+service -> service: Optional<sprint>.isPresent()
+activate service
+autonumber 6.2.1
+service -> sprint: scrumBoardList = getScrumBoardList()
+activate sprint
+deactivate sprint
+
+service -> "Repository <UserStoryID, UserStory>": findAll()
+activate "Repository <UserStoryID, UserStory>"
+"Repository <UserStoryID, UserStory>" --> service : List<UserStory>
+deactivate "Repository <UserStoryID, UserStory>"
+
+service -> service: filter userStories
+
+activate service
+autonumber 6.2.3.1
+service -> userStory: status = getStatus()
+activate userStory
+deactivate userStory
+
+service -> userStory: userStoryID = getUserStoryID()
+activate userStory
+deactivate userStory
+
+service -> service: check if userStoryID is in scrumBoardList
+service -> service: check if status is in Set<UserStoryStatus>
+service -> service: collect valid UserStories
+service -> userStory: status = getStatus()
+activate userStory
+deactivate userStory
+
+service -> service: sort UserStories by status
+service -> service: collect UserStories to list
+service <-- service: List<userStory>
+deactivate service
+deactivate service
+deactivate service
+
+autonumber 7
+service --> controller: userStories
+deactivate service
+
+controller -> mapper : userStoriesDTO = getUserStoriesDTO(userStories)
+activate mapper
+deactivate mapper
+
+controller --> response ** : create(userStoriesDTO, HttpStatus.OK)
+
+controller --> route : response
+deactivate controller
+
+route -->o " " : response(json)
+deactivate route
+
+@enduml
+

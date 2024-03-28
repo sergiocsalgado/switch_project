@@ -1,0 +1,33 @@
+@startuml
+
+legend top
+US001 - As Administrator, I want to create user profiles
+end legend
+autoactivate on
+
+actor Administrator as A
+participant ": CreateProfileUI" as B
+participant ":CreateProfileController" as C
+participant ": Company" as D
+participant ": ProfileContainer" as E
+
+autoactivate on
+autonumber 1.1
+activate  A #lightgrey
+A -> B #lightgrey: Create Profile description
+B -> C #lightgrey: createProfile(description)
+C -> D #lightgrey: createProfile(description)
+
+
+D -> E #lightgrey: createProfile(String description)
+
+E-> "profile: Profile" ** : create(String description)
+E -> E #lightgrey: saveProfile(profile)
+deactivate E
+
+E --> D:  true
+D --> C:  true
+C --> B:  true
+B --> A: "Profile created"
+
+@enduml

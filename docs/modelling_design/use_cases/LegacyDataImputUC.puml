@@ -1,0 +1,10 @@
+@startuml
+title Legacy Data Imput
+left to right direction
+actor user as user
+rectangle system {
+usecase "Data Base Project " as UC1
+}
+user -->UC1
+
+@enduml

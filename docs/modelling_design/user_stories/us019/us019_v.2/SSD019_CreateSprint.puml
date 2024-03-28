@@ -1,0 +1,18 @@
+
+@startuml
+
+legend top
+SSD - US019 - As Project Manager, I want to create a sprint
+end legend
+
+autonumber 1
+
+actor "Project Manager"
+
+activate "Project Manager" #lightgrey
+"Project Manager" -> System #lightgrey: Create a Sprint
+activate System #lightgrey
+System --> "Project Manager": Sprint created successfully
+deactivate
+
+@enduml

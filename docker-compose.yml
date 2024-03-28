@@ -1,0 +1,55 @@
+version: '3.1'
+
+#Setup Network
+networks:
+  g5NetWork:
+
+#Setup Volumes (default)
+volumes:
+  mariadb:
+    driver: local
+
+services:
+  database:
+    image: mariadb
+    restart: always
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_DATABASE: ${DB_DATABASE}
+    networks:
+      - g5NetWork
+    ports:
+      - '3306:3306'
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: database
+    networks:
+      - g5NetWork
+    ports:
+      - '8081:80'
+
+  frontend:
+    image: 'wolffer22/frontend:latest'
+    networks:
+      - g5NetWork
+    ports:
+      - '3000:3000'
+
+  backend:
+    image: 'wolffer22/backend:latest'
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://database:3306/${DB_DATABASE}
+      - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.mariadb.jdbc.Driver
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+    networks:
+      - g5NetWork
+    ports:
+      - '8080:8080'

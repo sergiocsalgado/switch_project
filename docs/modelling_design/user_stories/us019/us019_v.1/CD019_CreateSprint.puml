@@ -1,0 +1,60 @@
+CD 
+
+@startuml
+legend top
+CD US019 As Project Manager, I want to create a sprint
+end legend
+
+SprintUI ..> SprintController
+
+SprintController ..> ProjectContainer :projectContainer
+SprintController ..> Project
+ProjectContainer "1"*--"*" Project :contains
+SprintController ..> SprintContainer
+SprintContainer..|> FactorySprint :factorySprint
+FactorySprint..>Sprint
+SprintContainer "1"*--"*"Sprint: contains
+Project..>SprintContainer
+
+class SprintUI{
+}
+
+class SprintController{
+-getProject(String projectCode): Project
+-getSprintContainer(String projectCode) : SprintContainer
++createSprint(String projectCode, String sprintID, Period period): boolean
+}
+
+class ProjectContainer{
++getProject(String projectCode): Project
+}
+
+class Project{
+-typology: Typology
+-businessSector: BusinessSector
+-customer: Customer
+-projectStatus: ProjectStatus
+-projectCode: String
+-projectName: String
+-projectDescription: String
++Project(String projectCode, String projectName, String projectDescription,\nCustomer customer,BusinessSector businessSector,
+Typology typology, ProjectStatus projectStatus)
++ getSprintContainer(): SprintContainer
+}
+class SprintContainer{
++addSprint(String sprintID, Period period): boolean
+-saveSprint(Sprint sprint): boolean
+}
+interface FactorySprint{
++createSprint(String id, Period period): Sprint
+}
+
+class Sprint {
+-sprintID: String
+-period:Period
++getSprintID: SprintID
++getPeriod():Period
++sprintCopy(): Sprint
+}
+
+@enduml

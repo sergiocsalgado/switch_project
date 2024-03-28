@@ -1,0 +1,127 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+SD - Sequence Diagram
+US012 As Manager, I want to define the PO of a project
+end legend
+
+autoactivate on
+autonumber 1.1
+
+actor Manager
+activate Manager #lightgrey
+participant ":DefineProductOwnerUI"
+participant ":DefineProductOwnerController"
+participant "accountContainer\n:AccountContainer"
+participant "accountContainer\n:AccountContainer"
+participant "account:Account"
+participant ":AccountMapper"
+participant ":ProjectContainer"
+participant "project :Project"
+participant ":ResourceInProjectContainer"
+participant "resourceInProject\n:ResourceInProject"
+participant ":RoleContainer"
+
+
+
+'list Accounts
+
+Manager -> ":DefineProductOwnerUI" #b: Asks for Accounts
+":DefineProductOwnerUI" -> ":DefineProductOwnerController" #b:  getAccountsDTO()
+":DefineProductOwnerController" -> "accountContainer\n:AccountContainer" #b:  getAccounts()
+"accountContainer\n:AccountContainer"-->"listAccount :List<Accounts>"** #b: createListAccounts()
+"accountContainer\n:AccountContainer"-->":DefineProductOwnerController" #b: listAccounts
+
+":DefineProductOwnerController"->":AccountMapper" #b:listAccountDTO()
+":AccountMapper"-->"listAccountsDTO \n:List<AccountsDTO>"** #b: createListAccountsDTO()
+
+loop for each account in listAccounts
+":AccountMapper"->"listAccount :List<Accounts>" #b: account=get(i)
+deactivate
+":AccountMapper"->":AccountMapper" #b: accountDTO=AccountDTO(email, name)
+":AccountMapper"-->"accountDTO \n:AccountDTO"** #b: createAccountDTO()
+deactivate
+":AccountMapper"->"listAccountsDTO \n:List<AccountsDTO>"  #b: addAccountDTO(accountDTO)
+deactivate
+end
+
+":AccountMapper"-->":DefineProductOwnerController" #b: listAccountsDTO
+":DefineProductOwnerController"-->":DefineProductOwnerUI"  #b: listAccountsDTO
+":DefineProductOwnerUI"-->Manager  #b: Shows list of accounts
+
+autonumber 2.1
+'list projects
+autoactivate off
+Manager -> ":DefineProductOwnerUI" #b: Asks for list of projects
+ref over ":DefineProductOwnerUI"
+US015 - As Manager, I want
+to get a list of all projects.
+end
+
+":DefineProductOwnerUI" -->Manager  #b: Shows list of projects
+autoactivate on
+
+'define Scrum master
+autonumber 3.1
+Manager -> ":DefineProductOwnerUI" #b: Define Product Owner in Project
+":DefineProductOwnerUI" -> ":DefineProductOwnerController" #b: defineProductOwner(email, projectCode, \n allocation, costPerHour,daysFromNow)
+
+":DefineProductOwnerController" -> ":DefineProductOwnerController"  #b: getStartDate(int daysFromNow)
+":DefineProductOwnerController" -->"period:Period"** #b: create
+deactivate
+
+":DefineProductOwnerController" -> ":RoleContainer" #b:  getProductOwnerRole("product owner")
+":RoleContainer"--> "role:Role"** #b:  getRole("product owner")
+":RoleContainer"->":RoleContainer" #b: contains(role)
+deactivate
+":RoleContainer"-->":DefineProductOwnerController" #b: productOwnerRole
+
+":DefineProductOwnerController" -> "accountContainer\n:AccountContainer" #b:  getAccount(email)
+loop
+"accountContainer\n:AccountContainer"->"account:Account"#b: verifyEmail(email)
+"accountContainer\n:AccountContainer"<--"account:Account"#b: account
+end
+"accountContainer\n:AccountContainer"--> ":DefineProductOwnerController" #b: account
+
+":DefineProductOwnerController" ->":ProjectContainer" #b: defineRole(projectCode,account, role, allocation, costPerHour,period)
+":ProjectContainer" ->":ProjectContainer" #b:doesNotExceedPercentageAllocation(account, allocation, LocalDateTime localDateTime)
+
+loop
+":ProjectContainer" ->"project :Project" #b:getResourceInProjectContainer()
+"project :Project"->":ResourceInProjectContainer"#b:isInProject(account, localDateTime)
+loop
+
+":ResourceInProjectContainer"->"resourceInProject\n:ResourceInProject" #b:getAccount().equals(account)
+":ResourceInProjectContainer"<--"resourceInProject\n:ResourceInProject" #b:true
+end
+"project :Project"<--":ResourceInProjectContainer" #b:true
+":ProjectContainer" <--"project :Project" #b:true
+end
+deactivate
+
+":ProjectContainer" ->":ProjectContainer" #b:getProject(projectCode)
+
+loop
+":ProjectContainer" ->"project :Project" #b:getProject().equals(projectCode)
+":ProjectContainer" <--"project :Project"#b: project
+end
+deactivate
+
+":ProjectContainer" ->"project :Project"#b:getResourceInProjectContainer()
+":ProjectContainer" <--"project :Project"#b:getResourceInProjectContainer
+
+":ProjectContainer" ->":ResourceInProjectContainer"#b:defineRole(Account account, Role role, Period period,double costPerHour, double allocation)
+":ResourceInProjectContainer"->"resourceInProject\n:ResourceInProject" #b:create
+deactivate
+":ResourceInProjectContainer"->":ResourceInProjectContainer"#b: add(resourceInProject)
+deactivate
+":ProjectContainer"<--":ResourceInProjectContainer"#b:true
+
+":DefineProductOwnerController" <--":ProjectContainer" #b:true
+
+":DefineProductOwnerController"-->":DefineProductOwnerUI" #b: true
+":DefineProductOwnerUI"-->Manager #b: Product Owner defined in Project
+
+@enduml

@@ -1,0 +1,38 @@
+@startuml
+
+'status = (boolean) false
+legend top
+CD US009 Add a Customer
+end legend
+
+CustomertUI" "..>"  "CustomerController
+CustomerController" "..>" "Company : company
+Company " "..>" "CustomerContainer : customerContainer
+CustomerContainer"1 "*--"*"Customer : contains
+
+class CustomerController {
++AddCustomerController(Company company)
++addCustomer(String name) : boolean
+}
+
+class Company {
++Company(CustomerContainer customerContainer)
++addCustomer(String name) : boolean
+}
+class CustomerContainer {
++CustomerContainer()
++addCustomer(String name) : boolean
++saveCustomer(Customer customer) : boolean
+
+}
+
+class Customer {
+ -name: String
+ +Customer(String name)
+ +verifyName(String name) : boolean
+ }
+
+@enduml
+
+
+

@@ -1,0 +1,124 @@
+@startuml
+
+legend top
+SD: US015 List all Projects
+end legend
+
+skinparam sequence {
+    LifeLineBackgroundColor #lightgrey
+}
+
+boundary " " #white
+participant ": Route" as route
+participant ": ProjectController" as controller
+participant "response : ResponseEntity" as response
+participant ": ListAllProjectsService" as service
+participant "Repository <ProjectCode, Project>" << (I,#ccb3ff) >>
+participant "Repository <CustomerID, Customer>" << (I,#ccb3ff) >>
+participant "Repository <TypologyID, Typology>" << (I,#ccb3ff) >>
+participant "Repository <BusinessSectorID, BusinessSector>" << (I,#ccb3ff) >>
+participant Collectors as collector
+participant ": Map<CustomerID, String>" as mc
+participant ": Map<TypologyID, String>" as mt
+participant ": Map<BusinessSectorID, String>" as mbs
+participant ProjectDTOMapper
+participant ": List<ProjectDTO>" as projectDTOs
+
+autoactivate on
+autonumber 1
+" " o-> route : GET (/projects)
+
+route -> controller: getProjects()
+
+controller -> service : getProjects()
+
+autonumber 3.1
+service -> "Repository <ProjectCode, Project>": findAll()
+"Repository <ProjectCode, Project>" --> service: List<Project>
+
+autonumber 3.3
+service -> service: getCustomers()
+
+autonumber 3.3.1
+service -> "Repository <CustomerID, Customer>": findAll()
+"Repository <CustomerID, Customer>" --> service: List<Customer>
+service -> collector: toMap()
+
+autonumber 3.3.3.1
+collector -> collector: getCustomerID
+collector -> collector: getName().getValue()
+service <-- collector: Map<CustomerID, String>
+deactivate collector
+deactivate collector
+deactivate service
+
+autonumber 3.4
+service -> service: getTypologies()
+
+autonumber 3.4.1
+service -> "Repository <TypologyID, Typology>" : findAll()
+"Repository <TypologyID, Typology>"  --> service: List<Typology>
+service -> collector: toMap()
+
+autonumber 3.4.3.1
+collector -> collector: getTypologyID
+collector -> collector: getDescription().getDescription()
+service <-- collector: Map<CustomerID, String>
+deactivate collector
+deactivate collector
+deactivate service
+
+autonumber 3.5
+service -> service: getBusinessSectors()
+
+autonumber 3.5.1
+service -> "Repository <BusinessSectorID, BusinessSector>": findAll()
+"Repository <BusinessSectorID, BusinessSector>" --> service: List<BusinessSector>
+service -> collector: toMap()
+
+autonumber 3.5.3.1
+collector -> collector: getBusinessSectorID
+collector -> collector: getBusinessSectorDescription().getDescription()
+
+service <-- collector: Map<CustomerID, String>
+deactivate collector
+deactivate collector
+deactivate service
+
+autonumber 3.6
+service -> collector: toMap()
+
+autonumber 3.6.1
+collector -> mc: customerName = get(customerID)
+deactivate mc
+collector -> mt: typologyDescription = get(typologyID)
+deactivate mt
+collector -> mbs: businessSectorDescription = get(businessSectorID)
+deactivate mbs
+
+collector -> ProjectDTOMapper: projectDTO = toDTOWithoutIDs(project, customerName, typologyDescription, businessSectorDescription)
+
+deactivate ProjectDTOMapper
+
+collector -> projectDTOs: collect(Collectors.toUnmodifiableList())
+deactivate projectDTOs
+
+collector --> service: List<ProjectDTO>
+
+
+autonumber 4
+service --> controller: projectDTOS
+deactivate collector
+deactivate collector
+deactivate service
+
+
+controller --> response ** : create(projectDTOS, HttpStatus.OK)
+
+controller --> route : response
+deactivate controller
+
+route -->o " " : response(json)
+deactivate route
+
+@enduml

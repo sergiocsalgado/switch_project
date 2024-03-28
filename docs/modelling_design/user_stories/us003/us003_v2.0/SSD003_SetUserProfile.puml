@@ -1,0 +1,15 @@
+@startuml
+skinparam sequenceMessageAlign center
+
+legend top
+SSD US003 - Set Account Profile
+end legend
+
+autoactivate on
+Actor Administrator
+activate Administrator #lightgrey
+
+autonumber
+Administrator -> System #lightgrey: Set account profile
+System --> Administrator: Account profile changed
+@enduml

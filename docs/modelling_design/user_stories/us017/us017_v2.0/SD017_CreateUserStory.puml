@@ -1,0 +1,107 @@
+@startuml
+
+skinparam sequenceMessageAlign left
+skinparam sequenceArrowThickness 2
+skinparam maxmessagesize 250
+
+legend top
+SD US017 - As Product Owner, I want to create
+  a user story and add it to the ProductBacklog
+end legend
+
+boundary " " as ProductOwner #white
+participant ": Route" as Route
+participant "userStoryDTO : UserStoryDTO" as userStoryDTO
+participant ": UserStoryController" as UserStoryController
+participant ": CreateUserStoryService" as CreateUserStoryService
+participant "projectCode : ProjectCode" as ProjectCode
+participant "userStoryID : UserStoryID" as UserStoryID
+participant "userStoryNumber : UserStoryNumber" as UserStoryNumber
+participant "actor : Name" as Name
+participant "userStoryText : Description" as Description
+participant "status: UserStoryStatus" as UserStoryStatus
+participant "priority : Priority" as Priority
+participant ": ProjectRepository" as ProjectRepository
+participant ": FactoryUserStory" as FactoryUserStory
+participant "userStory : UserStory" as UserStory
+participant ": UserStoryRepository" as UserStoryRepository
+participant "UserStoryMapper" as Mapper
+participant "userStoryDTO : UserStoryDTO" as newUserStoryDTO
+participant "responseEntity : ResponseEntity" as Response
+
+autonumber 1.1
+ProductOwner o-> Route: POST (/projects/{projectCode}/product-backlog) (json)
+activate Route #b
+
+Route --> userStoryDTO **: create
+
+Route -> UserStoryController: createUserStoryAndAddToProductBacklog (String projectCode, userStoryDTO)
+
+activate UserStoryController #b
+
+ref over UserStoryController: unwrapping userStoryDTO
+UserStoryController -> CreateUserStoryService :  createUserStory (projectCode, userStoryID, userStoryNumber, actor, userStoryText, priority)
+
+activate CreateUserStoryService #b
+
+CreateUserStoryService --> ProjectCode ** : create VO ProjectCode
+CreateUserStoryService --> UserStoryID **  : create VO UserStoryID
+CreateUserStoryService --> UserStoryNumber **  : create VO UserStoryNumber
+CreateUserStoryService --> Name **  : create VO Name
+CreateUserStoryService --> Description **  : create VO Description
+CreateUserStoryService --> UserStoryStatus **  : create VO UserStoryStatus
+CreateUserStoryService --> Priority **  : create VO Priority
+
+CreateUserStoryService -> ProjectRepository  : true = containsOfIdentity(projectCode)
+activate ProjectRepository #b
+deactivate ProjectRepository
+
+
+CreateUserStoryService -> FactoryUserStory : userStory = createUserStory(userStoryID, projectCode, userStoryNumber, actor, userStoryText, status, priority)
+activate FactoryUserStory #b
+
+FactoryUserStory --> UserStory ** : create
+deactivate FactoryUserStory
+
+CreateUserStoryService -> CreateUserStoryService : addUserStory (userStory, priority, userStoryID, projectCode)
+activate CreateUserStoryService #b
+CreateUserStoryService -> UserStoryRepository : false = findAll().contains(userStory)
+activate UserStoryRepository #b
+deactivate UserStoryRepository
+
+CreateUserStoryService -> CreateUserStoryService : validateUserStory(userStory)
+activate CreateUserStoryService #b
+deactivate CreateUserStoryService
+
+CreateUserStoryService -> CreateUserStoryService : setPriority(userStory)
+activate CreateUserStoryService #b
+deactivate CreateUserStoryService
+
+CreateUserStoryService -> CreateUserStoryService : sortList(userStory)
+activate CreateUserStoryService #b
+deactivate CreateUserStoryService
+
+CreateUserStoryService ->UserStoryRepository : save(userStory)
+activate UserStoryRepository #b
+deactivate UserStoryRepository
+deactivate CreateUserStoryService
+
+CreateUserStoryService -> UserStoryController : userStory
+deactivate CreateUserStoryService
+
+
+UserStoryController -> Mapper : toDTO(userStory)
+
+activate Mapper #b
+
+Mapper --> newUserStoryDTO ** : create
+deactivate Mapper
+
+UserStoryController --> Response ** : create(userStoryDTO,HttpStatus.CREATED)
+UserStoryController --> Route : responseEntity(userStoryDTO,HttpStatus.CREATED)
+deactivate UserStoryController
+
+Route -->o ProductOwner : response(json)
+deactivate Route
+
+@enduml

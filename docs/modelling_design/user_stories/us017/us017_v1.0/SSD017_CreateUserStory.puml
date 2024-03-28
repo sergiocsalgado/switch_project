@@ -1,0 +1,20 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+SSD US017 As Product Owner, I want to create a user story and add it to the ProductBacklog
+end legend
+
+actor "Product Owner" as 1
+participant "System" as 2
+
+autonumber 1.1
+
+activate 1 #lightgrey
+1 -> 2 :Create a User Story and\n add it to the ProductBacklog
+activate 2 #lightgrey
+2 --> 1 :User Story created and\n added to the ProductBacklog
+deactivate
+
+@enduml

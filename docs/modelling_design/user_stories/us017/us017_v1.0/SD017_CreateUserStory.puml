@@ -1,0 +1,40 @@
+@startuml
+
+skinparam sequenceMessageAlign center
+
+legend top
+SD US017 As Product Owner, I want to create a user story and add it to the ProductBacklog
+end legend
+
+autoactivate on
+autonumber 1.1
+
+actor "Product Owner" as 0
+activate 0 #lightgrey
+participant ":UserStoryUI" as 1
+participant ":CreateUserStoryController" as 2
+participant ":ProjectContainer" as 3
+participant "prj:Project" as 4
+participant "pb:ProductBacklog" as 7
+participant FactoryUserStory << (I,#ccb3ff) >>
+
+0 -> 1 #lightgrey:Create a User Story\n and add it to the\n ProductBacklog
+1 -> 2 #lightgrey:createUserStory(projectCode,\n userStoryID, actor,\n userStoryText,\n status, priority)
+2 -> 3 #lightgrey:prj=getProjectByCode(projectCode)
+deactivate
+2 -> 4 #lightgrey: pb=getProductBacklog(prj)
+deactivate
+
+
+2 -> 7 #lightgrey: createUserStory(projectCode,userStoryID,actor,userStoryText,status,priority)
+7 -> FactoryUserStory #lightgrey: createUserStory(projectCode, userStoryID,\n actor,userStoryText,\n status,priority)
+FactoryUserStory --> "us:UserStory" ** : createUserStory\n(projectCode, userStoryID,\n actor,userStoryText,\n status,priority)
+deactivate
+7 -> 7 #grey: addUserStory(us)
+deactivate
+7 --> 2 : true
+2 --> 1 : true
+1 --> 0 : User Story created\n and added to the\n ProductBacklog
+
+@enduml
+

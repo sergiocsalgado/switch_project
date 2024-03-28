@@ -1,0 +1,14 @@
+@startuml
+
+
+actor Administrator
+
+activate Administrator #lightgrey
+
+Administrator -> System: 1. Register Account
+
+activate System #lightgrey
+Administrator <-- System: 1.1. Account Registered
+deactivate
+
+@enduml

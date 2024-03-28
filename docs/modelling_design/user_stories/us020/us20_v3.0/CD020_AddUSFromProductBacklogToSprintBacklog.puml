@@ -1,0 +1,81 @@
+@startuml
+
+'..|> implementation
+'-- associado
+'..> depende
+'*-- agrega
+'- atributo
+'+ método
+
+skinparam linetype ortho
+
+skinparam sequenceMessageAlign center
+
+legend top
+CD US020 Add User Story From ProductBacklog To SprintBacklog
+end legend
+
+package Controller {
+class UserStoryController {
++AddUserStoryToSprintBacklogService(): ResponseEntity
+}
+}
+
+package Service {
+class AddUserStoryToSprintBacklogServiceImpl {
+- sprintRepository: Repository<SprintID, Sprint>
++ addUserStoryToSprintBacklog(UserStoryID userStoryID, SprintID sprintID, ProjectCode projectCode)
+}
+package Interfaces {
+interface AddUserStoryToSprintBacklogService {
++ addUserStoryToSprintBacklog(UserStoryID userStoryID, SprintID sprintID, ProjectCode projectCode)
+}
+}
+}
+
+package Ddd {
+interface Repository<SprintID, sprint> {
++ save(sprint: Sprint): Sprint
+}
+}
+
+package Model {
+class " " as E <<(E, Yellow) Entity>>{
++getUserStoryID()
++getSprintID()
++getprojectCode()
+}
+package ValueObjects as "ValueObjects"{
+class UserStoryID <<(V, LightBlue) Value Object>> {
+- idUserStory: String
++ getUserStoryID(): String
+}
+class SprintID <<(V, LightBlue) Value Object>> {
+- code: String
++ getSprintID(): String
+}
+class ProjectCode <<(V, LightBlue) Value Object>> {
+- code: String
++ getProjectCode(): String
+}
+}
+
+
+}
+
+'..|> implementation
+'-- associado
+'..> depende
+'*-- agrega
+'- atributo
+'+ método
+
+UserStoryController ..> AddUserStoryToSprintBacklogService
+AddUserStoryToSprintBacklogServiceImpl ..|>  AddUserStoryToSprintBacklogService
+AddUserStoryToSprintBacklogServiceImpl ..> Repository
+Repository "1"*--"*" E
+E ..> UserStoryID
+E ..> SprintID
+E ..> ProjectCode
+
+@enduml

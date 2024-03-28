@@ -1,0 +1,73 @@
+@startuml
+/'Domain Model'/
+
+/'title'/
+
+legend top
+DM - Domain Model
+US012 As Manager, I want to define the PO of a project
+end legend
+
+/'Class'/
+
+Object "Profile" as Profile {
+-description
+}
+
+Object "Account" as Account {
+-email
+-name
+-phoneNumber
+-photo_optional
+-status
+}
+
+Object "Project" as Project {
+-projectCode
+-projectName
+-projectDescription
+-sprintDuration
+-numberSprints
+-budget
+}
+
+Object "Period" as Period {
+-startDate
+-endDate
+}
+
+Object "ResourceInProject" as ResourceInProject {
+-percentageAllocation
+-costPerHour
+}
+
+Object "Role" as Role{
+-description
+}
+
+/'Directions'/
+
+Project "1" - "1" Period : active in a >
+ResourceInProject "*" ---- "1" Period : within a  >
+ResourceInProject "*" --- "1" Project : allocated to >
+ResourceInProject "*" -"1" Role : associates to >
+Account "1" --- "*" ResourceInProject : represents a >
+Account "*" - "1" Profile :owns a >
+Account "*" - "1" Project :manages a >
+
+/'notas'/
+
+note right of Profile
+    Administrator
+    Manager
+    User
+end note
+
+note right of Role
+    Project Manager
+    Product Owner
+    Scrum Master
+    Team Member
+end note
+
+@enduml

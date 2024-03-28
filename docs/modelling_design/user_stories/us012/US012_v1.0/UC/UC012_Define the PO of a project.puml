@@ -1,0 +1,16 @@
+@startuml
+
+legend top
+UC US012 Define the Product Owner of a Project
+end legend
+left to right direction
+actor "Manager"
+rectangle System {
+    "Manager" --> (List all Accounts)
+    (List all Accounts) <. (Define Product Owner in Project) : includes
+    "Manager" --> (List all Projects)
+    (List all Projects) <. (Define Product Owner in Project) : includes
+    "Manager" --> (Define Product Owner in Project)
+}
+
+@enduml

@@ -1,0 +1,93 @@
+@startuml
+skinparam linetype ortho
+legend top
+CD US007 Create Typology
+end legend
+
+package Controller {
+    class "TypologyController" as TypologyController {
+        +createTypology(TypologyDTO typologyDTO)
+    }
+}
+
+package Service {
+    package interfaces {
+        interface "CreateTypologyService" as  CreateTypologyService {
+            +createTypology(String typologyID,
+            String typologyDescription)
+        }
+    }
+    class "CreateTypologyServiceImpl" as CreateTypologyServiceImpl {
+     - containsID(Typology typology)
+     - existsTypology(Description description)
+     + createTypology(String typologyIDInput,
+          String typologyDescriptionInput)
+    }
+}
+package Mapper {
+    class "TypologyDTOMapper" as TypologyMapper {
+        + toDTO(Typology typology)
+        + listTypologyDTO(List<Typology> typologies)
+    }
+    class "TypologyDTO" as TypologyDTO {
+     - typologyID : String
+     - typologyDescription : String
+     + getTypologyID()
+     + setTypologyID(String typologyID)
+     + getTypologyDescription()
+     + setTypologyDescription(String typologyDescription)
+     }
+}
+
+package ddd {
+    interface "InMemoryTypologyRepository" as InterfaceTypoRepo {
+    + save(Typology entity)
+    + findAll()
+    + containsOfIdentity(TypologyID id)
+    + ofIdentity(TypologyID id)
+}
+}
+
+package Model {
+
+ package Typology {
+        class "FactoryTypologyImpl" as FactoryTypologyImpl  {
+            +getTypologyID()
+            +getDescription()
+        }
+             interface "FactoryTypology" as FactoryTypology {
+                     +createTypology(TypologyID typologyID,
+                     Description typologyDescription)
+            }
+                class "Typology" as typology <<(A,SandyBrown) Aggregate Root>> {
+                    +getTypologyID()
+                    +getDescription()
+                    + copy()
+                }
+}
+package value_objects {
+        class "TypologyID" as typologyID <<(V, LightBlue) Value Object>>  {
+            -idOfTypology : String
+            +getIdOfTypology()
+        }
+        class "Description" as description <<(V, LightBlue) Value Object>> {
+                    -text : String
+                    +getDescription()
+                }
+}
+TypologyController ..> CreateTypologyService
+TypologyController ..> TypologyDTO
+TypologyController ..> TypologyMapper
+CreateTypologyService ..> CreateTypologyServiceImpl
+CreateTypologyServiceImpl ..> description
+CreateTypologyServiceImpl ..> typologyID
+CreateTypologyServiceImpl ..> FactoryTypology
+FactoryTypology ..> FactoryTypologyImpl
+FactoryTypologyImpl ..> typology
+CreateTypologyServiceImpl ..> InterfaceTypoRepo
+
+
+
+
+
+@enduml

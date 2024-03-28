@@ -1,0 +1,38 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+legend top
+CD US007 - Create a new project typology
+end legend
+
+CreateProjectTypologyUI..>TypologyController: typologyController
+TypologyController..>Company: company
+Company..>TypologyContainer:typologyContainer
+TypologyContainer "1"*--"*" Typology
+
+class CreateProjectTypologyUI {}
+
+class TypologyController{
++ TypologyController(Company company)
++ createProjectTypology(String description): boolean
+}
+
+class Company{
++ Company(TypologyContainer typologyContainer)
++ createProjectTypology(String description): boolean
+}
+
+class TypologyContainer{
+- typologies: List<Typology>
++ TypologyContainer()
++ createProjectTypology(String description): boolean
+- addProjectTypology(Typology typology)
+}
+
+class Typology{
+- description:String
++ Typology(String description)
++ verifyTypology(String description)
+}
+
+@enduml

@@ -1,0 +1,88 @@
+@startuml
+package controller {
+  class "ProfileController" {
+    createProfile(profileDTO)
+  }
+}
+
+package ddd {
+  interface "Repository<ProfileID, Profile>" {
+    +containsOfIdentity(profileID)
+  }
+}
+
+package mapper {
+  class "ProfileDTO" {
+    -profileID: String
+    -description: String
+    +getProfileID()
+    +setProfileID(String profileID)
+    +getDescription()
+    +setDescription(String description)
+  }
+  class "ProfileMapper" {
+    +toDTO(profile)
+  }
+}
+
+package model {
+  package profile {
+    interface "FactoryProfile" {
+      +createProfile(ProfileID profileID, Description description)
+    }
+    class "Profile" <<A,SandyBrown) Aggregate Root>>{
+      +copy()
+      +getProfileID()
+      +getDescription()
+    }
+  }
+  package value-objects {
+    class "ProfileID" <<(V, LightBlue) Value ValueObject>>{
+      - text: String
+      + getDescription()
+    }
+    class "Description"  <<(V, LightBlue) Value ValueObject>>{
+      -idProfile: String
+      +getProfileID()
+    }
+  }
+}
+
+package service {
+  package Interface {
+    interface CreateProfileService {
+      +createProfile(String profileID, String description)
+    }
+  }
+  class CreateProfileServiceImpl {
+    +createProfile(String profileID, String description)
+    -containsID(profile)
+  }
+}
+
+CreateProfileUI .down.> ProfileController
+CreateProfileUI ..> ProfileDTO
+
+
+ProfileController .down.> CreateProfileService
+ProfileController .down.> ProfileDTO
+ProfileController .down.> ProfileMapper
+
+ProfileMapper ..> ProfileDTO
+ProfileMapper ..> Profile
+
+CreateProfileServiceImpl .left.|> CreateProfileService
+CreateProfileServiceImpl .down.> "Repository<ProfileID, Profile>"
+CreateProfileServiceImpl .down.> ProfileDTO
+
+"Repository<ProfileID, Profile>" .down.> ProfileID
+"Repository<ProfileID, Profile>" .down.> Profile
+
+"Profile" "1"--> "1" ProfileID
+"Profile" "1"--> "1" Description
+
+"FactoryProfile" .left.> Profile
+"FactoryProfile" ..> ProfileID
+"FactoryProfile" ..> Description
+
+@enduml

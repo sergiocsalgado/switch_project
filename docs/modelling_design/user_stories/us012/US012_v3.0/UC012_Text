@@ -1,0 +1,31 @@
+CD 012 - As Manager, I want to define the PO of a project
+
+# Primary Actor:
+
+Manager
+
+Resume User Story Scenario:
+
+The Manager logs into the project management tool and navigates to the project settings.
+The Manager selects the option to define the Product Owner (PO) of the project.
+The Manager is presented with a form where they can enter the details of the PO, such as their name, contact information,
+and role in the project. Then fills in the required information and submits the form.
+The project management tool saves the information and assigns the designated PO to the project.
+After that the Manager verifies that the PO has been assigned correctly by checking the project dashboard and seeing the
+PO's name and contact information displayed prominently.
+Consequently the Manager communicates the PO assignment to the project team and stakeholders, ensuring that everyone is
+aware of who to contact for product-related decisions and updates.
+In this success scenario, the Manager successfully defines the PO for the project, ensuring that there is a clear point
+of contact for all product-related matters. This helps to streamline communication and decision-making, ultimately
+leading to a more efficient and effective project outcome.
+
+# Main Success Scenario:
+
+1.	Manager is well authenticated with Manager profile
+2.  Manager requests a list of all accounts
+3.	System responds with the list of all accounts
+4.	Manager requests a list of all projects
+5.  System responds with the list of all projects
+6.  Manager requests to define a Product Owner in a Project
+7.  System responds with Product Owner defined
+

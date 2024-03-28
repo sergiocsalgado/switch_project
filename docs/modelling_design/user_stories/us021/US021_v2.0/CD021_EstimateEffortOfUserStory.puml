@@ -1,0 +1,42 @@
+@startuml
+
+legend top
+SSD US021 As Team Member, I Want to Estimate the Effort
+of a User Story in a Sprint, during the Sprint Planning Ceremony
+end legend
+
+EstimateEffortUI..>EstimateEffortController
+EstimateEffortController..>EstimateEffortRequestDTO
+EstimateEffortRequestDTO"1"--*"1"EstimateEffortService
+EstimateEffortService..>UserStory
+UserStory"1"*--"1"Effort
+
+class EstimateEffortUI{
+}
+
+class EstimateEffortController {
++EstimateEffortController(ProjectContainer projectContainer)
++setEffortToUserStory(String userStoryID,String storyPoints): boolean
+-getUserStoryID(String userStoryID):estimateEffortService
+-getStoryPoints(String storyPoints):estimateEffortService
+}
+
+class EstimateEffortRequestDTO{
++getUserStoryID():String
++getStoryPoints():String
+}
+
+class EstimateEffortService{
++setEffortToUserStory(String userStoryID,String storyPoints): boolean
+}
+
+class UserStory{
++setEffort(Effort effort):void
+}
+
+class Effort{
++getEffort():int
++Effort:enum
+}
+
+@enduml

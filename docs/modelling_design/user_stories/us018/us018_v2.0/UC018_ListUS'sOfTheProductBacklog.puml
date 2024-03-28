@@ -1,0 +1,18 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+legend top
+US018 - As PO/SM/Team Member, I want to consult the
+product backlog,i.e. to get the list of user stories sorted by priority
+end legend
+
+left to right direction
+actor "PO/SM/TM"
+
+rectangle System {
+usecase "List US's of the \n product backlog" as UC2
+}
+
+ "PO/SM/TM" --> UC2
+
+@enduml

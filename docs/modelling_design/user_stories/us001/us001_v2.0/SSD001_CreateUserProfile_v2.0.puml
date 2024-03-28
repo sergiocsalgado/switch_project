@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+legend top
+US001 - As Administrator, I want to create user profiles
+end legend
+
+autonumber
+autoactivate on
+actor Administrator as Administrator
+activate Administrator #lightgrey
+Administrator -> System #lightgrey : Create a new profile
+System --> Administrator: Profile created successfully
+
+
+@enduml

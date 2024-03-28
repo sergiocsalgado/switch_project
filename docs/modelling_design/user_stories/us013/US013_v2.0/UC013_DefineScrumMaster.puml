@@ -1,0 +1,12 @@
+@startuml
+
+legend top
+UC US013 As Manager, I want to define the SM of a project
+end legend
+left to right direction
+actor "Manager"
+rectangle System {
+    "Manager" --> (Define the Scrum Master of a Project)
+}
+
+@enduml

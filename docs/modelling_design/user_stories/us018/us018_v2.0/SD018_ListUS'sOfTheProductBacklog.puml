@@ -1,0 +1,70 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+legend top
+US018 - As PO/SM/Team Member, I want to consult the product backlog,i.e. to get the list of user stories sorted by priority
+end legend
+autoactivate on
+autonumber 1
+
+skinparam maxmessagesize 250
+
+boundary " " #white
+participant ": Route" as Route
+participant ": UserStoryController" as Controller
+participant ": ListUserStoriesService" as Service
+participant UserStoryRepository << (I,#ccb3ff) >>
+participant ": UserStoryMapper" as Mapper
+
+participant "projectCode : ProjectCode" as ProjectCode
+
+participant "responseEntity : ResponseEntity" as Response
+
+" " o-> Route : GET (/projects/{projectCode}/product-backlog)
+activate Route #lightgrey
+
+Route -> Controller #b: getProductBacklogDTO (String projectCode)
+
+activate Controller #lightgrey
+
+Controller -> Service : getUserStories (String projectCode)
+
+activate Service #lightgrey
+
+Service --> ProjectCode ** #b: create
+
+Service -> UserStoryRepository : containsOfIdentity (projectCode)
+
+activate UserStoryRepository #lightgrey
+
+UserStoryRepository -> UserStoryRepository : filter sorted by priority \n US with status planned
+activate UserStoryRepository #lightgrey
+
+UserStoryRepository --> Service : userStories
+
+deactivate UserStoryRepository
+deactivate UserStoryRepository
+deactivate UserStoryRepository
+
+Service --> Controller : userStories
+
+deactivate Service
+
+Controller -> Mapper : getUserStoriesDTO (List<UserStory> userStories)
+
+activate Mapper #lightgrey
+
+Mapper --> Controller : userStoriesDTO
+
+deactivate Mapper
+
+
+Controller --> Response ** : create(userStoriesDTO,HttpStatus.OK)
+
+Controller --> Route : ResponseEntity<>(userStoriesDTO,HttpStatus.OK)
+deactivate Controller
+
+Route -->o " " : response(json)
+deactivate Route
+
+@enduml

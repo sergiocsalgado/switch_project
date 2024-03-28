@@ -1,0 +1,132 @@
+@startuml
+
+autonumber 1.1
+
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 250
+skinparam sequenceParticipant underline
+
+boundary " " #white
+participant ": Route" as Route
+participant "resourceInProjectDTO : ResourceInProjectDTO" as DTO
+participant ": ProjectController" as Controller
+participant ": DefineRoleService" as Service
+participant ": Repository" as IRepo
+participant ": IFactoryResourceInProject" as IFactoryRp
+
+
+participant "resourceInProject : ResourceInProject" as Resource
+participant "resource: Resource" as NewResource
+participant ": IResourceRepository" as IRRepo
+
+participant "responseEntity : ResponseEntity" as Response
+participant "resourceSaved : Resource" as ResourceSaved
+
+
+" " o-> Route : POST (/{projectCode}/resources) (json)
+activate Route
+
+Route --> DTO ** #b: create
+
+Route -> Controller #b: defineRole (String projectCode,\n String resourceInProjectID,String email,\n String role,Double allocation,Double costPerHour,\n String currency,String startDate,String endDate)
+ref over Controller: unwrapping ResourceInProjectDTO
+
+activate Controller
+
+Controller -> Service : defineRole (String projectCode,\n String resourceInProjectID,String email,\n String role,Double allocation,Double costPerHour,\n String currency,String startDate,String endDate)
+'isTeamMember
+activate Service
+Service -> Service : isTeamMember(String role_Description)
+
+activate Service
+Service -> Service : false = isTeamMember(String role_Description)
+
+deactivate Service
+'Role does not existe in Project
+Service -> Service : roleDoesNotExistsInProject(Project project,Role role, LocalDate startDate)
+
+activate Service
+
+Service -> Project : true = roleDoesNotExistsInProject(Role role, LocalDate startDate)
+activate Project
+deactivate Project
+
+deactivate Service
+'Resource not in project
+Service -> Service : resourceNotInProject(Project project,LocalDate startDate,Email email)
+
+activate Service
+
+Service -> Project : false = resourceIsInProject(Email email, LocalDate date)
+activate Project
+deactivate Project
+
+deactivate Service
+
+'Allocation is not higher than 100
+Service -> Service : doesNotExceedPercentageAllocation(Email email, double allocation, LocalDate startDate)
+
+activate Service
+
+Service -> Project : false = getResourceInProjectAllocation(Email email, LocalDate startDate)
+activate Project
+deactivate Project
+
+deactivate Service
+
+'Project exists
+Service -> Service :  getProjectByCode(ProjectCode projectCode)
+activate Service
+
+Service -> IRepo : true = ofIdentity(ID id)
+activate IRepo
+deactivate IRepo
+
+deactivate Service
+
+
+'create resource with role
+Service -> IFactoryRp : create(ResourceInProjectID resourceID,Email accountID,Role role, Period period,Cost cost,Allocation allocation)
+activate Service
+activate IFactoryRp
+
+IFactoryRp --> Resource  ** : create
+deactivate IFactoryRp
+
+activate Resource
+
+Resource --> Service : resource
+deactivate Resource
+
+deactivate Service
+
+Service -> Project : addResourceInProject(ResourceInProject resourceInProject)
+activate Service
+activate Project
+
+deactivate Service
+
+Project->Project : false = contains(resourceInProject)
+activate Project
+deactivate Project
+Project->Project :true = validResourceInProject(resourceInProject)
+activate Project
+deactivate Project
+Project->Project : true = add(resourceInProject)
+activate Project
+deactivate Project
+Project-->Service : resource
+deactivate Project
+deactivate Service
+
+Controller --> Response ** :
+
+
+Controller --> Route : responseEntity
+deactivate Controller
+
+Route -->o " " : response(json)
+deactivate Route
+
+@enduml

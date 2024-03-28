@@ -1,0 +1,11 @@
+@startuml
+title US04
+left to right direction
+actor Administrator
+rectangle System {
+usecase "Account" as UC1
+}
+ Administrator-->UC1
+
+
+@enduml

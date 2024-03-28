@@ -1,0 +1,140 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+skinparam linetype ortho
+legend top
+Class Diagram US018 - As PO/SM/Team Member, I want to consult the product backlog,
+                                i.e. to get the list of user stories sorted by priority
+end legend
+
+package Controller {
+    class "UserStoriesController" as controller {
+        +getProductBacklogDTO(String projectCode)
+    }
+}
+
+package Service {
+    package interfaces {
+        interface "ListUserStoriesService" as  serviceI {
+            +getUserStories(String projectCode)
+        }
+    }
+    class "ListUserStoriesServiceImpl" as service {
+                +getUserStories(String projectCode)
+    }
+}
+
+package ddd {
+    interface "Repository<ProjectCode, Project>" as interfaceProjRepo {
+        +containsOfIdentity(String projectCode))
+    }
+    interface "Repository<UserStoryID, UserStory>" as interfaceUSRepo {
+        +findAll()
+    }
+}
+
+package Mapper {
+    class "UserStoryMapper" as userStoryMapper {
+        + getUserStoriesDTO(userStories)
+    }
+
+    class "UserStoryDTO" as userStoryDTO {
+     - projectCode : String
+     - userStoryID : String
+     - userStoryText : String
+     - status : String
+     - userStoryNumber : String
+     - actor : String
+     - priority : int
+     }
+}
+
+package Model {
+
+    package value_objects {
+        class "UserStoryID" as userStoryID <<(V, LightBlue) Value Object>> {
+            -idUserStory : String
+            +getUserStoryID()
+        }
+        class "ProjectCode" as projectCode <<(V, LightBlue) Value Object>> {
+            -code : String
+            +getProjectCode()
+        }
+        class "UserStoryNumber" as userStoryNumber <<(V, LightBlue) Value Object>> {
+            -status : String
+            +getStatus()
+        }
+        class "Name" as name <<(V, LightBlue) Value Object>> {
+            -value : String
+            +getValue()
+        }
+        class "Description" as description <<(V, LightBlue) Value Object>> {
+            -text : String
+            +getDescription()
+        }
+        class "UserStoryStatus" as userStoryStatus <<(V, LightBlue) Value Object>> {
+            -status : Set<String>
+            -description : String
+            +getDescription()
+        }
+        class "Priority" as priority <<(V, LightBlue) Value Object>> {
+            -index : int
+            +getIndex()
+        }
+    }
+
+    package UserStory {
+        class "UserStory" as userStory <<(A,SandyBrown) Aggregate Root>> {
+            +getUserStoryID()
+            +getProjectCode()
+            +getUserStoryNumber()
+            +getActor()
+            +getUserStoryText()
+            +getStatus()
+            +getPriority()
+        }
+    }
+    package Project {
+        class "Project" as project <<(A,SandyBrown) Aggregate Root>> {
+            +getProjectCode()
+        }
+    }
+}
+
+
+controller ..> serviceI
+controller ..> userStoryMapper
+controller ...> userStoryDTO
+
+serviceI <|-- service
+serviceI ..> userStory
+
+service ..> interfaceProjRepo
+service ..> interfaceUSRepo
+service ..> userStory
+service ..> userStoryID
+
+interfaceProjRepo ..> project
+interfaceProjRepo ..> projectCode
+
+interfaceUSRepo ..> userStory
+interfaceUSRepo ..> userStoryID
+
+project "1" --> "1" projectCode
+
+userStory "1" --> "1" userStoryID
+userStory "1" --> "1" projectCode
+userStory "1" --> "1" userStoryNumber
+userStory "1" --> "1" name
+userStory "1" --> "1" description
+userStory "1" --> "1" userStoryStatus
+userStory "1" --> "1" priority
+
+userStoryMapper ..> userStoryID
+userStoryMapper ..> projectCode
+userStoryMapper ..> userStoryNumber
+userStoryMapper ..> name
+userStoryMapper ..> description
+userStoryMapper ..> userStoryStatus
+userStoryMapper ..> priority
+
+@enduml
